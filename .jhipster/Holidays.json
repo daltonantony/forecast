@@ -1,0 +1,45 @@
+{
+    "relationships": [],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "startDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "endDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "location",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "lastChangedBy",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "lastChangedDt",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": []
+        }
+    ],
+    "changelogDate": "20160201151614",
+    "dto": "no",
+    "service": "serviceImpl",
+    "pagination": "no"
+}

@@ -1,0 +1,69 @@
+<div>
+    <h2>ROLE_TARIFFs</h2>
+    <jh-alert></jh-alert>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <button class="btn btn-primary" ui-sref="rOLE_TARIFF.new">
+                    <span class="glyphicon glyphicon-flash"></span> <span>Create a new ROLE_TARIFF</span>
+                </button>
+            </div>
+            <div class="col-md-8">
+                <form name="searchForm" class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
+                    </div>
+                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a ROLE_TARIFF</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th><span>ID</span></th>
+                    <th><span>Role</span></th>
+                    <th><span>Tariff</span></th>
+                    <th><span>Location</span></th>
+                    <th><span>EffectiveDate</span></th>
+                    <th><span>ExpiryDate</span></th>
+                    <th><span>LastChangedDate</span></th>
+                    <th><span>LastChangedBy</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="rOLE_TARIFF in rOLE_TARIFFs track by rOLE_TARIFF.id">
+                    <td><a ui-sref="rOLE_TARIFF.detail({id:rOLE_TARIFF.id})">{{rOLE_TARIFF.id}}</a></td>
+                    <td>{{rOLE_TARIFF.role}}</td>
+                    <td>{{rOLE_TARIFF.tariff}}</td>
+                    <td>{{rOLE_TARIFF.location}}</td>
+                        <td>{{rOLE_TARIFF.effectiveDate | date:'mediumDate'}}</td>
+                        <td>{{rOLE_TARIFF.expiryDate | date:'mediumDate'}}</td>
+                        <td>{{rOLE_TARIFF.lastChangedDate | date:'mediumDate'}}</td>
+                    <td>{{rOLE_TARIFF.lastChangedBy}}</td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="rOLE_TARIFF.detail({id:rOLE_TARIFF.id})"
+                                class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span> View</span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="rOLE_TARIFF.edit({id:rOLE_TARIFF.id})"
+                                class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span> Edit</span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="rOLE_TARIFF.delete({id:rOLE_TARIFF.id})"
+                                class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span> Delete</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

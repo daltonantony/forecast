@@ -1,0 +1,50 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "employeeAllocation",
+            "otherEntityName": "employeeAllocation",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "employee"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "associateId",
+            "fieldType": "Long",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "raboId",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "domain",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "lastChangedDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "lastChangedBy",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20160106140148",
+    "dto": "no",
+    "service": "serviceImpl",
+    "pagination": "no"
+}

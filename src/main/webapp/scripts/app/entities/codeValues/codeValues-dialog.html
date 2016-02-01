@@ -1,0 +1,68 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+        <h4 class="modal-title" id="myCodeValuesLabel">Create or edit a CodeValues</h4>
+    </div>
+    <div class="modal-body">
+        <jh-alert-error></jh-alert-error>
+        <div class="form-group">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="codeValues.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_codeType">CodeType</label>
+            <input type="text" class="form-control" name="codeType" id="field_codeType"
+                    ng-model="codeValues.codeType"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_codeValue">CodeValue</label>
+            <input type="text" class="form-control" name="codeValue" id="field_codeValue"
+                    ng-model="codeValues.codeValue"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_effectiveDate">EffectiveDate</label>
+            <input id="field_effectiveDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="codeValues.effectiveDate" is-open="datePickerForEffectiveDate.status.opened"
+            />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePickerForEffectiveDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_expiryDate">ExpiryDate</label>
+            <input id="field_expiryDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="codeValues.expiryDate" is-open="datePickerForExpiryDate.status.opened"
+            />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePickerForExpiryDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_lastChangedBy">LastChangedBy</label>
+            <input type="text" class="form-control" name="lastChangedBy" id="field_lastChangedBy"
+                    ng-model="codeValues.lastChangedBy"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_lastChangedDate">LastChangedDate</label>
+            <input id="field_lastChangedDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="codeValues.lastChangedDate" is-open="datePickerForLastChangedDate.status.opened"
+            />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePickerForLastChangedDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

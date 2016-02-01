@@ -1,0 +1,44 @@
+{
+    "relationships": [],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "codeType",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "codeValue",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "effectiveDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "expiryDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "lastChangedBy",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "lastChangedDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": []
+        }
+    ],
+    "changelogDate": "20160201150137",
+    "dto": "no",
+    "service": "serviceImpl",
+    "pagination": "no"
+}

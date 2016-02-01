@@ -1,0 +1,94 @@
+
+<div>
+    <h2><span>EmployeeAllocation</span> {{employeeAllocation.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Field</th>
+                <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span>Project</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{employeeAllocation.project}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>StartDate</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{employeeAllocation.startDate | date:'mediumDate'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>EndDate</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{employeeAllocation.endDate | date:'mediumDate'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Location</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{employeeAllocation.location}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Allocation</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{employeeAllocation.allocation}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>LastChangedDate</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{employeeAllocation.lastChangedDate | date:'mediumDate'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>LastChangedby</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{employeeAllocation.lastChangedby}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Role</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{employeeAllocation.role}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>employee</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="employee.detail({id:employeeAllocation.employee.id})">{{employeeAllocation.employee.name}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+</div>

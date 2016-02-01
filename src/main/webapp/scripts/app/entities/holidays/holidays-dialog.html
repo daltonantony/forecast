@@ -1,0 +1,68 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+        <h4 class="modal-title" id="myHolidaysLabel">Create or edit a Holidays</h4>
+    </div>
+    <div class="modal-body">
+        <jh-alert-error></jh-alert-error>
+        <div class="form-group">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="holidays.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_name">Name</label>
+            <input type="text" class="form-control" name="name" id="field_name"
+                    ng-model="holidays.name"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_startDate">StartDate</label>
+            <input id="field_startDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="holidays.startDate" is-open="datePickerForStartDate.status.opened"
+            />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePickerForStartDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_endDate">EndDate</label>
+            <input id="field_endDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="holidays.endDate" is-open="datePickerForEndDate.status.opened"
+            />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePickerForEndDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_location">Location</label>
+            <input type="text" class="form-control" name="location" id="field_location"
+                    ng-model="holidays.location"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_lastChangedBy">LastChangedBy</label>
+            <input type="text" class="form-control" name="lastChangedBy" id="field_lastChangedBy"
+                    ng-model="holidays.lastChangedBy"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_lastChangedDt">LastChangedDt</label>
+            <input id="field_lastChangedDt" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="holidays.lastChangedDt" is-open="datePickerForLastChangedDt.status.opened"
+            />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePickerForLastChangedDtOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

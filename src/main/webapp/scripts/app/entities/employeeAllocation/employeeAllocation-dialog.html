@@ -1,0 +1,86 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+        <h4 class="modal-title" id="myEmployeeAllocationLabel">Create or edit a EmployeeAllocation</h4>
+    </div>
+    <div class="modal-body">
+        <jh-alert-error></jh-alert-error>
+        <div class="form-group">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="employeeAllocation.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_project">Project</label>
+            <input type="text" class="form-control" name="project" id="field_project"
+                    ng-model="employeeAllocation.project"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_startDate">StartDate</label>
+            <input id="field_startDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="employeeAllocation.startDate" is-open="datePickerForStartDate.status.opened"
+            />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePickerForStartDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_endDate">EndDate</label>
+            <input id="field_endDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="employeeAllocation.endDate" is-open="datePickerForEndDate.status.opened"
+            />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePickerForEndDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_location">Location</label>
+            <input type="text" class="form-control" name="location" id="field_location"
+                    ng-model="employeeAllocation.location"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_allocation">Allocation</label>
+            <input type="number" class="form-control" name="allocation" id="field_allocation"
+                    ng-model="employeeAllocation.allocation"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_lastChangedDate">LastChangedDate</label>
+            <input id="field_lastChangedDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="employeeAllocation.lastChangedDate" is-open="datePickerForLastChangedDate.status.opened"
+            />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePickerForLastChangedDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_lastChangedby">LastChangedby</label>
+            <input type="text" class="form-control" name="lastChangedby" id="field_lastChangedby"
+                    ng-model="employeeAllocation.lastChangedby"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_role">Role</label>
+            <input type="text" class="form-control" name="role" id="field_role"
+                    ng-model="employeeAllocation.role"
+                     />
+        </div>
+
+        <div class="form-group">
+            <label for="field_employee">employee</label>
+            <select class="form-control" id="field_employee" name="employee" ng-model="employeeAllocation.employee" ng-options="employee as employee.name for employee in employees track by employee.id">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

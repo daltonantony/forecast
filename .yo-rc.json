@@ -1,0 +1,24 @@
+{
+  "generator-jhipster": {
+    "baseName": "forecast",
+    "packageName": "com.opensolutions.forecast",
+    "packageFolder": "com/opensolutions/forecast",
+    "authenticationType": "session",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Memory",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "elasticsearch",
+    "useSass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "grunt",
+    "enableTranslation": false,
+    "enableSocialSignIn": false,
+    "rememberMeKey": "08fbd2caccb05e10264fd62fb1c929bf98dfb519",
+    "testFrameworks": [
+      "gatling"
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "employee",
+            "otherEntityName": "employee",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "name"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "project",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "startDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "endDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "location",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "allocation",
+            "fieldType": "Integer",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "lastChangedDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldId": 7,
+            "fieldName": "lastChangedby",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 8,
+            "fieldName": "role",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        }
+    ],
+    "changelogDate": "20160106140937",
+    "dto": "no",
+    "service": "serviceImpl",
+    "pagination": "no"
+}

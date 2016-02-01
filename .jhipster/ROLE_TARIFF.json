@@ -1,0 +1,49 @@
+{
+    "relationships": [],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "role",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "tariff",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "location",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "effectiveDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "expiryDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "lastChangedDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldId": 7,
+            "fieldName": "lastChangedBy",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20160106141355",
+    "dto": "no",
+    "service": "serviceImpl",
+    "pagination": "no"
+}

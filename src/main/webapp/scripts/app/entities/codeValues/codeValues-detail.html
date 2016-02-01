@@ -1,0 +1,70 @@
+
+<div>
+    <h2><span>CodeValues</span> {{codeValues.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Field</th>
+                <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span>CodeType</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{codeValues.codeType}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>CodeValue</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{codeValues.codeValue}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>EffectiveDate</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{codeValues.effectiveDate | date:'mediumDate'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>ExpiryDate</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{codeValues.expiryDate | date:'mediumDate'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>LastChangedBy</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{codeValues.lastChangedBy}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>LastChangedDate</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{codeValues.lastChangedDate | date:'mediumDate'}}</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+</div>

@@ -1,0 +1,75 @@
+<div>
+    <h2>EmployeeAllocations</h2>
+    <jh-alert></jh-alert>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <button class="btn btn-primary" ui-sref="employeeAllocation.new">
+                    <span class="glyphicon glyphicon-flash"></span> <span>Create a new EmployeeAllocation</span>
+                </button>
+            </div>
+            <div class="col-md-8">
+                <form name="searchForm" class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
+                    </div>
+                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a EmployeeAllocation</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th><span>ID</span></th>
+                    <th><span>Project</span></th>
+                    <th><span>StartDate</span></th>
+                    <th><span>EndDate</span></th>
+                    <th><span>Location</span></th>
+                    <th><span>Allocation</span></th>
+                    <th><span>LastChangedDate</span></th>
+                    <th><span>LastChangedby</span></th>
+                    <th><span>Role</span></th>
+                    <th><span>employee</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="employeeAllocation in employeeAllocations track by employeeAllocation.id">
+                    <td><a ui-sref="employeeAllocation.detail({id:employeeAllocation.id})">{{employeeAllocation.id}}</a></td>
+                    <td>{{employeeAllocation.project}}</td>
+                        <td>{{employeeAllocation.startDate | date:'mediumDate'}}</td>
+                        <td>{{employeeAllocation.endDate | date:'mediumDate'}}</td>
+                    <td>{{employeeAllocation.location}}</td>
+                    <td>{{employeeAllocation.allocation}}</td>
+                        <td>{{employeeAllocation.lastChangedDate | date:'mediumDate'}}</td>
+                    <td>{{employeeAllocation.lastChangedby}}</td>
+                    <td>{{employeeAllocation.role}}</td>
+                    <td>
+                        <a ui-sref="employee.detail({id:employeeAllocation.employee.id})">{{employeeAllocation.employee.name}}</a>
+                    </td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="employeeAllocation.detail({id:employeeAllocation.id})"
+                                class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span> View</span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="employeeAllocation.edit({id:employeeAllocation.id})"
+                                class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span> Edit</span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="employeeAllocation.delete({id:employeeAllocation.id})"
+                                class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span> Delete</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
