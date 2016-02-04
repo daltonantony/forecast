@@ -3,14 +3,15 @@ package com.opensolutions.forecast.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import java.time.LocalDate;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Employee.
@@ -36,6 +37,10 @@ public class Employee implements Serializable {
 
     @Column(name = "domain")
     private String domain;
+
+    //@JoinFormula("select * from code_values where code_type='domain'")
+    @Transient
+    private List<CodeValues> domains;
 
     @Column(name = "last_changed_date")
     private LocalDate lastChangedDate;
@@ -140,5 +145,13 @@ public class Employee implements Serializable {
             ", lastChangedDate='" + lastChangedDate + "'" +
             ", lastChangedBy='" + lastChangedBy + "'" +
             '}';
+    }
+
+    public List<CodeValues> getDomains() {
+        return domains;
+    }
+
+    public void setDomains(List<CodeValues> domains) {
+        this.domains = domains;
     }
 }

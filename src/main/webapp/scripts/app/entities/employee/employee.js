@@ -42,7 +42,7 @@ angular.module('forecastApp')
                 parent: 'employee',
                 url: '/new',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['ROLE_USER']
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
@@ -50,17 +50,9 @@ angular.module('forecastApp')
                         controller: 'EmployeeDialogController',
                         size: 'lg',
                         resolve: {
-                            entity: function () {
-                                return {
-                                    name: null,
-                                    associateId: null,
-                                    raboId: null,
-                                    domain: null,
-                                    lastChangedDate: null,
-                                    lastChangedBy: null,
-                                    id: null
-                                };
-                            }
+                            entity: ['$stateParams', 'Employee', function($stateParams, Employee) {
+                                return Employee.get({id : 0});
+                            }]
                         }
                     }).result.then(function(result) {
                         $state.go('employee', null, { reload: true });

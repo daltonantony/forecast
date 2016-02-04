@@ -1,5 +1,7 @@
 package com.opensolutions.forecast.service.impl;
 
+import com.opensolutions.forecast.domain.CodeValues;
+import com.opensolutions.forecast.repository.CodeValuesRepository;
 import com.opensolutions.forecast.service.EmployeeService;
 import com.opensolutions.forecast.domain.Employee;
 import com.opensolutions.forecast.repository.EmployeeRepository;
@@ -25,13 +27,16 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class EmployeeServiceImpl implements EmployeeService{
 
     private final Logger log = LoggerFactory.getLogger(EmployeeServiceImpl.class);
-    
+
     @Inject
     private EmployeeRepository employeeRepository;
-    
+
+    @Inject
+    private CodeValuesRepository codeValuesRepository;
+
     @Inject
     private EmployeeSearchRepository employeeSearchRepository;
-    
+
     /**
      * Save a employee.
      * @return the persisted entity
@@ -47,7 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService{
      *  get all the employees.
      *  @return the list of entities
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<Employee> findAll() {
         log.debug("Request to get all Employees");
         List<Employee> result = employeeRepository.findAll();
@@ -55,14 +60,20 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     /**
-     *  get one employee by id.
-     *  @return the entity
+     * get one employee by id.
+     *
+     * @return the entity
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public Employee findOne(Long id) {
         log.debug("Request to get Employee : {}", id);
-        Employee employee = employeeRepository.findOne(id);
-        return employee;
+        if (id == 0) {
+            List<CodeValues> all = codeValuesRepository.findAll();
+            Employee employee = new Employee();
+            employee.setDomains(all);
+            return employee;
+        }
+        return employeeRepository.findOne(id);
     }
 
     /**
@@ -78,9 +89,9 @@ public class EmployeeServiceImpl implements EmployeeService{
      * search for the employee corresponding
      * to the query.
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<Employee> search(String query) {
-        
+
         log.debug("REST request to search Employees for query {}", query);
         return StreamSupport
             .stream(employeeSearchRepository.search(queryStringQuery(query)).spliterator(), false)

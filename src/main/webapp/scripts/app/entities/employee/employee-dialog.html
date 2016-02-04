@@ -33,9 +33,12 @@
         </div>
         <div class="form-group">
             <label class="control-label" for="field_domain">Domain</label>
-            <input type="text" class="form-control" name="domain" id="field_domain"
+            <!--<input type="text" class="form-control" name="domain" id="field_domain"
                     ng-model="employee.domain"
-                     />
+                     />-->
+            <select name="domain" id="field_domain" class="form-control" ng-model="employee.domain" ng-options="cv as cv.codeValue for cv in employee.domains">
+                <option value="">---- Select Domain -----</option>
+            </select>
         </div>
         <div class="form-group">
             <label class="control-label" for="field_lastChangedDate">LastChangedDate</label>
