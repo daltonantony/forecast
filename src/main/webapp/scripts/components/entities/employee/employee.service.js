@@ -9,7 +9,6 @@ angular.module('forecastApp')
                 transformResponse: function (data) {
                     data = angular.fromJson(data);
                     data.lastChangedDate = DateUtils.convertLocaleDateFromServer(data.lastChangedDate);
-                    alert(JSON.stringify(data));
                     return data;
                 }
             },

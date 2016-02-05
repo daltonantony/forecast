@@ -30,10 +30,10 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class EmployeeResource {
 
     private final Logger log = LoggerFactory.getLogger(EmployeeResource.class);
-        
+
     @Inject
     private EmployeeService employeeService;
-    
+
     /**
      * POST  /employees -> Create a new employee.
      */
@@ -80,7 +80,7 @@ public class EmployeeResource {
     public List<Employee> getAllEmployees() {
         log.debug("REST request to get all Employees");
         return employeeService.findAll();
-            }
+    }
 
     /**
      * GET  /employees/:id -> get the "id" employee.
@@ -93,9 +93,7 @@ public class EmployeeResource {
         log.debug("REST request to get Employee : {}", id);
         Employee employee = employeeService.findOne(id);
         return Optional.ofNullable(employee)
-            .map(result -> new ResponseEntity<>(
-                result,
-                HttpStatus.OK))
+            .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 

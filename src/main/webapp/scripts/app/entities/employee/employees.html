@@ -24,7 +24,6 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th><span>ID</span></th>
                     <th><span>Name</span></th>
                     <th><span>AssociateId</span></th>
                     <th><span>RaboId</span></th>
@@ -36,12 +35,11 @@
             </thead>
             <tbody>
                 <tr ng-repeat="employee in employees track by employee.id">
-                    <td><a ui-sref="employee.detail({id:employee.id})">{{employee.id}}</a></td>
-                    <td>{{employee.name}}</td>
+                    <td><a ui-sref="employee.detail({id:employee.id})">{{employee.name}}</td>
                     <td>{{employee.associateId}}</td>
                     <td>{{employee.raboId}}</td>
                     <td>{{employee.domain}}</td>
-                        <td>{{employee.lastChangedDate | date:'mediumDate'}}</td>
+                    <td>{{employee.lastChangedDate | date:'mediumDate'}}</td>
                     <td>{{employee.lastChangedBy}}</td>
                     <td>
                         <button type="submit"
