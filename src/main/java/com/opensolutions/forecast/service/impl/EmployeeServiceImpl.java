@@ -1,7 +1,5 @@
 package com.opensolutions.forecast.service.impl;
 
-import com.opensolutions.forecast.domain.CodeValues;
-import com.opensolutions.forecast.repository.CodeValuesRepository;
 import com.opensolutions.forecast.service.EmployeeService;
 import com.opensolutions.forecast.domain.Employee;
 import com.opensolutions.forecast.repository.EmployeeRepository;
@@ -32,9 +30,6 @@ public class EmployeeServiceImpl implements EmployeeService{
     private EmployeeRepository employeeRepository;
 
     @Inject
-    private CodeValuesRepository codeValuesRepository;
-
-    @Inject
     private EmployeeSearchRepository employeeSearchRepository;
 
     /**
@@ -60,20 +55,14 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     /**
-     * get one employee by id.
-     *
-     * @return the entity
+     *  get one employee by id.
+     *  @return the entity
      */
     @Transactional(readOnly = true)
     public Employee findOne(Long id) {
         log.debug("Request to get Employee : {}", id);
-        if (id == 0) {
-            List<CodeValues> all = codeValuesRepository.findAll();
-            Employee employee = new Employee();
-            employee.setDomains(all);
-            return employee;
-        }
-        return employeeRepository.findOne(id);
+        Employee employee = employeeRepository.findOne(id);
+        return employee;
     }
 
     /**

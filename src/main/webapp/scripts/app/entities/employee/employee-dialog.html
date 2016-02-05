@@ -1,4 +1,3 @@
-
 <form name="editForm" role="form" novalidate ng-submit="save()">
 
     <div class="modal-header">
@@ -36,7 +35,7 @@
             <!--<input type="text" class="form-control" name="domain" id="field_domain"
                     ng-model="employee.domain"
                      />-->
-            <select name="domain" id="field_domain" class="form-control" ng-model="employee.domain" ng-options="cv as cv.codeValue for cv in employee.domains">
+            <select name="domain" id="field_domain" class="form-control" ng-model="employee.domain" ng-options="cv.codeValue as cv.codeValue for cv in domains">
                 <option value="">---- Select Domain -----</option>
             </select>
         </div>

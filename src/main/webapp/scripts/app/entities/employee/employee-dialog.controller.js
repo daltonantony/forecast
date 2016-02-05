@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('forecastApp').controller('EmployeeDialogController',
-    ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Employee', 'EmployeeAllocation',
-        function($scope, $stateParams, $uibModalInstance, entity, Employee, EmployeeAllocation) {
+    ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Employee', 'EmployeeAllocation', 'CodeValuesSearch',
+        function($scope, $stateParams, $uibModalInstance, entity, Employee, EmployeeAllocation, CodeValuesSearch) {
 
         $scope.employee = entity;
         $scope.employeeallocations = EmployeeAllocation.query();
+        $scope.domains = CodeValuesSearch.query({query: 'Domain'});
         $scope.load = function(id) {
             Employee.get({id : id}, function(result) {
                 $scope.employee = result;
