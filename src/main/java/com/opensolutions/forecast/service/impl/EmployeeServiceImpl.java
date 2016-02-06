@@ -1,5 +1,6 @@
 package com.opensolutions.forecast.service.impl;
 
+import com.opensolutions.forecast.security.SecurityUtils;
 import com.opensolutions.forecast.service.EmployeeService;
 import com.opensolutions.forecast.domain.Employee;
 import com.opensolutions.forecast.repository.EmployeeRepository;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,6 +39,8 @@ public class EmployeeServiceImpl implements EmployeeService{
      * @return the persisted entity
      */
     public Employee save(Employee employee) {
+        employee.setLastChangedBy(SecurityUtils.getCurrentUser().getUsername());
+        employee.setLastChangedDate(LocalDate.now());
         log.debug("Request to save Employee : {}", employee);
         Employee result = employeeRepository.save(employee);
         employeeSearchRepository.save(result);

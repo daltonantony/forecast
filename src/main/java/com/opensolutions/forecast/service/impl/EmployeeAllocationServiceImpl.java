@@ -1,5 +1,6 @@
 package com.opensolutions.forecast.service.impl;
 
+import com.opensolutions.forecast.security.SecurityUtils;
 import com.opensolutions.forecast.service.EmployeeAllocationService;
 import com.opensolutions.forecast.domain.EmployeeAllocation;
 import com.opensolutions.forecast.repository.EmployeeAllocationRepository;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,18 +27,20 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class EmployeeAllocationServiceImpl implements EmployeeAllocationService{
 
     private final Logger log = LoggerFactory.getLogger(EmployeeAllocationServiceImpl.class);
-    
+
     @Inject
     private EmployeeAllocationRepository employeeAllocationRepository;
-    
+
     @Inject
     private EmployeeAllocationSearchRepository employeeAllocationSearchRepository;
-    
+
     /**
      * Save a employeeAllocation.
      * @return the persisted entity
      */
     public EmployeeAllocation save(EmployeeAllocation employeeAllocation) {
+        employeeAllocation.setLastChangedBy(SecurityUtils.getCurrentUser().getUsername());
+        employeeAllocation.setLastChangedDate(LocalDate.now());
         log.debug("Request to save EmployeeAllocation : {}", employeeAllocation);
         EmployeeAllocation result = employeeAllocationRepository.save(employeeAllocation);
         employeeAllocationSearchRepository.save(result);
@@ -47,7 +51,7 @@ public class EmployeeAllocationServiceImpl implements EmployeeAllocationService{
      *  get all the employeeAllocations.
      *  @return the list of entities
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<EmployeeAllocation> findAll() {
         log.debug("Request to get all EmployeeAllocations");
         List<EmployeeAllocation> result = employeeAllocationRepository.findAll();
@@ -58,7 +62,7 @@ public class EmployeeAllocationServiceImpl implements EmployeeAllocationService{
      *  get one employeeAllocation by id.
      *  @return the entity
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public EmployeeAllocation findOne(Long id) {
         log.debug("Request to get EmployeeAllocation : {}", id);
         EmployeeAllocation employeeAllocation = employeeAllocationRepository.findOne(id);
@@ -78,9 +82,9 @@ public class EmployeeAllocationServiceImpl implements EmployeeAllocationService{
      * search for the employeeAllocation corresponding
      * to the query.
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<EmployeeAllocation> search(String query) {
-        
+
         log.debug("REST request to search EmployeeAllocations for query {}", query);
         return StreamSupport
             .stream(employeeAllocationSearchRepository.search(queryStringQuery(query)).spliterator(), false)
