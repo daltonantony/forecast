@@ -4,12 +4,16 @@ import com.opensolutions.forecast.service.HolidaysService;
 import com.opensolutions.forecast.domain.Holidays;
 import com.opensolutions.forecast.repository.HolidaysRepository;
 import com.opensolutions.forecast.repository.search.HolidaysSearchRepository;
+import com.opensolutions.forecast.security.SecurityUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,6 +41,8 @@ public class HolidaysServiceImpl implements HolidaysService{
      * @return the persisted entity
      */
     public Holidays save(Holidays holidays) {
+    	holidays.setLastChangedDt(LocalDate.now());
+    	holidays.setLastChangedBy(SecurityUtils.getCurrentUserLogin());
         log.debug("Request to save Holidays : {}", holidays);
         Holidays result = holidaysRepository.save(holidays);
         holidaysSearchRepository.save(result);
