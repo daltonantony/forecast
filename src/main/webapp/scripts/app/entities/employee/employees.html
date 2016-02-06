@@ -28,8 +28,8 @@
                     <th><span>AssociateId</span></th>
                     <th><span>RaboId</span></th>
                     <th><span>Domain</span></th>
-                    <th><span>LastChangedDate</span></th>
-                    <th><span>LastChangedBy</span></th>
+                <!--    <th><span>LastChangedDate</span></th>
+                    <th><span>LastChangedBy</span></th>-->
                     <th></th>
                 </tr>
             </thead>
@@ -39,8 +39,8 @@
                     <td>{{employee.associateId}}</td>
                     <td>{{employee.raboId}}</td>
                     <td>{{employee.domain}}</td>
-                    <td>{{employee.lastChangedDate | date:'mediumDate'}}</td>
-                    <td>{{employee.lastChangedBy}}</td>
+             <!--       <td>{{employee.lastChangedDate | date:'mediumDate'}}</td>
+                    <td>{{employee.lastChangedBy}}</td>-->
                     <td>
                         <button type="submit"
                                 ui-sref="employee.detail({id:employee.id})"

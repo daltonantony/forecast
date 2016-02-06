@@ -24,7 +24,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th><span>ID</span></th>
+                 <!--   <th><span>ID</span></th>-->
                     <th><span>CodeType</span></th>
                     <th><span>CodeValue</span></th>
                     <th><span>EffectiveDate</span></th>
@@ -36,7 +36,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="codeValues in codeValuess track by codeValues.id">
-                    <td><a ui-sref="codeValues.detail({id:codeValues.id})">{{codeValues.id}}</a></td>
+                    <!--<td><a ui-sref="codeValues.detail({id:codeValues.id})">{{codeValues.id}}</a></td>-->
                     <td>{{codeValues.codeType}}</td>
                     <td>{{codeValues.codeValue}}</td>
                         <td>{{codeValues.effectiveDate | date:'mediumDate'}}</td>

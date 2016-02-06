@@ -24,7 +24,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th><span>ID</span></th>
+                   <!-- <th><span>ID</span></th>-->
                     <th><span>Project</span></th>
                     <th><span>StartDate</span></th>
                     <th><span>EndDate</span></th>
@@ -39,7 +39,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="employeeAllocation in employeeAllocations track by employeeAllocation.id">
-                    <td><a ui-sref="employeeAllocation.detail({id:employeeAllocation.id})">{{employeeAllocation.id}}</a></td>
+                 <!--   <td><a ui-sref="employeeAllocation.detail({id:employeeAllocation.id})">{{employeeAllocation.id}}</a></td>-->
                     <td>{{employeeAllocation.project}}</td>
                         <td>{{employeeAllocation.startDate | date:'mediumDate'}}</td>
                         <td>{{employeeAllocation.endDate | date:'mediumDate'}}</td>
