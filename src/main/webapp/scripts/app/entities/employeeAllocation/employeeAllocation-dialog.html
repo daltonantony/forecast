@@ -14,6 +14,12 @@
                     ng-model="employeeAllocation.id" readonly />
         </div>-->
         <div class="form-group">
+            <label for="field_employee">Employee</label>
+            <select class="form-control" id="field_employee" name="employee" ng-model="employeeAllocation.employee" ng-options="employee as employee.name for employee in employees track by employee.id">
+                <option value="">---- Select Employee -----</option>
+            </select>
+        </div>
+        <div class="form-group">
             <label class="control-label" for="field_project">Project</label>
         <!--    <input type="text" class="form-control" name="project" id="field_project"
                     ng-model="employeeAllocation.project"
@@ -69,17 +75,14 @@
         </div>
         <div class="form-group">
             <label class="control-label" for="field_role">Role</label>
-            <input type="text" class="form-control" name="role" id="field_role"
+           <!-- <input type="text" class="form-control" name="role" id="field_role"
                     ng-model="employeeAllocation.role"
-                     />
-        </div>
-
-        <div class="form-group">
-            <label for="field_employee">employee</label>
-            <select class="form-control" id="field_employee" name="employee" ng-model="employeeAllocation.employee" ng-options="employee as employee.name for employee in employees track by employee.id">
-                <option value=""></option>
+                     />-->
+            <select name="location" id="field_role" class="form-control" ng-model="employeeAllocation.role" ng-options="cv.codeValue as cv.codeValue for cv in roles">
+                <option value="">---- Select Project -----</option>
             </select>
         </div>
+
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">

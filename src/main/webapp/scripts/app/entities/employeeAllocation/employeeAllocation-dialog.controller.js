@@ -6,6 +6,7 @@ angular.module('forecastApp').controller('EmployeeAllocationDialogController',
 
         $scope.projects = CodeValuesSearch.query({query: 'Project'});
         $scope.locations = CodeValuesSearch.query({query: 'Location'});
+        $scope.roles = CodeValuesSearch.query({query: 'Role'});
         $scope.employeeAllocation = entity;
         $scope.employees = Employee.query();
         $scope.load = function(id) {
