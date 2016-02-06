@@ -28,8 +28,6 @@
                     <th><span>StartDate</span></th>
                     <th><span>EndDate</span></th>
                     <th><span>Location</span></th>
-                    <th><span>LastChangedBy</span></th>
-                    <th><span>LastChangedDt</span></th>
                     <th></th>
                 </tr>
             </thead>
@@ -39,8 +37,6 @@
                     <td>{{holidays.startDate | date:'mediumDate'}}</td>
                     <td>{{holidays.endDate | date:'mediumDate'}}</td>
                     <td>{{holidays.location}}</td>
-                    <td>{{holidays.lastChangedBy}}</td>
-                        <td>{{holidays.lastChangedDt | date:'mediumDate'}}</td>
                     <td>
                         <button type="submit"
                                 ui-sref="holidays.detail({id:holidays.id})"
