@@ -14,6 +14,9 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -101,6 +104,11 @@ public class HolidaysResourceIntTest {
     @Transactional
     public void createHolidays() throws Exception {
         int databaseSizeBeforeCreate = holidaysRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Create the Holidays
 
@@ -117,8 +125,8 @@ public class HolidaysResourceIntTest {
         assertThat(testHolidays.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testHolidays.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testHolidays.getLocation()).isEqualTo(DEFAULT_LOCATION);
-        assertThat(testHolidays.getLastChangedBy()).isEqualTo(DEFAULT_LAST_CHANGED_BY);
-        assertThat(testHolidays.getLastChangedDt()).isEqualTo(DEFAULT_LAST_CHANGED_DT);
+        assertThat(testHolidays.getLastChangedBy()).isEqualTo("admin");
+        assertThat(testHolidays.getLastChangedDt()).isEqualTo(UPDATED_LAST_CHANGED_DT);
     }
 
     @Test
@@ -174,6 +182,11 @@ public class HolidaysResourceIntTest {
         holidaysRepository.saveAndFlush(holidays);
 
 		int databaseSizeBeforeUpdate = holidaysRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Update the holidays
         holidays.setName(UPDATED_NAME);
@@ -196,7 +209,7 @@ public class HolidaysResourceIntTest {
         assertThat(testHolidays.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testHolidays.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testHolidays.getLocation()).isEqualTo(UPDATED_LOCATION);
-        assertThat(testHolidays.getLastChangedBy()).isEqualTo(UPDATED_LAST_CHANGED_BY);
+        assertThat(testHolidays.getLastChangedBy()).isEqualTo("admin");
         assertThat(testHolidays.getLastChangedDt()).isEqualTo(UPDATED_LAST_CHANGED_DT);
     }
 

@@ -43,7 +43,7 @@ public class EmployeeAllocation implements Serializable {
     private LocalDate lastChangedDate;
 
     @Column(name = "last_changedby")
-    private String lastChangedBy;
+    private String lastChangedby;
 
     @Column(name = "role")
     private String role;
@@ -108,12 +108,12 @@ public class EmployeeAllocation implements Serializable {
         this.lastChangedDate = lastChangedDate;
     }
 
-    public String getLastChangedBy() {
-        return lastChangedBy;
+    public String getLastChangedby() {
+        return lastChangedby;
     }
 
-    public void setLastChangedBy(String lastChangedby) {
-        this.lastChangedBy = lastChangedBy;
+    public void setLastChangedby(String lastChangedby) {
+        this.lastChangedby = lastChangedby;
     }
 
     public String getRole() {
@@ -159,7 +159,7 @@ public class EmployeeAllocation implements Serializable {
             ", location='" + location + "'" +
             ", allocation='" + allocation + "'" +
             ", lastChangedDate='" + lastChangedDate + "'" +
-            ", lastChangedby='" + lastChangedBy + "'" +
+            ", lastChangedby='" + lastChangedby + "'" +
             ", role='" + role + "'" +
             '}';
     }

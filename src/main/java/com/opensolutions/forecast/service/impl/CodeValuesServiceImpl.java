@@ -39,7 +39,7 @@ public class CodeValuesServiceImpl implements CodeValuesService{
      * @return the persisted entity
      */
     public CodeValues save(CodeValues codeValues) {
-        codeValues.setLastChangedBy(SecurityUtils.getCurrentUser().getUsername());
+        codeValues.setLastChangedBy(SecurityUtils.getCurrentUserLogin());
         codeValues.setLastChangedDate(LocalDate.now());
         log.debug("Request to save CodeValues : {}", codeValues);
         CodeValues result = codeValuesRepository.save(codeValues);

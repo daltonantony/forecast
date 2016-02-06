@@ -14,6 +14,9 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -108,6 +111,11 @@ public class EmployeeAllocationResourceIntTest {
     @Transactional
     public void createEmployeeAllocation() throws Exception {
         int databaseSizeBeforeCreate = employeeAllocationRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Create the EmployeeAllocation
 
@@ -125,8 +133,8 @@ public class EmployeeAllocationResourceIntTest {
         assertThat(testEmployeeAllocation.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testEmployeeAllocation.getLocation()).isEqualTo(DEFAULT_LOCATION);
         assertThat(testEmployeeAllocation.getAllocation()).isEqualTo(DEFAULT_ALLOCATION);
-        assertThat(testEmployeeAllocation.getLastChangedDate()).isEqualTo(DEFAULT_LAST_CHANGED_DATE);
-        assertThat(testEmployeeAllocation.getLastChangedby()).isEqualTo(DEFAULT_LAST_CHANGEDBY);
+        assertThat(testEmployeeAllocation.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
+        assertThat(testEmployeeAllocation.getLastChangedby()).isEqualTo("admin");
         assertThat(testEmployeeAllocation.getRole()).isEqualTo(DEFAULT_ROLE);
     }
 
@@ -187,6 +195,11 @@ public class EmployeeAllocationResourceIntTest {
         employeeAllocationRepository.saveAndFlush(employeeAllocation);
 
 		int databaseSizeBeforeUpdate = employeeAllocationRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Update the employeeAllocation
         employeeAllocation.setProject(UPDATED_PROJECT);
@@ -213,7 +226,7 @@ public class EmployeeAllocationResourceIntTest {
         assertThat(testEmployeeAllocation.getLocation()).isEqualTo(UPDATED_LOCATION);
         assertThat(testEmployeeAllocation.getAllocation()).isEqualTo(UPDATED_ALLOCATION);
         assertThat(testEmployeeAllocation.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
-        assertThat(testEmployeeAllocation.getLastChangedby()).isEqualTo(UPDATED_LAST_CHANGEDBY);
+        assertThat(testEmployeeAllocation.getLastChangedby()).isEqualTo("admin");
         assertThat(testEmployeeAllocation.getRole()).isEqualTo(UPDATED_ROLE);
     }
 

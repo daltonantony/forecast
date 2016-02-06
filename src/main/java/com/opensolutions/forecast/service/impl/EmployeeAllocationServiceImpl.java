@@ -39,7 +39,7 @@ public class EmployeeAllocationServiceImpl implements EmployeeAllocationService{
      * @return the persisted entity
      */
     public EmployeeAllocation save(EmployeeAllocation employeeAllocation) {
-        employeeAllocation.setLastChangedBy(SecurityUtils.getCurrentUser().getUsername());
+        employeeAllocation.setLastChangedby(SecurityUtils.getCurrentUserLogin());
         employeeAllocation.setLastChangedDate(LocalDate.now());
         log.debug("Request to save EmployeeAllocation : {}", employeeAllocation);
         EmployeeAllocation result = employeeAllocationRepository.save(employeeAllocation);

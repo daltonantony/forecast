@@ -14,6 +14,13 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -100,9 +107,13 @@ public class EmployeeResourceIntTest {
     @Transactional
     public void createEmployee() throws Exception {
         int databaseSizeBeforeCreate = employeeRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Create the Employee
-
         restEmployeeMockMvc.perform(post("/api/employees")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(employee)))
@@ -116,8 +127,8 @@ public class EmployeeResourceIntTest {
         assertThat(testEmployee.getAssociateId()).isEqualTo(DEFAULT_ASSOCIATE_ID);
         assertThat(testEmployee.getRaboId()).isEqualTo(DEFAULT_RABO_ID);
         assertThat(testEmployee.getDomain()).isEqualTo(DEFAULT_DOMAIN);
-        assertThat(testEmployee.getLastChangedDate()).isEqualTo(DEFAULT_LAST_CHANGED_DATE);
-        assertThat(testEmployee.getLastChangedBy()).isEqualTo(DEFAULT_LAST_CHANGED_BY);
+        assertThat(testEmployee.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
+        assertThat(testEmployee.getLastChangedBy()).isEqualTo("admin");
     }
 
     @Test
@@ -125,7 +136,7 @@ public class EmployeeResourceIntTest {
     public void getAllEmployees() throws Exception {
         // Initialize the database
         employeeRepository.saveAndFlush(employee);
-
+        
         // Get all the employees
         restEmployeeMockMvc.perform(get("/api/employees?sort=id,desc"))
                 .andExpect(status().isOk())
@@ -173,6 +184,11 @@ public class EmployeeResourceIntTest {
         employeeRepository.saveAndFlush(employee);
 
 		int databaseSizeBeforeUpdate = employeeRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Update the employee
         employee.setName(UPDATED_NAME);
@@ -196,7 +212,7 @@ public class EmployeeResourceIntTest {
         assertThat(testEmployee.getRaboId()).isEqualTo(UPDATED_RABO_ID);
         assertThat(testEmployee.getDomain()).isEqualTo(UPDATED_DOMAIN);
         assertThat(testEmployee.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
-        assertThat(testEmployee.getLastChangedBy()).isEqualTo(UPDATED_LAST_CHANGED_BY);
+        assertThat(testEmployee.getLastChangedBy()).isEqualTo("admin");
     }
 
     @Test

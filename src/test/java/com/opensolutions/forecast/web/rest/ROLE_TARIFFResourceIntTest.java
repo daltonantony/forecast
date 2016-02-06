@@ -14,6 +14,9 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -106,6 +109,11 @@ public class ROLE_TARIFFResourceIntTest {
     @Transactional
     public void createROLE_TARIFF() throws Exception {
         int databaseSizeBeforeCreate = rOLE_TARIFFRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Create the ROLE_TARIFF
 
@@ -123,8 +131,8 @@ public class ROLE_TARIFFResourceIntTest {
         assertThat(testROLE_TARIFF.getLocation()).isEqualTo(DEFAULT_LOCATION);
         assertThat(testROLE_TARIFF.getEffectiveDate()).isEqualTo(DEFAULT_EFFECTIVE_DATE);
         assertThat(testROLE_TARIFF.getExpiryDate()).isEqualTo(DEFAULT_EXPIRY_DATE);
-        assertThat(testROLE_TARIFF.getLastChangedDate()).isEqualTo(DEFAULT_LAST_CHANGED_DATE);
-        assertThat(testROLE_TARIFF.getLastChangedBy()).isEqualTo(DEFAULT_LAST_CHANGED_BY);
+        assertThat(testROLE_TARIFF.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
+        assertThat(testROLE_TARIFF.getLastChangedBy()).isEqualTo("admin");
     }
 
     @Test
@@ -182,6 +190,11 @@ public class ROLE_TARIFFResourceIntTest {
         rOLE_TARIFFRepository.saveAndFlush(rOLE_TARIFF);
 
 		int databaseSizeBeforeUpdate = rOLE_TARIFFRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Update the rOLE_TARIFF
         rOLE_TARIFF.setRole(UPDATED_ROLE);
@@ -207,7 +220,7 @@ public class ROLE_TARIFFResourceIntTest {
         assertThat(testROLE_TARIFF.getEffectiveDate()).isEqualTo(UPDATED_EFFECTIVE_DATE);
         assertThat(testROLE_TARIFF.getExpiryDate()).isEqualTo(UPDATED_EXPIRY_DATE);
         assertThat(testROLE_TARIFF.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
-        assertThat(testROLE_TARIFF.getLastChangedBy()).isEqualTo(UPDATED_LAST_CHANGED_BY);
+        assertThat(testROLE_TARIFF.getLastChangedBy()).isEqualTo("admin");
     }
 
     @Test

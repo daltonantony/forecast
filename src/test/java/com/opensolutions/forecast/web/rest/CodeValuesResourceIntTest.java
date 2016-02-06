@@ -14,6 +14,9 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -101,6 +104,11 @@ public class CodeValuesResourceIntTest {
     @Transactional
     public void createCodeValues() throws Exception {
         int databaseSizeBeforeCreate = codeValuesRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Create the CodeValues
 
@@ -117,8 +125,8 @@ public class CodeValuesResourceIntTest {
         assertThat(testCodeValues.getCodeValue()).isEqualTo(DEFAULT_CODE_VALUE);
         assertThat(testCodeValues.getEffectiveDate()).isEqualTo(DEFAULT_EFFECTIVE_DATE);
         assertThat(testCodeValues.getExpiryDate()).isEqualTo(DEFAULT_EXPIRY_DATE);
-        assertThat(testCodeValues.getLastChangedBy()).isEqualTo(DEFAULT_LAST_CHANGED_BY);
-        assertThat(testCodeValues.getLastChangedDate()).isEqualTo(DEFAULT_LAST_CHANGED_DATE);
+        assertThat(testCodeValues.getLastChangedBy()).isEqualTo("admin");
+        assertThat(testCodeValues.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
     }
 
     @Test
@@ -174,6 +182,11 @@ public class CodeValuesResourceIntTest {
         codeValuesRepository.saveAndFlush(codeValues);
 
 		int databaseSizeBeforeUpdate = codeValuesRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Update the codeValues
         codeValues.setCodeType(UPDATED_CODE_TYPE);
@@ -196,7 +209,7 @@ public class CodeValuesResourceIntTest {
         assertThat(testCodeValues.getCodeValue()).isEqualTo(UPDATED_CODE_VALUE);
         assertThat(testCodeValues.getEffectiveDate()).isEqualTo(UPDATED_EFFECTIVE_DATE);
         assertThat(testCodeValues.getExpiryDate()).isEqualTo(UPDATED_EXPIRY_DATE);
-        assertThat(testCodeValues.getLastChangedBy()).isEqualTo(UPDATED_LAST_CHANGED_BY);
+        assertThat(testCodeValues.getLastChangedBy()).isEqualTo("admin");
         assertThat(testCodeValues.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
     }
 
