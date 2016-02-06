@@ -4,12 +4,16 @@ import com.opensolutions.forecast.service.ROLE_TARIFFService;
 import com.opensolutions.forecast.domain.ROLE_TARIFF;
 import com.opensolutions.forecast.repository.ROLE_TARIFFRepository;
 import com.opensolutions.forecast.repository.search.ROLE_TARIFFSearchRepository;
+import com.opensolutions.forecast.security.SecurityUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,6 +41,8 @@ public class ROLE_TARIFFServiceImpl implements ROLE_TARIFFService{
      * @return the persisted entity
      */
     public ROLE_TARIFF save(ROLE_TARIFF rOLE_TARIFF) {
+    	rOLE_TARIFF.setLastChangedDate(LocalDate.now());
+    	rOLE_TARIFF.setLastChangedBy(SecurityUtils.getCurrentUserLogin());
         log.debug("Request to save ROLE_TARIFF : {}", rOLE_TARIFF);
         ROLE_TARIFF result = rOLE_TARIFFRepository.save(rOLE_TARIFF);
         rOLE_TARIFFSearchRepository.save(result);

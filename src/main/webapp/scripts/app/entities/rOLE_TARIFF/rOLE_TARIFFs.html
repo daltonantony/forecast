@@ -24,27 +24,21 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th><span>ID</span></th>
                     <th><span>Role</span></th>
                     <th><span>Tariff</span></th>
                     <th><span>Location</span></th>
                     <th><span>EffectiveDate</span></th>
                     <th><span>ExpiryDate</span></th>
-                    <th><span>LastChangedDate</span></th>
-                    <th><span>LastChangedBy</span></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="rOLE_TARIFF in rOLE_TARIFFs track by rOLE_TARIFF.id">
-                    <td><a ui-sref="rOLE_TARIFF.detail({id:rOLE_TARIFF.id})">{{rOLE_TARIFF.id}}</a></td>
-                    <td>{{rOLE_TARIFF.role}}</td>
+                    <td><a ui-sref="rOLE_TARIFF.detail({id:rOLE_TARIFF.id})">{{rOLE_TARIFF.role}}</a></td>
                     <td>{{rOLE_TARIFF.tariff}}</td>
                     <td>{{rOLE_TARIFF.location}}</td>
-                        <td>{{rOLE_TARIFF.effectiveDate | date:'mediumDate'}}</td>
-                        <td>{{rOLE_TARIFF.expiryDate | date:'mediumDate'}}</td>
-                        <td>{{rOLE_TARIFF.lastChangedDate | date:'mediumDate'}}</td>
-                    <td>{{rOLE_TARIFF.lastChangedBy}}</td>
+                    <td>{{rOLE_TARIFF.effectiveDate | date:'mediumDate'}}</td>
+                    <td>{{rOLE_TARIFF.expiryDate | date:'mediumDate'}}</td>
                     <td>
                         <button type="submit"
                                 ui-sref="rOLE_TARIFF.detail({id:rOLE_TARIFF.id})"

@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('forecastApp').controller('ROLE_TARIFFDialogController',
-    ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'ROLE_TARIFF',
-        function($scope, $stateParams, $uibModalInstance, entity, ROLE_TARIFF) {
+    ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'ROLE_TARIFF', 'CodeValuesSearch',
+        function($scope, $stateParams, $uibModalInstance, entity, ROLE_TARIFF, CodeValuesSearch) {
 
+    	$scope.roles = CodeValuesSearch.query({query: 'Role'});
+    	$scope.locations = CodeValuesSearch.query({query: 'Location'});
         $scope.rOLE_TARIFF = entity;
         $scope.load = function(id) {
             ROLE_TARIFF.get({id : id}, function(result) {
