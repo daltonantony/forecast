@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -84,10 +85,14 @@ public class CodeValuesServiceImpl implements CodeValuesService{
      */
     @Transactional(readOnly = true)
     public List<CodeValues> search(String query) {
-
         log.debug("REST request to search CodeValuess for query {}", query);
-        return StreamSupport
-            .stream(codeValuesSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
+        final List<CodeValues> queriedCodeValues = new ArrayList<>();
+        final List<CodeValues> allCodeValues = findAll();
+        for (CodeValues codeValues : allCodeValues) {
+			if (codeValues.getCodeType().equalsIgnoreCase(query)) {
+				queriedCodeValues.add(codeValues);
+			}
+		}
+        return queriedCodeValues;
     }
 }
