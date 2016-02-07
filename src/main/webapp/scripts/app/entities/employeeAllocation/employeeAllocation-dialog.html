@@ -8,11 +8,6 @@
     </div>
     <div class="modal-body">
         <jh-alert-error></jh-alert-error>
-       <!-- <div class="form-group">
-            <label for="id">ID</label>
-            <input type="text" class="form-control" id="id" name="id"
-                    ng-model="employeeAllocation.id" readonly />
-        </div>-->
         <div class="form-group">
             <label for="field_employee">Employee</label>
             <select class="form-control" id="field_employee" name="employee" ng-model="employeeAllocation.employee" ng-options="employee as employee.name for employee in employees track by employee.id">
@@ -21,9 +16,6 @@
         </div>
         <div class="form-group">
             <label class="control-label" for="field_project">Project</label>
-        <!--    <input type="text" class="form-control" name="project" id="field_project"
-                    ng-model="employeeAllocation.project"
-                     />-->
             <select name="project" id="field_project" class="form-control" ng-model="employeeAllocation.project" ng-options="cv.codeValue as cv.codeValue for cv in projects">
                 <option value="">---- Select Project -----</option>
             </select>
@@ -46,11 +38,8 @@
         </div>
         <div class="form-group">
             <label class="control-label" for="field_location">Location</label>
-           <!-- <input type="text" class="form-control" name="location" id="field_location"
-                    ng-model="employeeAllocation.location"
-                     />-->
-            <select name="location" id="field_location" class="form-control" ng-model="employeeAllocation.project" ng-options="cv.codeValue as cv.codeValue for cv in locations">
-                <option value="">---- Select Project -----</option>
+            <select name="location" id="field_location" class="form-control" ng-model="employeeAllocation.location" ng-options="cv.codeValue as cv.codeValue for cv in locations">
+                <option value="">---- Select Location -----</option>
             </select>
         </div>
         <div class="form-group">
@@ -59,27 +48,10 @@
                     ng-model="employeeAllocation.allocation"
                      />
         </div>
-        <!--<div class="form-group">
-            <label class="control-label" for="field_lastChangedDate">LastChangedDate</label>
-            <input id="field_lastChangedDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="employeeAllocation.lastChangedDate" is-open="datePickerForLastChangedDate.status.opened"
-            />
-            <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="datePickerForLastChangedDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
-        </div>
-        <div class="form-group">
-            <label class="control-label" for="field_lastChangedby">LastChangedby</label>
-            <input type="text" class="form-control" name="lastChangedby" id="field_lastChangedby"
-                    ng-model="employeeAllocation.lastChangedby"
-                     />
-        </div>-->
         <div class="form-group">
             <label class="control-label" for="field_role">Role</label>
-           <!-- <input type="text" class="form-control" name="role" id="field_role"
-                    ng-model="employeeAllocation.role"
-                     />-->
             <select name="location" id="field_role" class="form-control" ng-model="employeeAllocation.role" ng-options="cv.codeValue as cv.codeValue for cv in roles">
-                <option value="">---- Select Project -----</option>
+                <option value="">---- Select Role -----</option>
             </select>
         </div>
 

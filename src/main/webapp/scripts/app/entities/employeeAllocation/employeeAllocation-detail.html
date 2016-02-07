@@ -1,6 +1,6 @@
 
 <div>
-    <h2><span>EmployeeAllocation</span> {{employeeAllocation.id}}</h2>
+    <h2><span>EmployeeAllocation - </span> {{employeeAllocation.employee.name}}</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -76,7 +76,7 @@
             </tr>
             <tr>
                 <td>
-                    <span>employee</span>
+                    <span>Employee</span>
                 </td>
                 <td>
                     <a class="form-control-static" ui-sref="employee.detail({id:employeeAllocation.employee.id})">{{employeeAllocation.employee.name}}</a>
