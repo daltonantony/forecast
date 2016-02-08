@@ -54,7 +54,7 @@ angular.module('forecastApp')
                                 return {
                                     name: null,
                                     associateId: null,
-                                    raboId: null,
+                                    clientId: null,
                                     domain: null,
                                     lastChangedDate: null,
                                     lastChangedBy: null,

@@ -27,7 +27,7 @@
             <column name="effective_date" type="date"/>
             <column name="expiry_date" type="date"/>
             <column name="last_changed_by" type="string"/>
-            <column name="last_changed_date" type="date"/>
+            <column name="last_changed_date" type="date" defaultValueDate="${now}"/>
         </loadData>
     </changeSet>
 </databaseChangeLog>
