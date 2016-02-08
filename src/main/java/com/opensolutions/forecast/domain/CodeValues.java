@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -22,12 +24,15 @@ public class CodeValues implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Column(name = "code_type")
     private String codeType;
 
+    @NotNull
     @Column(name = "code_value")
     private String codeValue;
 
+    @NotNull
     @Column(name = "effective_date")
     private LocalDate effectiveDate;
 

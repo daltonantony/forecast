@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -41,14 +43,14 @@ public class HolidaysResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Holidays> createHolidays(@RequestBody Holidays holidays) throws URISyntaxException {
+    public ResponseEntity<Holidays> createHolidays(@RequestBody @Valid Holidays holidays) throws URISyntaxException {
         log.debug("REST request to save Holidays : {}", holidays);
         if (holidays.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("holidays", "idexists", "A new holidays cannot already have an ID")).body(null);
         }
         Holidays result = holidaysService.save(holidays);
         return ResponseEntity.created(new URI("/api/holidayss/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("holidays", result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert("Holiday", result.getName()))
             .body(result);
     }
 
@@ -59,14 +61,14 @@ public class HolidaysResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Holidays> updateHolidays(@RequestBody Holidays holidays) throws URISyntaxException {
+    public ResponseEntity<Holidays> updateHolidays(@RequestBody @Valid Holidays holidays) throws URISyntaxException {
         log.debug("REST request to update Holidays : {}", holidays);
         if (holidays.getId() == null) {
             return createHolidays(holidays);
         }
         Holidays result = holidaysService.save(holidays);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("holidays", holidays.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert("Holiday", holidays.getName()))
             .body(result);
     }
 
@@ -109,7 +111,7 @@ public class HolidaysResource {
     public ResponseEntity<Void> deleteHolidays(@PathVariable Long id) {
         log.debug("REST request to delete Holidays : {}", id);
         holidaysService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("holidays", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("Holiday", id.toString())).build();
     }
 
     /**

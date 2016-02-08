@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -22,15 +24,19 @@ public class Holidays implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
+    @NotNull
     @Column(name = "start_date")
     private LocalDate startDate;
 
+    @NotNull
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @NotNull
     @Column(name = "location")
     private String location;
 

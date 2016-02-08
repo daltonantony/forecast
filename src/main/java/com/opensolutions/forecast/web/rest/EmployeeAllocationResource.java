@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -41,14 +43,14 @@ public class EmployeeAllocationResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<EmployeeAllocation> createEmployeeAllocation(@RequestBody EmployeeAllocation employeeAllocation) throws URISyntaxException {
+    public ResponseEntity<EmployeeAllocation> createEmployeeAllocation(@RequestBody @Valid EmployeeAllocation employeeAllocation) throws URISyntaxException {
         log.debug("REST request to save EmployeeAllocation : {}", employeeAllocation);
         if (employeeAllocation.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("employeeAllocation", "idexists", "A new employeeAllocation cannot already have an ID")).body(null);
         }
         EmployeeAllocation result = employeeAllocationService.save(employeeAllocation);
         return ResponseEntity.created(new URI("/api/employeeAllocations/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("employeeAllocation", result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert("Employee Allocation", result.getEmployee().getName()))
             .body(result);
     }
 
@@ -59,14 +61,14 @@ public class EmployeeAllocationResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<EmployeeAllocation> updateEmployeeAllocation(@RequestBody EmployeeAllocation employeeAllocation) throws URISyntaxException {
+    public ResponseEntity<EmployeeAllocation> updateEmployeeAllocation(@RequestBody @Valid EmployeeAllocation employeeAllocation) throws URISyntaxException {
         log.debug("REST request to update EmployeeAllocation : {}", employeeAllocation);
         if (employeeAllocation.getId() == null) {
             return createEmployeeAllocation(employeeAllocation);
         }
         EmployeeAllocation result = employeeAllocationService.save(employeeAllocation);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("employeeAllocation", employeeAllocation.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert("Employee Allocation", employeeAllocation.getEmployee().getName()))
             .body(result);
     }
 
@@ -109,7 +111,7 @@ public class EmployeeAllocationResource {
     public ResponseEntity<Void> deleteEmployeeAllocation(@PathVariable Long id) {
         log.debug("REST request to delete EmployeeAllocation : {}", id);
         employeeAllocationService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("employeeAllocation", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("Employee Allocation", id.toString())).build();
     }
 
     /**

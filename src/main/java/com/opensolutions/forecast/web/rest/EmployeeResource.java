@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -42,7 +44,7 @@ public class EmployeeResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) throws URISyntaxException {
+    public ResponseEntity<Employee> createEmployee(@RequestBody @Valid Employee employee) throws URISyntaxException {
         log.debug("REST request to save Employee : {}", employee);
         if (employee.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("employee", "idexists", "A new employee cannot already have an ID")).body(null);
@@ -50,7 +52,7 @@ public class EmployeeResource {
 
         Employee result = employeeService.save(employee);
         return ResponseEntity.created(new URI("/api/employees/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("employee", result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert("Employee", result.getName()))
             .body(result);
     }
 
@@ -61,14 +63,14 @@ public class EmployeeResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee) throws URISyntaxException {
+    public ResponseEntity<Employee> updateEmployee(@RequestBody @Valid Employee employee) throws URISyntaxException {
         log.debug("REST request to update Employee : {}", employee);
         if (employee.getId() == null) {
             return createEmployee(employee);
         }
         Employee result = employeeService.save(employee);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("employee", employee.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert("Employee", employee.getName()))
             .body(result);
     }
 
@@ -109,7 +111,7 @@ public class EmployeeResource {
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         log.debug("REST request to delete Employee : {}", id);
         employeeService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("employee", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("Employee", id.toString())).build();
     }
 
     /**

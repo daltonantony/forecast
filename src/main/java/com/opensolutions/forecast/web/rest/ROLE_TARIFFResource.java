@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -41,14 +43,14 @@ public class ROLE_TARIFFResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ROLE_TARIFF> createROLE_TARIFF(@RequestBody ROLE_TARIFF rOLE_TARIFF) throws URISyntaxException {
+    public ResponseEntity<ROLE_TARIFF> createROLE_TARIFF(@RequestBody @Valid ROLE_TARIFF rOLE_TARIFF) throws URISyntaxException {
         log.debug("REST request to save ROLE_TARIFF : {}", rOLE_TARIFF);
         if (rOLE_TARIFF.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("rOLE_TARIFF", "idexists", "A new rOLE_TARIFF cannot already have an ID")).body(null);
         }
         ROLE_TARIFF result = rOLE_TARIFFService.save(rOLE_TARIFF);
         return ResponseEntity.created(new URI("/api/rOLE_TARIFFs/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("rOLE_TARIFF", result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert("Role Tariff", result.getRole()))
             .body(result);
     }
 
@@ -59,14 +61,14 @@ public class ROLE_TARIFFResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ROLE_TARIFF> updateROLE_TARIFF(@RequestBody ROLE_TARIFF rOLE_TARIFF) throws URISyntaxException {
+    public ResponseEntity<ROLE_TARIFF> updateROLE_TARIFF(@RequestBody @Valid ROLE_TARIFF rOLE_TARIFF) throws URISyntaxException {
         log.debug("REST request to update ROLE_TARIFF : {}", rOLE_TARIFF);
         if (rOLE_TARIFF.getId() == null) {
             return createROLE_TARIFF(rOLE_TARIFF);
         }
         ROLE_TARIFF result = rOLE_TARIFFService.save(rOLE_TARIFF);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("rOLE_TARIFF", rOLE_TARIFF.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert("Role Tariff", rOLE_TARIFF.getRole()))
             .body(result);
     }
 
@@ -109,7 +111,7 @@ public class ROLE_TARIFFResource {
     public ResponseEntity<Void> deleteROLE_TARIFF(@PathVariable Long id) {
         log.debug("REST request to delete ROLE_TARIFF : {}", id);
         rOLE_TARIFFService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("rOLE_TARIFF", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("Role Tariff", id.toString())).build();
     }
 
     /**

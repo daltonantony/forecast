@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -23,15 +25,19 @@ public class ROLE_TARIFF implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Column(name = "role")
     private String role;
 
+    @NotNull
     @Column(name = "tariff", precision=10, scale=2)
     private BigDecimal tariff;
 
+    @NotNull
     @Column(name = "location")
     private String location;
 
+    @NotNull
     @Column(name = "effective_date")
     private LocalDate effectiveDate;
 

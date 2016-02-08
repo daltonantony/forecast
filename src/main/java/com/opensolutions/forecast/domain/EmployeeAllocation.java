@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,18 +26,22 @@ public class EmployeeAllocation implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Column(name = "project")
     private String project;
 
+    @NotNull
     @Column(name = "start_date")
     private LocalDate startDate;
 
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @NotNull
     @Column(name = "location")
     private String location;
 
+    @NotNull
     @Column(name = "allocation")
     private Integer allocation;
 
@@ -45,9 +51,11 @@ public class EmployeeAllocation implements Serializable {
     @Column(name = "last_changedby")
     private String lastChangedby;
 
+    @NotNull
     @Column(name = "role")
     private String role;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;

@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -41,14 +43,14 @@ public class CodeValuesResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<CodeValues> createCodeValues(@RequestBody CodeValues codeValues) throws URISyntaxException {
+    public ResponseEntity<CodeValues> createCodeValues(@RequestBody @Valid CodeValues codeValues) throws URISyntaxException {
         log.debug("REST request to save CodeValues : {}", codeValues);
         if (codeValues.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("codeValues", "idexists", "A new codeValues cannot already have an ID")).body(null);
         }
         CodeValues result = codeValuesService.save(codeValues);
         return ResponseEntity.created(new URI("/api/codeValuess/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("codeValues", result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert("CodeValue", result.getCodeValue()))
             .body(result);
     }
 
@@ -59,14 +61,14 @@ public class CodeValuesResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<CodeValues> updateCodeValues(@RequestBody CodeValues codeValues) throws URISyntaxException {
+    public ResponseEntity<CodeValues> updateCodeValues(@RequestBody @Valid CodeValues codeValues) throws URISyntaxException {
         log.debug("REST request to update CodeValues : {}", codeValues);
         if (codeValues.getId() == null) {
             return createCodeValues(codeValues);
         }
         CodeValues result = codeValuesService.save(codeValues);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("codeValues", codeValues.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert("CodeValue", codeValues.getCodeValue()))
             .body(result);
     }
 
@@ -109,7 +111,7 @@ public class CodeValuesResource {
     public ResponseEntity<Void> deleteCodeValues(@PathVariable Long id) {
         log.debug("REST request to delete CodeValues : {}", id);
         codeValuesService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("codeValues", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("CodeValue", id.toString())).build();
     }
 
     /**

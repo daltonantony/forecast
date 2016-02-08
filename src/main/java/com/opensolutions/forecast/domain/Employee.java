@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,15 +27,18 @@ public class Employee implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
+    @NotNull
     @Column(name = "associate_id")
     private Long associateId;
 
     @Column(name = "client_id")
     private String clientId;
 
+    @NotNull
     @Column(name = "domain")
     private String domain;
 
