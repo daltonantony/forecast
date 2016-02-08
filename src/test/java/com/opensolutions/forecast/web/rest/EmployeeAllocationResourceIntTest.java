@@ -1,8 +1,10 @@
 package com.opensolutions.forecast.web.rest;
 
 import com.opensolutions.forecast.Application;
+import com.opensolutions.forecast.domain.Employee;
 import com.opensolutions.forecast.domain.EmployeeAllocation;
 import com.opensolutions.forecast.repository.EmployeeAllocationRepository;
+import com.opensolutions.forecast.repository.EmployeeRepository;
 import com.opensolutions.forecast.service.EmployeeAllocationService;
 
 import org.junit.Before;
@@ -70,6 +72,9 @@ public class EmployeeAllocationResourceIntTest {
 
     @Inject
     private EmployeeAllocationRepository employeeAllocationRepository;
+    
+    @Inject
+    private EmployeeRepository employeeRepository;
 
     @Inject
     private EmployeeAllocationService employeeAllocationService;
@@ -83,6 +88,8 @@ public class EmployeeAllocationResourceIntTest {
     private MockMvc restEmployeeAllocationMockMvc;
 
     private EmployeeAllocation employeeAllocation;
+    
+    private Employee employee;
 
     @PostConstruct
     public void setup() {
@@ -96,6 +103,8 @@ public class EmployeeAllocationResourceIntTest {
 
     @Before
     public void initTest() {
+    	saveEmployee();
+        
         employeeAllocation = new EmployeeAllocation();
         employeeAllocation.setProject(DEFAULT_PROJECT);
         employeeAllocation.setStartDate(DEFAULT_START_DATE);
@@ -105,7 +114,18 @@ public class EmployeeAllocationResourceIntTest {
         employeeAllocation.setLastChangedDate(DEFAULT_LAST_CHANGED_DATE);
         employeeAllocation.setLastChangedby(DEFAULT_LAST_CHANGEDBY);
         employeeAllocation.setRole(DEFAULT_ROLE);
+		employeeAllocation.setEmployee(employee);
     }
+
+	private void saveEmployee() {
+		employee = new Employee();
+    	employee.setName("EmpName");
+    	employee.setAssociateId(123456L);
+    	employee.setDomain("Domain");
+
+    	// Initialize the database
+        employeeRepository.saveAndFlush(employee);
+	}
 
     @Test
     @Transactional
