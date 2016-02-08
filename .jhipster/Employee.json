@@ -23,7 +23,7 @@
         },
         {
             "fieldId": 3,
-            "fieldName": "raboId",
+            "fieldName": "clientId",
             "fieldType": "String"
         },
         {
