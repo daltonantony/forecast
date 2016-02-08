@@ -14,13 +14,9 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -56,8 +52,8 @@ public class EmployeeResourceIntTest {
 
     private static final Long DEFAULT_ASSOCIATE_ID = 1L;
     private static final Long UPDATED_ASSOCIATE_ID = 2L;
-    private static final String DEFAULT_RABO_ID = "AAAAA";
-    private static final String UPDATED_RABO_ID = "BBBBB";
+    private static final String DEFAULT_CLIENT_ID = "AAAAA";
+    private static final String UPDATED_CLIENT_ID = "BBBBB";
     private static final String DEFAULT_DOMAIN = "AAAAA";
     private static final String UPDATED_DOMAIN = "BBBBB";
 
@@ -97,7 +93,7 @@ public class EmployeeResourceIntTest {
         employee = new Employee();
         employee.setName(DEFAULT_NAME);
         employee.setAssociateId(DEFAULT_ASSOCIATE_ID);
-        employee.setRaboId(DEFAULT_RABO_ID);
+        employee.setClientId(DEFAULT_CLIENT_ID);
         employee.setDomain(DEFAULT_DOMAIN);
         employee.setLastChangedDate(DEFAULT_LAST_CHANGED_DATE);
         employee.setLastChangedBy(DEFAULT_LAST_CHANGED_BY);
@@ -107,7 +103,7 @@ public class EmployeeResourceIntTest {
     @Transactional
     public void createEmployee() throws Exception {
         int databaseSizeBeforeCreate = employeeRepository.findAll().size();
-        
+
         // mock the security context for the logged in user name
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
@@ -125,7 +121,7 @@ public class EmployeeResourceIntTest {
         Employee testEmployee = employees.get(employees.size() - 1);
         assertThat(testEmployee.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testEmployee.getAssociateId()).isEqualTo(DEFAULT_ASSOCIATE_ID);
-        assertThat(testEmployee.getRaboId()).isEqualTo(DEFAULT_RABO_ID);
+        assertThat(testEmployee.getClientId()).isEqualTo(DEFAULT_CLIENT_ID);
         assertThat(testEmployee.getDomain()).isEqualTo(DEFAULT_DOMAIN);
         assertThat(testEmployee.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
         assertThat(testEmployee.getLastChangedBy()).isEqualTo("admin");
@@ -136,7 +132,7 @@ public class EmployeeResourceIntTest {
     public void getAllEmployees() throws Exception {
         // Initialize the database
         employeeRepository.saveAndFlush(employee);
-        
+
         // Get all the employees
         restEmployeeMockMvc.perform(get("/api/employees?sort=id,desc"))
                 .andExpect(status().isOk())
@@ -144,7 +140,7 @@ public class EmployeeResourceIntTest {
                 .andExpect(jsonPath("$.[*].id").value(hasItem(employee.getId().intValue())))
                 .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
                 .andExpect(jsonPath("$.[*].associateId").value(hasItem(DEFAULT_ASSOCIATE_ID.intValue())))
-                .andExpect(jsonPath("$.[*].raboId").value(hasItem(DEFAULT_RABO_ID.toString())))
+                .andExpect(jsonPath("$.[*].clientId").value(hasItem(DEFAULT_CLIENT_ID.toString())))
                 .andExpect(jsonPath("$.[*].domain").value(hasItem(DEFAULT_DOMAIN.toString())))
                 .andExpect(jsonPath("$.[*].lastChangedDate").value(hasItem(DEFAULT_LAST_CHANGED_DATE.toString())))
                 .andExpect(jsonPath("$.[*].lastChangedBy").value(hasItem(DEFAULT_LAST_CHANGED_BY.toString())));
@@ -163,7 +159,7 @@ public class EmployeeResourceIntTest {
             .andExpect(jsonPath("$.id").value(employee.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.associateId").value(DEFAULT_ASSOCIATE_ID.intValue()))
-            .andExpect(jsonPath("$.raboId").value(DEFAULT_RABO_ID.toString()))
+            .andExpect(jsonPath("$.clientId").value(DEFAULT_CLIENT_ID.toString()))
             .andExpect(jsonPath("$.domain").value(DEFAULT_DOMAIN.toString()))
             .andExpect(jsonPath("$.lastChangedDate").value(DEFAULT_LAST_CHANGED_DATE.toString()))
             .andExpect(jsonPath("$.lastChangedBy").value(DEFAULT_LAST_CHANGED_BY.toString()));
@@ -184,7 +180,7 @@ public class EmployeeResourceIntTest {
         employeeRepository.saveAndFlush(employee);
 
 		int databaseSizeBeforeUpdate = employeeRepository.findAll().size();
-        
+
         // mock the security context for the logged in user name
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
@@ -193,7 +189,7 @@ public class EmployeeResourceIntTest {
         // Update the employee
         employee.setName(UPDATED_NAME);
         employee.setAssociateId(UPDATED_ASSOCIATE_ID);
-        employee.setRaboId(UPDATED_RABO_ID);
+        employee.setClientId(UPDATED_CLIENT_ID);
         employee.setDomain(UPDATED_DOMAIN);
         employee.setLastChangedDate(UPDATED_LAST_CHANGED_DATE);
         employee.setLastChangedBy(UPDATED_LAST_CHANGED_BY);
@@ -209,7 +205,7 @@ public class EmployeeResourceIntTest {
         Employee testEmployee = employees.get(employees.size() - 1);
         assertThat(testEmployee.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testEmployee.getAssociateId()).isEqualTo(UPDATED_ASSOCIATE_ID);
-        assertThat(testEmployee.getRaboId()).isEqualTo(UPDATED_RABO_ID);
+        assertThat(testEmployee.getClientId()).isEqualTo(UPDATED_CLIENT_ID);
         assertThat(testEmployee.getDomain()).isEqualTo(UPDATED_DOMAIN);
         assertThat(testEmployee.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
         assertThat(testEmployee.getLastChangedBy()).isEqualTo("admin");

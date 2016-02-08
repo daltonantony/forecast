@@ -31,8 +31,8 @@ public class Employee implements Serializable {
     @Column(name = "associate_id")
     private Long associateId;
 
-    @Column(name = "rabo_id")
-    private String raboId;
+    @Column(name = "client_id")
+    private String clientId;
 
     @Column(name = "domain")
     private String domain;
@@ -72,12 +72,12 @@ public class Employee implements Serializable {
         this.associateId = associateId;
     }
 
-    public String getRaboId() {
-        return raboId;
+    public String getClientId() {
+        return clientId;
     }
 
-    public void setRaboId(String raboId) {
-        this.raboId = raboId;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public String getDomain() {
@@ -135,7 +135,7 @@ public class Employee implements Serializable {
             "id=" + id +
             ", name='" + name + "'" +
             ", associateId='" + associateId + "'" +
-            ", raboId='" + raboId + "'" +
+            ", clientId='" + clientId + "'" +
             ", domain='" + domain + "'" +
             ", lastChangedDate='" + lastChangedDate + "'" +
             ", lastChangedBy='" + lastChangedBy + "'" +

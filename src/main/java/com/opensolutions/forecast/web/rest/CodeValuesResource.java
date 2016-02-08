@@ -30,10 +30,10 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class CodeValuesResource {
 
     private final Logger log = LoggerFactory.getLogger(CodeValuesResource.class);
-        
+
     @Inject
     private CodeValuesService codeValuesService;
-    
+
     /**
      * POST  /codeValuess -> Create a new codeValues.
      */
@@ -77,10 +77,10 @@ public class CodeValuesResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<CodeValues> getAllCodeValuess() {
-        log.debug("REST request to get all CodeValuess");
+    public List<CodeValues> getAllCodeValues() {
+        log.debug("REST request to get all CodeValues");
         return codeValuesService.findAll();
-            }
+    }
 
     /**
      * GET  /codeValuess/:id -> get the "id" codeValues.

@@ -2,6 +2,7 @@ package com.opensolutions.forecast.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.opensolutions.forecast.domain.Employee;
+import com.opensolutions.forecast.security.SecurityUtils;
 import com.opensolutions.forecast.service.EmployeeService;
 import com.opensolutions.forecast.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
@@ -46,6 +47,7 @@ public class EmployeeResource {
         if (employee.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("employee", "idexists", "A new employee cannot already have an ID")).body(null);
         }
+
         Employee result = employeeService.save(employee);
         return ResponseEntity.created(new URI("/api/employees/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("employee", result.getId().toString()))
