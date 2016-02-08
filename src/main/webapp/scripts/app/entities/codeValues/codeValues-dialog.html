@@ -8,19 +8,19 @@
     </div>
     <div class="modal-body">
         <jh-alert-error></jh-alert-error>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label" for="field_codeType">CodeType</label>
             <input type="text" class="form-control" name="codeType" id="field_codeType"
                     ng-model="codeValues.codeType"
                      />
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label" for="field_codeValue">CodeValue</label>
             <input type="text" class="form-control" name="codeValue" id="field_codeValue"
                     ng-model="codeValues.codeValue"
                      />
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label" for="field_effectiveDate">EffectiveDate</label>
             <input id="field_effectiveDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="codeValues.effectiveDate" is-open="datePickerForEffectiveDate.status.opened"
             />

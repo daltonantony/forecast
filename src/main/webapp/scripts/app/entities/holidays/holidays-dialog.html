@@ -8,13 +8,13 @@
     </div>
     <div class="modal-body">
         <jh-alert-error></jh-alert-error>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label" for="field_name">Name</label>
             <input type="text" class="form-control" name="name" id="field_name"
                     ng-model="holidays.name"
                      />
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label" for="field_startDate">StartDate</label>
             <input id="field_startDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="holidays.startDate" is-open="datePickerForStartDate.status.opened"
             />
@@ -22,7 +22,7 @@
                 <button type="button" class="btn btn-default" ng-click="datePickerForStartDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
             </span>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label" for="field_endDate">EndDate</label>
             <input id="field_endDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="holidays.endDate" is-open="datePickerForEndDate.status.opened"
             />
@@ -30,7 +30,7 @@
                 <button type="button" class="btn btn-default" ng-click="datePickerForEndDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
             </span>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label" for="field_location">Location</label>
 			<select name="location" id="field_location" class="form-control" ng-model="holidays.location" ng-options="cv.codeValue as cv.codeValue for cv in locations">
                 <option value="">---- Select Location -----</option>

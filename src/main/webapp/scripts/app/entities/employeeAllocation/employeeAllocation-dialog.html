@@ -8,19 +8,19 @@
     </div>
     <div class="modal-body">
         <jh-alert-error></jh-alert-error>
-        <div class="form-group">
-            <label for="field_employee">Employee</label>
+        <div class="form-group required">
+            <label class="control-label" for="field_employee">Employee</label>
             <select class="form-control" id="field_employee" name="employee" ng-model="employeeAllocation.employee" ng-options="employee as employee.name for employee in employees track by employee.id">
                 <option value="">---- Select Employee -----</option>
             </select>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label" for="field_project">Project</label>
             <select name="project" id="field_project" class="form-control" ng-model="employeeAllocation.project" ng-options="cv.codeValue as cv.codeValue for cv in projects">
                 <option value="">---- Select Project -----</option>
             </select>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label" for="field_startDate">StartDate</label>
             <input id="field_startDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="employeeAllocation.startDate" is-open="datePickerForStartDate.status.opened"
             />
@@ -36,19 +36,19 @@
                 <button type="button" class="btn btn-default" ng-click="datePickerForEndDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
             </span>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label" for="field_location">Location</label>
             <select name="location" id="field_location" class="form-control" ng-model="employeeAllocation.location" ng-options="cv.codeValue as cv.codeValue for cv in locations">
                 <option value="">---- Select Location -----</option>
             </select>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label" for="field_allocation">Allocation</label>
             <input type="number" class="form-control" name="allocation" id="field_allocation"
                     ng-model="employeeAllocation.allocation"
                      />
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label" for="field_role">Role</label>
             <select name="location" id="field_role" class="form-control" ng-model="employeeAllocation.role" ng-options="cv.codeValue as cv.codeValue for cv in roles">
                 <option value="">---- Select Role -----</option>
