@@ -65,6 +65,11 @@ To setup this project in Jenkins, use the following configuration:
 * Post-build Actions
     * Publish JUnit test result report / Test Report XMLs: `build/test-results/*.xml`
 
+
+# Heroku URL
+
+* Application can be accessed via url : https://forecast-cgn.herokuapp.com/
+
 [JHipster]: https://jhipster.github.io/
 [Node.js]: https://nodejs.org/
 [Bower]: http://bower.io/
