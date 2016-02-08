@@ -31,7 +31,7 @@ angular.module('forecastApp')
             $scope.employee = {
                 name: null,
                 associateId: null,
-                raboId: null,
+                clientId: null,
                 domain: null,
                 lastChangedDate: null,
                 lastChangedBy: null,
