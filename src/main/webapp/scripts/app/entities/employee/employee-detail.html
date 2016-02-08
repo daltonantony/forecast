@@ -1,67 +1,56 @@
-
 <div>
-    <h2><span>Employee - </span> {{employee.name}}</h2>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Field</th>
-                <th>Value</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <span>Name</span>
-                </td>
-                <td>
-                    <span class="form-control-static">{{employee.name}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span>AssociateId</span>
-                </td>
-                <td>
-                    <span class="form-control-static">{{employee.associateId}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span>ClientId</span>
-                </td>
-                <td>
-                    <span class="form-control-static">{{employee.clientId}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span>Domain</span>
-                </td>
-                <td>
-                    <span class="form-control-static">{{employee.domain}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span>LastChangedDate</span>
-                </td>
-                <td>
-                    <span class="form-control-static">{{employee.lastChangedDate | date:'mediumDate'}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span>LastChangedBy</span>
-                </td>
-                <td>
-                    <span class="form-control-static">{{employee.lastChangedBy}}</span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <div>
+        <h2><span>Employee - </span> {{employee.name}}</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th><span>Name</span></th>
+                    <th><span>AssociateId</span></th>
+                    <th><span>ClientId</span></th>
+                    <th><span>Domain</span></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{employee.name}}</td>
+                    <td>{{employee.associateId}}</td>
+                    <td>{{employee.clientId}}</td>
+                    <td>{{employee.domain}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
+    </div>
+    <div>
+        <h2><span>EmployeeAllocation - </span> {{employee.name}}</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th><span>Project</span></th>
+                    <th><span>StartDate</span></th>
+                    <th><span>EndDate</span></th>
+                    <th><span>Location</span></th>
+                    <th><span>Allocation</span></th>
+                    <th><span>Role</span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="employeeAllocation in employeeAllocations track by employeeAllocation.id">
+                    <td>{{employeeAllocation.project}}</td>
+                    <td>{{employeeAllocation.startDate | date:'mediumDate'}}</td>
+                    <td>{{employeeAllocation.endDate | date:'mediumDate'}}</td>
+                    <td>{{employeeAllocation.location}}</td>
+                    <td>{{employeeAllocation.allocation}}</td>
+                    <td>{{employeeAllocation.role}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <button type="submit"
             onclick="window.history.back()"
             class="btn btn-info">
