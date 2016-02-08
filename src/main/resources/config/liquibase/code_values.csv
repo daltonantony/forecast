@@ -6,10 +6,10 @@ id;code_type;code_value;effective_date;expiry_date;last_changed_by;last_changed_
 105;Location;India;2016-01-01;null;admin;sysdate
 106;Location;Australia;2016-01-01;null;admin;sysdate
 107;Location;Spain;2016-01-01;null;admin;sysdate
-108;Domain;Financieren;2016-01-01;null;admin;sysdate
-109;Domain;Payments;2016-01-01;null;admin;sysdate
-110;Domain;Savings;2016-01-01;null;admin;sysdate
-111;Domain;Online;2016-01-01;null;admin;sysdate
+108;Domain;Financing;2016-01-01;null;admin;sysdate
+109;Domain;Cards;2016-01-01;null;admin;sysdate
+110;Domain;Mobile;2016-01-01;null;admin;sysdate
+111;Domain;Insurance;2016-01-01;null;admin;sysdate
 112;Project;TimeSheet;2016-01-01;null;admin;sysdate
 113;Project;ContentManagement;2016-01-01;null;admin;sysdate
 114;Project;Forecast;2016-01-01;null;admin;sysdate
