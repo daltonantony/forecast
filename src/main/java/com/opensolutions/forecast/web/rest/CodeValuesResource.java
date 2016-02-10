@@ -126,4 +126,18 @@ public class CodeValuesResource {
         log.debug("Request to search CodeValuess for query {}", query);
         return codeValuesService.search(query);
     }
+    
+    /**
+     * SEARCH  /_search/activeCodeValues/:query -> search for the active codeValues corresponding
+     * to the query.
+     */
+    @RequestMapping(value = "/_search/activeCodeValues/{query}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public List<CodeValues> searchActiveCodeValuess(@PathVariable String query) {
+        log.debug("Request to search Active CodeValues for query {}", query);
+        return codeValuesService.searchActiveCodeValues(query);
+    }
+
 }

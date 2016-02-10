@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('forecastApp')
-    .controller('CodeValuesController', function ($scope, $state, CodeValues, CodeValuesSearch) {
+    .controller('CodeValuesController', function ($scope, $state, CodeValues, CodeValuesSearch, ActiveCodeValuesSearch) {
 
         $scope.codeValuess = [];
         $scope.loadAll = function() {
@@ -11,9 +11,18 @@ angular.module('forecastApp')
         };
         $scope.loadAll();
 
-
         $scope.search = function () {
             CodeValuesSearch.query({query: $scope.searchQuery}, function(result) {
+                $scope.codeValuess = result;
+            }, function(response) {
+                if(response.status === 404) {
+                    $scope.loadAll();
+                }
+            });
+        };
+        
+        $scope.searchActiveCodeValues = function () {
+        	ActiveCodeValuesSearch.query({query: $scope.searchQuery}, function(result) {
                 $scope.codeValuess = result;
             }, function(response) {
                 if(response.status === 404) {

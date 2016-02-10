@@ -95,4 +95,30 @@ public class CodeValuesServiceImpl implements CodeValuesService{
 		}
         return queriedCodeValues;
     }
+
+    /**
+     * search for the active codeValues corresponding
+     * to the query.
+     */
+    @Transactional(readOnly = true)
+    public List<CodeValues> searchActiveCodeValues(String query) {
+        log.debug("REST request to search Active CodeValues for query {}", query);
+        final List<CodeValues> queriedActiveCodeValues = new ArrayList<>();
+        final List<CodeValues> allCodeValues = findAll();
+        for (CodeValues codeValues : allCodeValues) {
+			if (codeValues.getCodeType().equalsIgnoreCase(query) && isCodeValueActive(codeValues)) {
+				queriedActiveCodeValues.add(codeValues);
+			}
+		}
+        return queriedActiveCodeValues;
+    }
+
+    private boolean isCodeValueActive(CodeValues codeValues) {
+    	final boolean isEffectiveDateBeforeNow = codeValues.getEffectiveDate().isBefore(LocalDate.now());
+    	final LocalDate expiryDate = codeValues.getExpiryDate();
+    	final boolean isExpiryDateEitherNullOrAfterNow =
+    			expiryDate == null || expiryDate.isAfter(LocalDate.now());
+    	return isEffectiveDateBeforeNow && isExpiryDateEitherNullOrAfterNow;
+    }
+    
 }

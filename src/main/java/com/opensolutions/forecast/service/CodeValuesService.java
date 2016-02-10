@@ -37,4 +37,11 @@ public interface CodeValuesService {
      * to the query.
      */
     public List<CodeValues> search(String query);
+
+    /**
+     * search for the active codeValues corresponding
+     * to the query.
+     */
+    public List<CodeValues> searchActiveCodeValues(String query);
+    
 }

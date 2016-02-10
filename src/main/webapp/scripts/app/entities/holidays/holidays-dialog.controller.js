@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('forecastApp').controller('HolidaysDialogController',
-    ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Holidays', 'CodeValuesSearch',
-        function($scope, $stateParams, $uibModalInstance, entity, Holidays, CodeValuesSearch) {
+    ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Holidays', 'ActiveCodeValuesSearch',
+        function($scope, $stateParams, $uibModalInstance, entity, Holidays, ActiveCodeValuesSearch) {
 
-    	$scope.locations = CodeValuesSearch.query({query: 'Location'});
+    	$scope.locations = ActiveCodeValuesSearch.query({query: 'Location'});
         $scope.holidays = entity;
         $scope.load = function(id) {
             Holidays.get({id : id}, function(result) {
