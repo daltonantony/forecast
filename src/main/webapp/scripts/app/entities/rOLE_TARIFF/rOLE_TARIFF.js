@@ -8,7 +8,7 @@ angular.module('forecastApp')
                 url: '/rOLE_TARIFFs',
                 data: {
                     authorities: ['ROLE_USER'],
-                    pageTitle: 'ROLE_TARIFFs'
+                    pageTitle: 'Role Tariffs'
                 },
                 views: {
                     'content@': {

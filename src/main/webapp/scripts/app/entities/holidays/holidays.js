@@ -8,7 +8,7 @@ angular.module('forecastApp')
                 url: '/holidayss',
                 data: {
                     authorities: ['ROLE_USER'],
-                    pageTitle: 'Holidayss'
+                    pageTitle: 'Holidays'
                 },
                 views: {
                     'content@': {
