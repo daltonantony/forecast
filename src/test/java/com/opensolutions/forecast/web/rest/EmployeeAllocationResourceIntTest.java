@@ -20,6 +20,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -29,8 +32,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,7 +77,7 @@ public class EmployeeAllocationResourceIntTest {
 
     @Inject
     private EmployeeAllocationRepository employeeAllocationRepository;
-    
+
     @Inject
     private EmployeeRepository employeeRepository;
 
@@ -88,7 +93,7 @@ public class EmployeeAllocationResourceIntTest {
     private MockMvc restEmployeeAllocationMockMvc;
 
     private EmployeeAllocation employeeAllocation;
-    
+
     private Employee employee;
 
     @PostConstruct
@@ -104,7 +109,7 @@ public class EmployeeAllocationResourceIntTest {
     @Before
     public void initTest() {
     	saveEmployee();
-        
+
         employeeAllocation = new EmployeeAllocation();
         employeeAllocation.setProject(DEFAULT_PROJECT);
         employeeAllocation.setStartDate(DEFAULT_START_DATE);
@@ -131,10 +136,11 @@ public class EmployeeAllocationResourceIntTest {
     @Transactional
     public void createEmployeeAllocation() throws Exception {
         int databaseSizeBeforeCreate = employeeAllocationRepository.findAll().size();
-        
+
         // mock the security context for the logged in user name
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        User user = new User("admin", "admin", Collections.emptyList());
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken(user,""));
         SecurityContextHolder.setContext(securityContext);
 
         // Create the EmployeeAllocation
@@ -215,10 +221,11 @@ public class EmployeeAllocationResourceIntTest {
         employeeAllocationRepository.saveAndFlush(employeeAllocation);
 
 		int databaseSizeBeforeUpdate = employeeAllocationRepository.findAll().size();
-        
+
         // mock the security context for the logged in user name
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        User user = new User("admin", "admin", Collections.emptyList());
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken(user,""));
         SecurityContextHolder.setContext(securityContext);
 
         // Update the employeeAllocation

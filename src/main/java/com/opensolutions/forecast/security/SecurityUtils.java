@@ -37,6 +37,23 @@ public final class SecurityUtils {
     }
 
     /**
+     * Return the current user, or throws an exception, if the user is not
+     * authenticated yet.
+     *
+     * @return the current user
+     */
+    public static User getCurrentUser() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        if (authentication != null) {
+            if (authentication.getPrincipal() instanceof User) {
+                return (User) authentication.getPrincipal();
+            }
+        }
+        throw new IllegalStateException("User not found!");
+    }
+
+    /**
      * Check if a user is authenticated.
      *
      * @return true if the user is authenticated, false otherwise
@@ -52,23 +69,6 @@ public final class SecurityUtils {
             }
         }
         return true;
-    }
-
-    /**
-     * Return the current user, or throws an exception, if the user is not
-     * authenticated yet.
-     *
-     * @return the current user
-     */
-    public static User getCurrentUser() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
-        if (authentication != null) {
-            if (authentication.getPrincipal() instanceof User) {
-                return (User) authentication.getPrincipal();
-            }
-        }
-        throw new IllegalStateException("User not found!");
     }
 
     /**

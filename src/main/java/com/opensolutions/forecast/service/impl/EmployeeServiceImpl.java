@@ -39,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService{
      * @return the persisted entity
      */
     public Employee save(Employee employee) {
-        employee.setLastChangedBy(SecurityUtils.getCurrentUserLogin());
+        employee.setLastChangedBy(SecurityUtils.getCurrentUser().getUsername());
         employee.setLastChangedDate(LocalDate.now());
         log.debug("Request to save Employee : {}", employee);
         Employee result = employeeRepository.save(employee);
