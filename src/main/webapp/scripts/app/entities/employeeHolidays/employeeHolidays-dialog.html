@@ -1,0 +1,56 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+        <h4 class="modal-title" id="myEmployeeHolidaysLabel">Create or edit a EmployeeHolidays</h4>
+    </div>
+    <div class="modal-body">
+        <jh-alert-error></jh-alert-error>
+        <div class="form-group">
+            <label class="control-label" for="field_week1">Week1</label>
+            <input type="number" class="form-control" name="week1" id="field_week1"
+                    ng-model="employeeHolidays.week1"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_week2">Week2</label>
+            <input type="number" class="form-control" name="week2" id="field_week2"
+                    ng-model="employeeHolidays.week2"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_week3">Week3</label>
+            <input type="number" class="form-control" name="week3" id="field_week3"
+                    ng-model="employeeHolidays.week3"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_week4">Week4</label>
+            <input type="number" class="form-control" name="week4" id="field_week4"
+                    ng-model="employeeHolidays.week4"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_week5">Week5</label>
+            <input type="number" class="form-control" name="week5" id="field_week5"
+                    ng-model="employeeHolidays.week5"
+                     />
+        </div>
+        <div class="form-group">
+            <label for="field_employeeBillingHours">EmployeeBillingHours</label>
+            <select class="form-control" id="field_employeeBillingHours" name="employeeBillingHours" ng-model="employeeHolidays.employeeBillingHours" ng-options="employeeBillingHours as employeeBillingHours.name for employeeBillingHours in employeebillinghourss track by employeeBillingHours.id">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

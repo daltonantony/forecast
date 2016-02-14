@@ -11,5 +11,7 @@
     <include file="classpath:config/liquibase/changelog/20160201150137_added_entity_CodeValues.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160201151614_added_entity_Holidays.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160206220030_populate_entity_CodeValues.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160214140937_added_entity_EmployeeBillingHours.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160214140937_added_entity_EmployeeHolidays.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
 </databaseChangeLog>

@@ -1,11 +1,11 @@
 <div>
-    <h2>Employees</h2>
+    <h2>EmployeeHolidayss</h2>
     <jh-alert></jh-alert>
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <button class="btn btn-primary" ui-sref="employee.new">
-                    <span class="glyphicon glyphicon-flash"></span> <span>Create a new Employee</span>
+                <button class="btn btn-primary" ui-sref="employeeHolidays.new">
+                    <span class="glyphicon glyphicon-flash"></span> <span>Create a new EmployeeHolidays</span>
                 </button>
             </div>
             <div class="col-md-8">
@@ -13,7 +13,7 @@
                     <div class="form-group">
                         <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
                     </div>
-                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search an Employee</span>
+                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a EmployeeHolidays</span>
                     </button>
                 </form>
             </div>
@@ -24,38 +24,41 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th><span>Name</span></th>
-                    <th><span>AssociateId</span></th>
-                    <th><span>ClientId</span></th>
-                    <th><span>Domain</span></th>
+                    <th><span>Week1</span></th>
+                    <th><span>Week2</span></th>
+                    <th><span>Week3</span></th>
+                    <th><span>Week4</span></th>
+                    <th><span>Week5</span></th>
+                    <th><span>employeeBillingHours</span></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="employee in employees track by employee.id">
-                    <td><a ui-sref="employee.detail({id:employee.id})">{{employee.name}}</td>
-                    <td>{{employee.associateId}}</td>
-                    <td>{{employee.clientId}}</td>
-                    <td>{{employee.domain}}</td>
+                <tr ng-repeat="employeeHolidays in employeeHolidayss track by employeeHolidays.id">
+                    <td>{{employeeHolidays.week1}}</td>
+                    <td>{{employeeHolidays.week2}}</td>
+                    <td>{{employeeHolidays.week3}}</td>
+                    <td>{{employeeHolidays.week4}}</td>
+                    <td>{{employeeHolidays.week5}}</td>
+                    <td>
+                        <a ui-sref="employeeBillingHours.detail({id:employeeHolidays.employeeBillingHours.id})">{{employeeHolidays.employeeBillingHours.name}}</a>
+                    </td>
                     <td>
                         <button type="submit"
-                                ui-sref="employee.detail({id:employee.id})"
+                                ui-sref="employeeHolidays.detail({id:employeeHolidays.id})"
                                 class="btn btn-info btn-sm">
                             <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span> View</span>
                         </button>
                         <button type="submit"
-                                ui-sref="employee.edit({id:employee.id})"
+                                ui-sref="employeeHolidays.edit({id:employeeHolidays.id})"
                                 class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span> Edit</span>
                         </button>
                         <button type="submit"
-                                ui-sref="employee.delete({id:employee.id})"
+                                ui-sref="employeeHolidays.delete({id:employeeHolidays.id})"
                                 class="btn btn-danger btn-sm">
                             <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span> Delete</span>
                         </button>
-                            <button class="btn btn-primary" ui-sref="employeeBillingHours.new">
-                                <span class="glyphicon glyphicon-flash"></span> <span>EmployeeBillingHours</span>
-                            </button>
                     </td>
                 </tr>
             </tbody>
