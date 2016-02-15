@@ -1,11 +1,11 @@
 <div>
-    <h2>EmployeeHolidayss</h2>
+    <h2>Employee Holidays</h2>
     <jh-alert></jh-alert>
     <div class="container">
         <div class="row">
             <div class="col-md-4">
                 <button class="btn btn-primary" ui-sref="employeeHolidays.new">
-                    <span class="glyphicon glyphicon-flash"></span> <span>Create a new EmployeeHolidays</span>
+                    <span class="glyphicon glyphicon-flash"></span> <span>Create new Employee Holidays</span>
                 </button>
             </div>
             <div class="col-md-8">
@@ -13,7 +13,7 @@
                     <div class="form-group">
                         <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
                     </div>
-                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a EmployeeHolidays</span>
+                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search Employee Holidays</span>
                     </button>
                 </form>
             </div>
@@ -24,25 +24,25 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th><span>Employee Billing Hours</span></th>
                     <th><span>Week1</span></th>
                     <th><span>Week2</span></th>
                     <th><span>Week3</span></th>
                     <th><span>Week4</span></th>
                     <th><span>Week5</span></th>
-                    <th><span>employeeBillingHours</span></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="employeeHolidays in employeeHolidayss track by employeeHolidays.id">
+                    <td>
+                        <a ui-sref="employeeBillingHours.detail({id:employeeHolidays.employeeBillingHours.id})">{{employeeHolidays.employeeBillingHours.employee.name}}</a>
+                    </td>
                     <td>{{employeeHolidays.week1}}</td>
                     <td>{{employeeHolidays.week2}}</td>
                     <td>{{employeeHolidays.week3}}</td>
                     <td>{{employeeHolidays.week4}}</td>
                     <td>{{employeeHolidays.week5}}</td>
-                    <td>
-                        <a ui-sref="employeeBillingHours.detail({id:employeeHolidays.employeeBillingHours.id})">{{employeeHolidays.employeeBillingHours.name}}</a>
-                    </td>
                     <td>
                         <button type="submit"
                                 ui-sref="employeeHolidays.detail({id:employeeHolidays.id})"

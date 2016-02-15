@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
@@ -29,24 +31,31 @@ public class EmployeeBillingHours implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Column(name = "week1")
     private Integer week1;
 
+    @NotNull
     @Column(name = "week2")
     private Integer week2;
 
+    @NotNull
     @Column(name = "week3")
     private Integer week3;
 
+    @NotNull
     @Column(name = "week4")
     private Integer week4;
 
+    @NotNull
     @Column(name = "week5")
     private Integer week5;
 
+    @NotNull
     @Column(name = "created_date")
     private LocalDate createdDate;
 
+    @NotNull
     @Column(name = "forecast_date")
     private LocalDate forecastDate;
 
@@ -56,6 +65,7 @@ public class EmployeeBillingHours implements Serializable {
     @Column(name = "last_changed_by")
     private String lastChangedBy;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;

@@ -4,14 +4,17 @@ import com.opensolutions.forecast.service.EmployeeBillingHoursService;
 import com.opensolutions.forecast.domain.EmployeeBillingHours;
 import com.opensolutions.forecast.repository.EmployeeBillingHoursRepository;
 import com.opensolutions.forecast.repository.search.EmployeeBillingHoursSearchRepository;
+import com.opensolutions.forecast.security.SecurityUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -37,6 +40,8 @@ public class EmployeeBillingHoursServiceImpl implements EmployeeBillingHoursServ
      * @return the persisted entity
      */
     public EmployeeBillingHours save(EmployeeBillingHours employeeBillingHours) {
+    	employeeBillingHours.setLastChangedBy(SecurityUtils.getCurrentUserLogin());
+    	employeeBillingHours.setLastChangedDate(LocalDate.now());
         log.debug("Request to save EmployeeBillingHours : {}", employeeBillingHours);
         EmployeeBillingHours result = employeeBillingHoursRepository.save(employeeBillingHours);
         employeeBillingHoursSearchRepository.save(result);

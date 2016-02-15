@@ -1,6 +1,6 @@
 
 <div>
-    <h2><span>EmployeeHolidays</span> {{employeeHolidays.id}}</h2>
+    <h2><span>Employee Holidays - </span>{{employeeHolidays.employeeBillingHours.employee.name}}</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -10,6 +10,14 @@
             </tr>
             </thead>
             <tbody>
+            <tr>
+                <td>
+                    <span>Employee Billing Hours</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="employeeBillingHours.detail({id:employeeHolidays.employeeBillingHours.id})">{{employeeHolidays.employeeBillingHours.employee.name}}</a>
+                </td>
+            </tr>
             <tr>
                 <td>
                     <span>Week1</span>
@@ -64,14 +72,6 @@
                 </td>
                 <td>
                     <span class="form-control-static">{{employeeHolidays.lastChangedBy}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span>employeeBillingHours</span>
-                </td>
-                <td>
-                    <a class="form-control-static" ui-sref="employeeBillingHours.detail({id:employeeHolidays.employeeBillingHours.id})">{{employeeHolidays.employeeBillingHours.name}}</a>
                 </td>
             </tr>
             </tbody>

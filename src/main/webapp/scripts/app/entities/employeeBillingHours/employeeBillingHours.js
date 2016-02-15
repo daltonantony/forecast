@@ -8,7 +8,7 @@ angular.module('forecastApp')
                 url: '/employeeBillingHourss',
                 data: {
                     authorities: ['ROLE_USER'],
-                    pageTitle: 'EmployeeBillingHourss'
+                    pageTitle: 'Employee Billing Hours'
                 },
                 views: {
                     'content@': {

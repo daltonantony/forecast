@@ -1,8 +1,12 @@
 package com.opensolutions.forecast.web.rest;
 
 import com.opensolutions.forecast.Application;
+import com.opensolutions.forecast.domain.Employee;
+import com.opensolutions.forecast.domain.EmployeeBillingHours;
 import com.opensolutions.forecast.domain.EmployeeHolidays;
+import com.opensolutions.forecast.repository.EmployeeBillingHoursRepository;
 import com.opensolutions.forecast.repository.EmployeeHolidaysRepository;
+import com.opensolutions.forecast.repository.EmployeeRepository;
 import com.opensolutions.forecast.service.EmployeeHolidaysService;
 
 import org.junit.Before;
@@ -14,6 +18,9 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -69,6 +76,12 @@ public class EmployeeHolidaysResourceIntTest {
     private EmployeeHolidaysRepository employeeHolidaysRepository;
 
     @Inject
+    private EmployeeRepository employeeRepository;
+
+    @Inject
+    private EmployeeBillingHoursRepository employeeBillingHoursRepository;
+
+    @Inject
     private EmployeeHolidaysService employeeHolidaysService;
 
     @Inject
@@ -80,6 +93,10 @@ public class EmployeeHolidaysResourceIntTest {
     private MockMvc restEmployeeHolidaysMockMvc;
 
     private EmployeeHolidays employeeHolidays;
+
+    private EmployeeBillingHours employeeBillingHours;
+
+    private Employee employee;
 
     @PostConstruct
     public void setup() {
@@ -93,6 +110,8 @@ public class EmployeeHolidaysResourceIntTest {
 
     @Before
     public void initTest() {
+    	saveEmployeeBillingHours();
+    	
         employeeHolidays = new EmployeeHolidays();
         employeeHolidays.setWeek1(DEFAULT_WEEK1);
         employeeHolidays.setWeek2(DEFAULT_WEEK2);
@@ -101,12 +120,41 @@ public class EmployeeHolidaysResourceIntTest {
         employeeHolidays.setWeek5(DEFAULT_WEEK5);
         employeeHolidays.setLastChangedDate(DEFAULT_LAST_CHANGED_DATE);
         employeeHolidays.setLastChangedBy(DEFAULT_LAST_CHANGED_BY);
+        employeeHolidays.setEmployeeBillingHours(employeeBillingHours);
     }
+
+	private void saveEmployeeBillingHours() {
+		employee = new Employee();
+    	employee.setName("EmpName");
+    	employee.setAssociateId(123456L);
+    	employee.setDomain("Domain");
+
+    	// Initialize the database
+        employeeRepository.saveAndFlush(employee);
+        
+        employeeBillingHours = new EmployeeBillingHours();
+        employeeBillingHours.setEmployee(employee);
+        employeeBillingHours.setWeek1(DEFAULT_WEEK1);
+        employeeBillingHours.setWeek2(DEFAULT_WEEK2);
+        employeeBillingHours.setWeek3(DEFAULT_WEEK3);
+        employeeBillingHours.setWeek4(DEFAULT_WEEK4);
+        employeeBillingHours.setWeek5(DEFAULT_WEEK5);
+        employeeBillingHours.setCreatedDate(LocalDate.now());
+        employeeBillingHours.setForecastDate(LocalDate.now());
+
+        // Initialize the database
+        employeeBillingHoursRepository.saveAndFlush(employeeBillingHours);
+	}
 
     @Test
     @Transactional
     public void createEmployeeHolidays() throws Exception {
         int databaseSizeBeforeCreate = employeeHolidaysRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Create the EmployeeHolidays
 
@@ -124,8 +172,8 @@ public class EmployeeHolidaysResourceIntTest {
         assertThat(testEmployeeHolidays.getWeek3()).isEqualTo(DEFAULT_WEEK3);
         assertThat(testEmployeeHolidays.getWeek4()).isEqualTo(DEFAULT_WEEK4);
         assertThat(testEmployeeHolidays.getWeek5()).isEqualTo(DEFAULT_WEEK5);
-        assertThat(testEmployeeHolidays.getLastChangedDate()).isEqualTo(DEFAULT_LAST_CHANGED_DATE);
-        assertThat(testEmployeeHolidays.getLastChangedBy()).isEqualTo(DEFAULT_LAST_CHANGED_BY);
+        assertThat(testEmployeeHolidays.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
+        assertThat(testEmployeeHolidays.getLastChangedBy()).isEqualTo("admin");
     }
 
     @Test
@@ -183,6 +231,11 @@ public class EmployeeHolidaysResourceIntTest {
         employeeHolidaysRepository.saveAndFlush(employeeHolidays);
 
 		int databaseSizeBeforeUpdate = employeeHolidaysRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Update the employeeHolidays
         employeeHolidays.setWeek1(UPDATED_WEEK1);
@@ -208,7 +261,7 @@ public class EmployeeHolidaysResourceIntTest {
         assertThat(testEmployeeHolidays.getWeek4()).isEqualTo(UPDATED_WEEK4);
         assertThat(testEmployeeHolidays.getWeek5()).isEqualTo(UPDATED_WEEK5);
         assertThat(testEmployeeHolidays.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
-        assertThat(testEmployeeHolidays.getLastChangedBy()).isEqualTo(UPDATED_LAST_CHANGED_BY);
+        assertThat(testEmployeeHolidays.getLastChangedBy()).isEqualTo("admin");
     }
 
     @Test

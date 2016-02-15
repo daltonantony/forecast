@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,6 +47,7 @@ public class EmployeeHolidays implements Serializable {
     @Column(name = "last_changed_by")
     private String lastChangedBy;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "employee_billing_hours_id")
     private EmployeeBillingHours employeeBillingHours;

@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -41,14 +43,14 @@ public class EmployeeHolidaysResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<EmployeeHolidays> createEmployeeHolidays(@RequestBody EmployeeHolidays employeeHolidays) throws URISyntaxException {
+    public ResponseEntity<EmployeeHolidays> createEmployeeHolidays(@RequestBody @Valid EmployeeHolidays employeeHolidays) throws URISyntaxException {
         log.debug("REST request to save EmployeeHolidays : {}", employeeHolidays);
         if (employeeHolidays.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("employeeHolidays", "idexists", "A new employeeHolidays cannot already have an ID")).body(null);
         }
         EmployeeHolidays result = employeeHolidaysService.save(employeeHolidays);
         return ResponseEntity.created(new URI("/api/employeeHolidayss/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("employeeHolidays", result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert("EmployeeHolidays", result.getEmployeeBillingHours().getEmployee().getName()))
             .body(result);
     }
 
@@ -59,14 +61,14 @@ public class EmployeeHolidaysResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<EmployeeHolidays> updateEmployeeHolidays(@RequestBody EmployeeHolidays employeeHolidays) throws URISyntaxException {
+    public ResponseEntity<EmployeeHolidays> updateEmployeeHolidays(@RequestBody @Valid EmployeeHolidays employeeHolidays) throws URISyntaxException {
         log.debug("REST request to update EmployeeHolidays : {}", employeeHolidays);
         if (employeeHolidays.getId() == null) {
             return createEmployeeHolidays(employeeHolidays);
         }
         EmployeeHolidays result = employeeHolidaysService.save(employeeHolidays);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("employeeHolidays", employeeHolidays.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert("EmployeeHolidays", employeeHolidays.getEmployeeBillingHours().getEmployee().getName()))
             .body(result);
     }
 
@@ -109,7 +111,7 @@ public class EmployeeHolidaysResource {
     public ResponseEntity<Void> deleteEmployeeHolidays(@PathVariable Long id) {
         log.debug("REST request to delete EmployeeHolidays : {}", id);
         employeeHolidaysService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("employeeHolidays", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("EmployeeHolidays", id.toString())).build();
     }
 
     /**

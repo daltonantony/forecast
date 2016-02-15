@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -41,14 +43,14 @@ public class EmployeeBillingHoursResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<EmployeeBillingHours> createEmployeeBillingHours(@RequestBody EmployeeBillingHours employeeBillingHours) throws URISyntaxException {
+    public ResponseEntity<EmployeeBillingHours> createEmployeeBillingHours(@RequestBody @Valid EmployeeBillingHours employeeBillingHours) throws URISyntaxException {
         log.debug("REST request to save EmployeeBillingHours : {}", employeeBillingHours);
         if (employeeBillingHours.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("employeeBillingHours", "idexists", "A new employeeBillingHours cannot already have an ID")).body(null);
         }
         EmployeeBillingHours result = employeeBillingHoursService.save(employeeBillingHours);
         return ResponseEntity.created(new URI("/api/employeeBillingHourss/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("employeeBillingHours", result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert("EmployeeBillingHours", result.getEmployee().getName()))
             .body(result);
     }
 
@@ -59,14 +61,14 @@ public class EmployeeBillingHoursResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<EmployeeBillingHours> updateEmployeeBillingHours(@RequestBody EmployeeBillingHours employeeBillingHours) throws URISyntaxException {
+    public ResponseEntity<EmployeeBillingHours> updateEmployeeBillingHours(@RequestBody @Valid EmployeeBillingHours employeeBillingHours) throws URISyntaxException {
         log.debug("REST request to update EmployeeBillingHours : {}", employeeBillingHours);
         if (employeeBillingHours.getId() == null) {
             return createEmployeeBillingHours(employeeBillingHours);
         }
         EmployeeBillingHours result = employeeBillingHoursService.save(employeeBillingHours);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("employeeBillingHours", employeeBillingHours.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert("EmployeeBillingHours", employeeBillingHours.getEmployee().getName()))
             .body(result);
     }
 
@@ -109,7 +111,7 @@ public class EmployeeBillingHoursResource {
     public ResponseEntity<Void> deleteEmployeeBillingHours(@PathVariable Long id) {
         log.debug("REST request to delete EmployeeBillingHours : {}", id);
         employeeBillingHoursService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("employeeBillingHours", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("EmployeeBillingHours", id.toString())).build();
     }
 
     /**

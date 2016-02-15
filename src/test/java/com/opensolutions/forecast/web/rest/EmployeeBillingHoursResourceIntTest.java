@@ -1,8 +1,10 @@
 package com.opensolutions.forecast.web.rest;
 
 import com.opensolutions.forecast.Application;
+import com.opensolutions.forecast.domain.Employee;
 import com.opensolutions.forecast.domain.EmployeeBillingHours;
 import com.opensolutions.forecast.repository.EmployeeBillingHoursRepository;
+import com.opensolutions.forecast.repository.EmployeeRepository;
 import com.opensolutions.forecast.service.EmployeeBillingHoursService;
 
 import org.junit.Before;
@@ -14,6 +16,9 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -75,6 +80,9 @@ public class EmployeeBillingHoursResourceIntTest {
     private EmployeeBillingHoursRepository employeeBillingHoursRepository;
 
     @Inject
+    private EmployeeRepository employeeRepository;
+
+    @Inject
     private EmployeeBillingHoursService employeeBillingHoursService;
 
     @Inject
@@ -86,6 +94,8 @@ public class EmployeeBillingHoursResourceIntTest {
     private MockMvc restEmployeeBillingHoursMockMvc;
 
     private EmployeeBillingHours employeeBillingHours;
+
+    private Employee employee;
 
     @PostConstruct
     public void setup() {
@@ -99,6 +109,8 @@ public class EmployeeBillingHoursResourceIntTest {
 
     @Before
     public void initTest() {
+    	saveEmployee();
+    	
         employeeBillingHours = new EmployeeBillingHours();
         employeeBillingHours.setWeek1(DEFAULT_WEEK1);
         employeeBillingHours.setWeek2(DEFAULT_WEEK2);
@@ -109,12 +121,28 @@ public class EmployeeBillingHoursResourceIntTest {
         employeeBillingHours.setForecastDate(DEFAULT_FORECAST_DATE);
         employeeBillingHours.setLastChangedDate(DEFAULT_LAST_CHANGED_DATE);
         employeeBillingHours.setLastChangedBy(DEFAULT_LAST_CHANGED_BY);
+        employeeBillingHours.setEmployee(employee);
     }
+
+	private void saveEmployee() {
+		employee = new Employee();
+    	employee.setName("EmpName");
+    	employee.setAssociateId(123456L);
+    	employee.setDomain("Domain");
+
+    	// Initialize the database
+        employeeRepository.saveAndFlush(employee);
+	}
 
     @Test
     @Transactional
     public void createEmployeeBillingHours() throws Exception {
         int databaseSizeBeforeCreate = employeeBillingHoursRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Create the EmployeeBillingHours
 
@@ -134,8 +162,8 @@ public class EmployeeBillingHoursResourceIntTest {
         assertThat(testEmployeeBillingHours.getWeek5()).isEqualTo(DEFAULT_WEEK5);
         assertThat(testEmployeeBillingHours.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
         assertThat(testEmployeeBillingHours.getForecastDate()).isEqualTo(DEFAULT_FORECAST_DATE);
-        assertThat(testEmployeeBillingHours.getLastChangedDate()).isEqualTo(DEFAULT_LAST_CHANGED_DATE);
-        assertThat(testEmployeeBillingHours.getLastChangedBy()).isEqualTo(DEFAULT_LAST_CHANGED_BY);
+        assertThat(testEmployeeBillingHours.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
+        assertThat(testEmployeeBillingHours.getLastChangedBy()).isEqualTo("admin");
     }
 
     @Test
@@ -197,6 +225,11 @@ public class EmployeeBillingHoursResourceIntTest {
         employeeBillingHoursRepository.saveAndFlush(employeeBillingHours);
 
 		int databaseSizeBeforeUpdate = employeeBillingHoursRepository.findAll().size();
+        
+        // mock the security context for the logged in user name
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
 
         // Update the employeeBillingHours
         employeeBillingHours.setWeek1(UPDATED_WEEK1);
@@ -226,7 +259,7 @@ public class EmployeeBillingHoursResourceIntTest {
         assertThat(testEmployeeBillingHours.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
         assertThat(testEmployeeBillingHours.getForecastDate()).isEqualTo(UPDATED_FORECAST_DATE);
         assertThat(testEmployeeBillingHours.getLastChangedDate()).isEqualTo(UPDATED_LAST_CHANGED_DATE);
-        assertThat(testEmployeeBillingHours.getLastChangedBy()).isEqualTo(UPDATED_LAST_CHANGED_BY);
+        assertThat(testEmployeeBillingHours.getLastChangedBy()).isEqualTo("admin");
     }
 
     @Test

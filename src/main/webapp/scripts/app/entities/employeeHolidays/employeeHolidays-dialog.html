@@ -4,10 +4,16 @@
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="clear()">&times;</button>
-        <h4 class="modal-title" id="myEmployeeHolidaysLabel">Create or edit a EmployeeHolidays</h4>
+        <h4 class="modal-title" id="myEmployeeHolidaysLabel">Create or edit Employee Holidays</h4>
     </div>
     <div class="modal-body">
         <jh-alert-error></jh-alert-error>
+        <div class="form-group required">
+            <label class="control-label" for="field_employeeBillingHours">Employee Billing Hours</label>
+            <select class="form-control" id="field_employeeBillingHours" name="employeeBillingHours" ng-model="employeeHolidays.employeeBillingHours" ng-options="employeeBillingHours as employeeBillingHours.employee.name for employeeBillingHours in employeebillinghourss track by employeeBillingHours.id">
+                <option value="">---- Select Employee Billing Hours for Employee -----</option>
+            </select>
+        </div>
         <div class="form-group">
             <label class="control-label" for="field_week1">Week1</label>
             <input type="number" class="form-control" name="week1" id="field_week1"
@@ -37,12 +43,6 @@
             <input type="number" class="form-control" name="week5" id="field_week5"
                     ng-model="employeeHolidays.week5"
                      />
-        </div>
-        <div class="form-group">
-            <label for="field_employeeBillingHours">EmployeeBillingHours</label>
-            <select class="form-control" id="field_employeeBillingHours" name="employeeBillingHours" ng-model="employeeHolidays.employeeBillingHours" ng-options="employeeBillingHours as employeeBillingHours.name for employeeBillingHours in employeebillinghourss track by employeeBillingHours.id">
-                <option value=""></option>
-            </select>
         </div>
     </div>
     <div class="modal-footer">
