@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('forecastApp')
-    .factory('EmployeeBillingHours', function ($resource, DateUtils) {
+var app = angular.module('forecastApp');
+
+app.factory('EmployeeBillingHours', function ($resource, DateUtils) {
         return $resource('api/employeeBillingHourss/:id', {}, {
             'query': { method: 'GET', isArray: true},
             'get': {
@@ -34,3 +35,9 @@ angular.module('forecastApp')
             }
         });
     });
+
+app.factory('EmployeeBillingHoursForComingMonths', function ($resource) {
+    return $resource('api/employeeBillingHoursComingMonths/:empId', {}, {
+        'get': { method: 'GET', isArray: true}
+    });
+});

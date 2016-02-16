@@ -32,10 +32,10 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class EmployeeBillingHoursResource {
 
     private final Logger log = LoggerFactory.getLogger(EmployeeBillingHoursResource.class);
-        
+
     @Inject
     private EmployeeBillingHoursService employeeBillingHoursService;
-    
+
     /**
      * POST  /employeeBillingHourss -> Create a new employeeBillingHours.
      */
@@ -82,7 +82,19 @@ public class EmployeeBillingHoursResource {
     public List<EmployeeBillingHours> getAllEmployeeBillingHourss() {
         log.debug("REST request to get all EmployeeBillingHourss");
         return employeeBillingHoursService.findAll();
-            }
+    }
+
+    /**
+     * GET  /employeeBillingHourss -> get all the employeeBillingHourss.
+     */
+    @RequestMapping(value = "/employeeBillingHoursComingMonths/{empId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public List<EmployeeBillingHours> getComingMonthsHourss(@PathVariable Long empId) {
+        log.debug("REST request to get all Employee Coming Months Hours");
+        return employeeBillingHoursService.findComingMonths(empId);
+    }
 
     /**
      * GET  /employeeBillingHourss/:id -> get the "id" employeeBillingHours.

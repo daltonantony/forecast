@@ -39,8 +39,8 @@ angular.module('forecastApp')
                 }
             })
             .state('employeeBillingHours.new', {
-                parent: 'employeeBillingHours',
-                url: '/new',
+                parent: 'entity',
+                url: '/employeeBillingHoursComingMonths/{empId}',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
@@ -50,20 +50,9 @@ angular.module('forecastApp')
                         controller: 'EmployeeBillingHoursDialogController',
                         size: 'lg',
                         resolve: {
-                            entity: function () {
-                                return {
-                                    week1: null,
-                                    week2: null,
-                                    week3: null,
-                                    week4: null,
-                                    week5: null,
-                                    createdDate: null,
-                                    forecastDate: null,
-                                    lastChangedDate: null,
-                                    lastChangedBy: null,
-                                    id: null
-                                };
-                            }
+                            /*entity: ['$stateParams', 'EmployeeBillingHours', 'EmployeeBillingHoursForComingMonths', function($stateParams, EmployeeBillingHours, EmployeeBillingHoursForComingMonths) {
+                                return EmployeeBillingHoursForComingMonths.get({empId : $stateParams.empId});
+                            }]*/
                         }
                     }).result.then(function(result) {
                         $state.go('employeeBillingHours', null, { reload: true });

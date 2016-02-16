@@ -1,16 +1,24 @@
 'use strict';
 
 angular.module('forecastApp').controller('EmployeeBillingHoursDialogController',
-    ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'EmployeeBillingHours', 'Employee',
-        function($scope, $stateParams, $uibModalInstance, entity, EmployeeBillingHours, Employee) {
+    ['$scope', '$stateParams', '$uibModalInstance', 'EmployeeBillingHours', 'Employee', 'EmployeeBillingHoursForComingMonths',
+        function($scope, $stateParams, $uibModalInstance, EmployeeBillingHours, Employee, EmployeeBillingHoursForComingMonths) {
 
-        $scope.employeeBillingHours = entity;
+      //  $scope.employeeBillingHours = entity;
         $scope.employees = Employee.query();
         $scope.load = function(id) {
             EmployeeBillingHours.get({id : id}, function(result) {
                 $scope.employeeBillingHours = result;
             });
         };
+
+            $scope.loadAll = function (id) {
+                EmployeeBillingHoursForComingMonths.get({empId: $stateParams.empId}, function (result) {
+                    $scope.forcastEmployeeBillingHours = result;
+                });
+            };
+
+            $scope.loadAll();
 
         var onSaveSuccess = function (result) {
             $scope.$emit('forecastApp:employeeBillingHoursUpdate', result);

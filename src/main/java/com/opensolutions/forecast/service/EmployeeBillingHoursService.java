@@ -22,6 +22,12 @@ public interface EmployeeBillingHoursService {
     public List<EmployeeBillingHours> findAll();
 
     /**
+     *  get all the employeeBillingHourss.
+     *  @return the list of entities
+     */
+    public List<EmployeeBillingHours> findComingMonths(Long empId);
+
+    /**
      *  get the "id" employeeBillingHours.
      *  @return the entity
      */

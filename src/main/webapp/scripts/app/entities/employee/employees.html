@@ -53,9 +53,12 @@
                                 class="btn btn-danger btn-sm">
                             <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span> Delete</span>
                         </button>
-                            <button class="btn btn-primary" ui-sref="employeeBillingHours.new">
-                                <span class="glyphicon glyphicon-flash"></span> <span>EmployeeBillingHours</span>
+                            <button class="btn btn-primary" ui-sref="employeeBillingHours.new({empId:employee.id})">
+                                <span class="glyphicon glyphicon-flash"></span> <span>Enter Hours</span>
                             </button>
+                        <button class="btn btn-primary" ui-sref="employeeHolidays.new">
+                            <span class="glyphicon glyphicon-flash"></span> <span>Enter Holidays</span>
+                        </button>
                     </td>
                 </tr>
             </tbody>
