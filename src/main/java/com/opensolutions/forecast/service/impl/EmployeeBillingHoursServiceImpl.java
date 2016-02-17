@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 
 import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -123,4 +126,23 @@ public class EmployeeBillingHoursServiceImpl implements EmployeeBillingHoursServ
             .stream(employeeBillingHoursSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
+
+    public static void main (String args[]){
+        LocalDate startDate = getFirstWorkingDayInMonth(Year.now().getValue(), YearMonth.now().getMonthValue());
+        System.out.printf("First Working Day of the Month : "+ startDate.getDayOfWeek());
+        System.out.printf(", First Working Date of the Month : "+ startDate);
+    }
+
+    private static LocalDate getFirstWorkingDayInMonth(int year, int month){
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        int dayValue = startDate.with(TemporalAdjusters.firstDayOfMonth()).getDayOfWeek().getValue();
+        if(dayValue == 6){
+            startDate = LocalDate.of(year, month, 3);
+        }else if(dayValue == 7){
+            startDate = LocalDate.of(year, month, 2);
+        }
+        return startDate;
+    }
+
+
 }
