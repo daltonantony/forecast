@@ -127,22 +127,4 @@ public class EmployeeBillingHoursServiceImpl implements EmployeeBillingHoursServ
             .collect(Collectors.toList());
     }
 
-    /*public static void main (String args[]){
-        LocalDate startDate = getFirstWorkingDayInMonth(Year.now().getValue(), YearMonth.now().getMonthValue());
-        System.out.printf("First Working Day of the Month : "+ startDate.getDayOfWeek());
-        System.out.printf(", First Working Date of the Month : "+ startDate);
-    }
-
-    private static LocalDate getFirstWorkingDayInMonth(int year, int month){
-        LocalDate startDate = LocalDate.of(year, month, 1);
-        int dayValue = startDate.with(TemporalAdjusters.firstDayOfMonth()).getDayOfWeek().getValue();
-        if(dayValue == 6){
-            startDate = LocalDate.of(year, month, 3);
-        }else if(dayValue == 7){
-            startDate = LocalDate.of(year, month, 2);
-        }
-        return startDate;
-    }*/
-
-
 }
