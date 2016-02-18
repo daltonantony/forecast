@@ -4,7 +4,7 @@ id;code_type;code_value;effective_date;expiry_date;last_changed_by
 103;Role;Manager;2016-01-01;null;admin
 104;Role;Architect;2016-01-01;null;admin
 105;Location;India;2016-01-01;null;admin
-106;Location;Australia;2016-01-01;null;admin
+106;Location;Netherlands;2016-01-01;null;admin
 107;Location;Spain;2016-01-01;null;admin
 108;Domain;Financing;2016-01-01;null;admin
 109;Domain;Cards;2016-01-01;null;admin
