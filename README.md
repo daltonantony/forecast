@@ -68,7 +68,7 @@ To setup this project in Jenkins, use the following configuration:
 
 # Heroku URL
 
-* Application can be accessed via url : https://forecast-cgn.herokuapp.com/
+* Application can be accessed via url : https://forecast-demo.herokuapp.com/
 
 [JHipster]: https://jhipster.github.io/
 [Node.js]: https://nodejs.org/
