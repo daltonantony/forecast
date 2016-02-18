@@ -7,7 +7,7 @@ angular.module('forecastApp')
                 parent: 'entity',
                 url: '/codeValuess',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['ROLE_ADMIN'],
                     pageTitle: 'CodeValues'
                 },
                 views: {
@@ -23,7 +23,7 @@ angular.module('forecastApp')
                 parent: 'entity',
                 url: '/codeValues/{id}',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['ROLE_ADMIN'],
                     pageTitle: 'CodeValues'
                 },
                 views: {
@@ -42,7 +42,7 @@ angular.module('forecastApp')
                 parent: 'codeValues',
                 url: '/new',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['ROLE_ADMIN'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
@@ -73,7 +73,7 @@ angular.module('forecastApp')
                 parent: 'codeValues',
                 url: '/{id}/edit',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['ROLE_ADMIN'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
@@ -96,7 +96,7 @@ angular.module('forecastApp')
                 parent: 'codeValues',
                 url: '/{id}/delete',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['ROLE_ADMIN'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
