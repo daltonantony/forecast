@@ -7,6 +7,7 @@ import com.opensolutions.forecast.repository.AuthorityRepository;
 import com.opensolutions.forecast.repository.UserRepository;
 import com.opensolutions.forecast.repository.search.UserSearchRepository;
 import com.opensolutions.forecast.security.AuthoritiesConstants;
+import com.opensolutions.forecast.security.SecurityUtils;
 import com.opensolutions.forecast.service.MailService;
 import com.opensolutions.forecast.service.UserService;
 import com.opensolutions.forecast.web.rest.dto.ManagedUserDTO;
@@ -193,6 +194,23 @@ public class UserResource {
                 .map(managedUserDTO -> new ResponseEntity<>(managedUserDTO, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    /**
+     * GET  /user -> get the logged in user.
+     */
+    @RequestMapping(value = "/user",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<ManagedUserDTO> getLoggedInUser() {
+        final String login = SecurityUtils.getCurrentUserLogin();
+		log.debug("REST request to get logged in User : {}", login );
+        return userService.getUserWithAuthoritiesByLogin(login)
+                .map(ManagedUserDTO::new)
+                .map(managedUserDTO -> new ResponseEntity<>(managedUserDTO, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     /**
      * DELETE  USER :login -> delete the "login" User.
      */

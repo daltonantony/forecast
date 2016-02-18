@@ -1,8 +1,8 @@
 id;login;password_hash;first_name;last_name;email;activated;lang_key;created_by
-1;system;$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG;System;System;system@localhost;true;en;system
-2;anonymousUser;$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO;Anonymous;User;anonymous@localhost;true;en;system
-3;admin;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;admin@localhost;true;en;system
-4;user;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;User;User;user@localhost;true;en;system
+1;system;$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG;System;NULL;system@localhost;true;en;system
+2;anonymousUser;$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO;Anonymous;NULL;anonymous@localhost;true;en;system
+3;admin;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;NULL;admin@localhost;true;en;system
+4;user;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;User;NULL;user@localhost;true;en;system
 5;126195;$2a$10$BcYp6gBUXS9/18VEIslPv.HngXNGQMLUq8NwKyixp17NFfUkkFJE.;Agor;P;agorp@localhost;true;en;system
 6;126462;$2a$10$w.78CxpMXFpOlELCRUhq0enYfeqIRSk3ihjrx406Xb/s7DOkGCy/S;Sathish;M;sathishm@localhost;true;en;system
 7;149614;$2a$10$V1f7O/K.yjJ60RLVc.sile5IY9/ZAy96IaUl7xj/zcIrxCrY5puRu;Sathish;T;sathisht@localhost;true;en;system

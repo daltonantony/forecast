@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('forecastApp')
-    .factory('User', function ($resource) {
+var app = angular.module('forecastApp');
+
+    app.factory('User', function ($resource) {
         return $resource('api/users/:login', {}, {
                 'query': {method: 'GET', isArray: true},
                 'get': {
@@ -14,5 +15,17 @@ angular.module('forecastApp')
                 'save': { method:'POST' },
                 'update': { method:'PUT' },
                 'delete':{ method:'DELETE'}
+            });
+        });
+    
+    app.factory('UserDetails', function ($resource) {
+        return $resource('api/user', {}, {
+                'get': {
+                    method: 'GET',
+                    transformResponse: function (data) {
+                        data = angular.fromJson(data);
+                        return data;
+                    }
+                }
             });
         });
