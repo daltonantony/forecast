@@ -1,5 +1,7 @@
 package com.opensolutions.forecast.service.impl;
 
+import com.opensolutions.forecast.domain.Employee;
+import com.opensolutions.forecast.repository.EmployeeRepository;
 import com.opensolutions.forecast.security.SecurityUtils;
 import com.opensolutions.forecast.service.EmployeeAllocationService;
 import com.opensolutions.forecast.domain.EmployeeAllocation;
@@ -14,6 +16,7 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -33,6 +36,9 @@ public class EmployeeAllocationServiceImpl implements EmployeeAllocationService{
 
     @Inject
     private EmployeeAllocationSearchRepository employeeAllocationSearchRepository;
+
+    @Inject
+    private EmployeeRepository employeeRepository;
 
     /**
      * Save a employeeAllocation.
@@ -67,6 +73,18 @@ public class EmployeeAllocationServiceImpl implements EmployeeAllocationService{
         log.debug("Request to get EmployeeAllocation : {}", id);
         EmployeeAllocation employeeAllocation = employeeAllocationRepository.findOne(id);
         return employeeAllocation;
+    }
+
+
+    /**
+     *  get one employeeAllocation by id.
+     *  @return the entity
+     */
+    @Transactional(readOnly = true)
+    public Set<EmployeeAllocation> findAnEmployeeAllocations(Long empId) {
+        log.debug("Request to get EmployeeAllocation For EmpId : {}", empId);
+        final Employee employee = employeeRepository.findOne(empId);
+        return employee.getEmployeeAllocations();
     }
 
     /**

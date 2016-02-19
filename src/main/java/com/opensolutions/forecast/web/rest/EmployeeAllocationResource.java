@@ -1,28 +1,29 @@
 package com.opensolutions.forecast.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.opensolutions.forecast.domain.EmployeeAllocation;
-import com.opensolutions.forecast.service.EmployeeAllocationService;
-import com.opensolutions.forecast.web.rest.util.HeaderUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;
-import javax.validation.Valid;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.Set;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import javax.inject.Inject;
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.codahale.metrics.annotation.Timed;
+import com.opensolutions.forecast.domain.EmployeeAllocation;
+import com.opensolutions.forecast.service.EmployeeAllocationService;
+import com.opensolutions.forecast.web.rest.util.HeaderUtil;
 
 /**
  * REST controller for managing EmployeeAllocation.
@@ -32,10 +33,10 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class EmployeeAllocationResource {
 
     private final Logger log = LoggerFactory.getLogger(EmployeeAllocationResource.class);
-        
+
     @Inject
     private EmployeeAllocationService employeeAllocationService;
-    
+
     /**
      * POST  /employeeAllocations -> Create a new employeeAllocation.
      */
@@ -43,10 +44,12 @@ public class EmployeeAllocationResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<EmployeeAllocation> createEmployeeAllocation(@RequestBody @Valid EmployeeAllocation employeeAllocation) throws URISyntaxException {
+    public ResponseEntity<EmployeeAllocation> createEmployeeAllocation(
+        @RequestBody @Valid EmployeeAllocation employeeAllocation) throws URISyntaxException {
         log.debug("REST request to save EmployeeAllocation : {}", employeeAllocation);
         if (employeeAllocation.getId() != null) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("employeeAllocation", "idexists", "A new employeeAllocation cannot already have an ID")).body(null);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("employeeAllocation", "idexists",
+                "A new employeeAllocation cannot already have an ID")).body(null);
         }
         EmployeeAllocation result = employeeAllocationService.save(employeeAllocation);
         return ResponseEntity.created(new URI("/api/employeeAllocations/" + result.getId()))
@@ -61,14 +64,16 @@ public class EmployeeAllocationResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<EmployeeAllocation> updateEmployeeAllocation(@RequestBody @Valid EmployeeAllocation employeeAllocation) throws URISyntaxException {
+    public ResponseEntity<EmployeeAllocation> updateEmployeeAllocation(
+        @RequestBody @Valid EmployeeAllocation employeeAllocation) throws URISyntaxException {
         log.debug("REST request to update EmployeeAllocation : {}", employeeAllocation);
         if (employeeAllocation.getId() == null) {
             return createEmployeeAllocation(employeeAllocation);
         }
         EmployeeAllocation result = employeeAllocationService.save(employeeAllocation);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("Employee Allocation", employeeAllocation.getEmployee().getName()))
+            .headers(
+                HeaderUtil.createEntityUpdateAlert("Employee Allocation", employeeAllocation.getEmployee().getName()))
             .body(result);
     }
 
@@ -82,7 +87,7 @@ public class EmployeeAllocationResource {
     public List<EmployeeAllocation> getAllEmployeeAllocations() {
         log.debug("REST request to get all EmployeeAllocations");
         return employeeAllocationService.findAll();
-            }
+    }
 
     /**
      * GET  /employeeAllocations/:id -> get the "id" employeeAllocation.
@@ -111,19 +116,20 @@ public class EmployeeAllocationResource {
     public ResponseEntity<Void> deleteEmployeeAllocation(@PathVariable Long id) {
         log.debug("REST request to delete EmployeeAllocation : {}", id);
         employeeAllocationService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("Employee Allocation", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("Employee Allocation", id.toString()))
+            .build();
     }
 
     /**
      * SEARCH  /_search/employeeAllocations/:query -> search for the employeeAllocation corresponding
      * to the query.
      */
-    @RequestMapping(value = "/_search/employeeAllocations/{query}",
+    @RequestMapping(value = "/getEmployeeAllocationsForAnEmployee/{empId}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<EmployeeAllocation> searchEmployeeAllocations(@PathVariable String query) {
-        log.debug("Request to search EmployeeAllocations for query {}", query);
-        return employeeAllocationService.search(query);
+    public Set<EmployeeAllocation> searchEmployeeAllocations(@PathVariable Long empId) {
+        log.debug("Request to search EmployeeAllocations for Employee Id {}", empId);
+        return employeeAllocationService.findAnEmployeeAllocations(empId);
     }
 }

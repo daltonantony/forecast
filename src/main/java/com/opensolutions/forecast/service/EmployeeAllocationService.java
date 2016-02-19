@@ -3,6 +3,7 @@ package com.opensolutions.forecast.service;
 import com.opensolutions.forecast.domain.EmployeeAllocation;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Service Interface for managing EmployeeAllocation.
@@ -26,6 +27,8 @@ public interface EmployeeAllocationService {
      *  @return the entity
      */
     public EmployeeAllocation findOne(Long id);
+
+    public Set<EmployeeAllocation> findAnEmployeeAllocations(Long empId);
 
     /**
      *  delete the "id" employeeAllocation.
