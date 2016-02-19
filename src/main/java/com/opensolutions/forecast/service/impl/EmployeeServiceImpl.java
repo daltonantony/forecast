@@ -90,4 +90,15 @@ public class EmployeeServiceImpl implements EmployeeService{
             .stream(employeeSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
+
+	@Override
+	public Employee getEmployeeForAssociateId(Long associateId) {
+		final List<Employee> employees = findAll();
+		for (Employee employee : employees) {
+			if (employee.getAssociateId().equals(associateId)) {
+				return employee;
+			}
+		}
+		return null;
+	}
 }

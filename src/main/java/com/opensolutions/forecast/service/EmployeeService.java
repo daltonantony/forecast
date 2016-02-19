@@ -37,4 +37,11 @@ public interface EmployeeService {
      * to the query.
      */
     public List<Employee> search(String query);
+    
+    /**
+     *  get the employee based on Associate Id.
+     *  @return the entity
+     */
+    public Employee getEmployeeForAssociateId(Long associateId);
+
 }

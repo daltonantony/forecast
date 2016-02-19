@@ -1,8 +1,6 @@
 package com.opensolutions.forecast.service.util;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
-
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
@@ -69,23 +67,19 @@ public class EmployeeHoursHelper {
 
     private static LocalDate getFirstWorkingDayInMonth(int year, int month) {
         LocalDate startDate = LocalDate.of(year, month, 1).with(TemporalAdjusters.firstDayOfMonth());
-        int startDayValue = startDate.getDayOfWeek().getValue();
-        if (startDayValue == 6) {
-            startDate = startDate.plusDays(2);
-        } else if (startDayValue == 7) {
-            startDate = startDate.plusDays(1);
-        }
+        final DayOfWeek startDay = startDate.getDayOfWeek();
+        if (DayOfWeek.SATURDAY == startDay || DayOfWeek.SUNDAY == startDay) {
+			startDate = startDate.with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY));
+		}
         return startDate;
     }
 
     private static LocalDate getLastWorkingDayInMonth(int year, int month) {
         LocalDate endDate = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
-        int endDayValue = endDate.getDayOfWeek().getValue();
-        if (endDayValue == 6) {
-            endDate = endDate.minusDays(1);
-        } else if (endDayValue == 7) {
-            endDate = endDate.minusDays(2);
-        }
+        final DayOfWeek endDay = endDate.getDayOfWeek();
+        if (DayOfWeek.SATURDAY == endDay || DayOfWeek.SUNDAY == endDay) {
+        	endDate = endDate.with(TemporalAdjusters.lastInMonth(DayOfWeek.FRIDAY));
+		}
         return endDate;
     }
 

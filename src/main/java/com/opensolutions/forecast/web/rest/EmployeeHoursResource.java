@@ -128,8 +128,8 @@ public class EmployeeHoursResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public Map<String, List<EmployeeHours>> getComingMonthsHours() {
-        log.debug("REST request to get all Employee Coming Months Hours");
-        return employeeHoursService.findComingMonthHours(149614L);
+        log.debug("REST request to get the Employee Hours for Coming Months");
+        return employeeHoursService.getEmployeeHoursForComingMonths();
     }
 
     @RequestMapping(value = "/getWorkingDatesPerWeekForMonths",

@@ -40,5 +40,8 @@ public interface EmployeeHoursService {
      */
     public List<EmployeeHours> search(String query);
 
-    public Map<String, List<EmployeeHours>> findComingMonthHours(Long empId);
+    /**
+     * @return Employee Hours for Coming Months
+     */
+    public Map<String, List<EmployeeHours>> getEmployeeHoursForComingMonths();
 }

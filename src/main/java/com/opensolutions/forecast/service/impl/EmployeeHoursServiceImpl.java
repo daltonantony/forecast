@@ -5,7 +5,10 @@ import com.opensolutions.forecast.domain.EmployeeHours;
 import com.opensolutions.forecast.repository.EmployeeHoursRepository;
 import com.opensolutions.forecast.repository.EmployeeRepository;
 import com.opensolutions.forecast.repository.search.EmployeeHoursSearchRepository;
+import com.opensolutions.forecast.security.SecurityUtils;
 import com.opensolutions.forecast.service.EmployeeHoursService;
+import com.opensolutions.forecast.service.EmployeeService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,9 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 
     @Inject
     private EmployeeRepository employeeRepository;
+    
+    @Inject
+    private EmployeeService employeeService;
 
     /**
      * Save a employeeHours.
@@ -99,13 +105,15 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     }
 
     @Override
-    public Map<String, List<EmployeeHours>> findComingMonthHours(Long empId) {
+    public Map<String, List<EmployeeHours>> getEmployeeHoursForComingMonths() {
         final Map<String, List<EmployeeHours>> employeeHoursMap = new LinkedHashMap<>();
-        final Employee employee = employeeRepository.findOne(empId);
+        final Long empId = Long.valueOf(SecurityUtils.getCurrentUserLogin());
+        log.debug("REST request to get all Employee Hours for Coming Months for: {}", empId);
+		final Employee employee = employeeService.getEmployeeForAssociateId(empId);
+		log.debug("Retrieved employee: {}", employee.getName());
         employeeHoursMap.put(LocalDate.now().plusMonths(1).getMonth().toString(), getEmployeeHoursList(employee, 1));
         employeeHoursMap.put(LocalDate.now().plusMonths(2).getMonth().toString(), getEmployeeHoursList(employee, 2));
         employeeHoursMap.put(LocalDate.now().plusMonths(3).getMonth().toString(), getEmployeeHoursList(employee, 3));
-
         return employeeHoursMap;
     }
 
@@ -135,7 +143,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
         hours.setCreatedDate(LocalDate.now());
         hours.setLastChangedDate(LocalDate.now());
         hours.setForecastDate(forecastDate);
-        hours.setLastChangedBy("Admin");
+        hours.setLastChangedBy("admin");
         return hours;
     }
 }
