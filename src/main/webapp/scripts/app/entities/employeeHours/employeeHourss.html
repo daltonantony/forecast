@@ -1,0 +1,53 @@
+<div>
+    <h2>Employee Hours</h2>
+    <jh-alert></jh-alert>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <button class="btn btn-primary" ng-click="newForecastForComingMonths()">
+                    <span class="glyphicon glyphicon-flash"></span> <span>Create a new Hours</span>
+                </button>
+            </div>
+            <div class="col-md-8">
+                <form name="searchForm" class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
+                    </div>
+                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a EmployeeHours</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive" ng-show="newForecast">
+        <table class="table table-striped" ng-repeat="(key, value) in forcastEmployeeHours">
+            <thead>
+            <tr>
+                <th><span>Month</span> </th>
+                <th><span>Type</span> </th>
+                <th ng-repeat="dates in workingDatesPerWeekForMonths[key]"><span>{{dates}}</span></th>
+            </tr>
+            </thead>
+            <tr ng-repeat="hours in value">
+                <td ng-if="$first"><b>{{key}}</b></td>
+                <td ng-if="!$first"></td>
+                <td><b>{{hours.type}}</b></td>
+                <td><input type="text" class="form-control" ng-model="hours.week1" id="hours.week1" ng-disabled="$first"></td>
+                <td><input type="text" class="form-control" ng-model="hours.week2" id="hours.week2" ng-disabled="$first"></td>
+                <td><input type="text" class="form-control" ng-model="hours.week3" id="hours.week3" ng-disabled="$first"></td>
+                <td><input type="text" class="form-control" ng-model="hours.week4" id="hours.week4" ng-disabled="$first"></td>
+                <td><input type="text" class="form-control" ng-model="hours.week5" id="hours.week5" ng-disabled="$first"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="clear()">
+                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+            </button>
+            <button type="button" class="btn btn-primary">
+                <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+            </button>
+        </div>
+    </div>
+</div>

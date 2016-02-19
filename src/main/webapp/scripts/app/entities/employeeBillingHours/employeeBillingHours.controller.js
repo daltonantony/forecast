@@ -10,14 +10,6 @@ angular.module('forecastApp')
             });
         };
         $scope.loadAll();
-
-        $scope.newForecastForComingMonths = function () {
-            $scope.newForecast = true;
-            EmployeeBillingHoursForComingMonths.get({empId: 1}, function (result) {
-                $scope.forcastEmployeeBillingHours = result;
-            });
-        };
-
         $scope.search = function () {
             EmployeeBillingHoursSearch.query({query: $scope.searchQuery}, function(result) {
                 $scope.employeeBillingHourss = result;
