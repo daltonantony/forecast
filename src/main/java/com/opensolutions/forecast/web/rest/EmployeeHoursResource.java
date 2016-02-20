@@ -1,7 +1,7 @@
 package com.opensolutions.forecast.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.google.common.collect.Multimap;
+import com.opensolutions.forecast.domain.DaysOfMonth;
 import com.opensolutions.forecast.domain.EmployeeHours;
 import com.opensolutions.forecast.service.EmployeeHoursService;
 import com.opensolutions.forecast.service.util.EmployeeHoursHelper;
@@ -127,7 +127,7 @@ public class EmployeeHoursResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public Map<String, List<EmployeeHours>> getComingMonthsHours() {
+    public Map<String, List<DaysOfMonth>> getComingMonthsHours() {
         log.debug("REST request to get the Employee Hours for Coming Months");
         return employeeHoursService.getEmployeeHoursForComingMonths();
     }

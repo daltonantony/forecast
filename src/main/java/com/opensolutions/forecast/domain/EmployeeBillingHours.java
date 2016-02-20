@@ -190,14 +190,4 @@ public class EmployeeBillingHours implements Serializable {
             ", lastChangedBy='" + lastChangedBy + "'" +
             '}';
     }
-
-  /*  public static  void main(String[] args) {
-        LocalDate firstOfMonth = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
-
-        LocalDate lastDayOfMonth  = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
-        long weeksBetweenDates = ChronoUnit.WEEKS.between(firstOfMonth, lastDayOfMonth.plusDays(1));
-        System.out.println(firstOfMonth);
-        System.out.println(lastDayOfMonth);
-        System.out.println(weeksBetweenDates);
-    }*/
 }

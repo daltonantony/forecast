@@ -21,23 +21,16 @@
     </div>
 
     <div class="table-responsive" ng-show="newForecast">
-        <table class="table table-striped" ng-repeat="(key, value) in forcastEmployeeHours">
+        <table class="table table-striped">
             <thead>
             <tr>
                 <th><span>Month</span> </th>
-                <th><span>Type</span> </th>
-                <th ng-repeat="dates in workingDatesPerWeekForMonths[key]"><span>{{dates}}</span></th>
+                <th ng-repeat="n in [].constructor(31) track by $index"><span>{{$index + 1}}</span> </th>
             </tr>
             </thead>
-            <tr ng-repeat="hours in value">
-                <td ng-if="$first"><b>{{key}}</b></td>
-                <td ng-if="!$first"></td>
-                <td><b>{{hours.type}}</b></td>
-                <td><input type="text" class="form-control" ng-model="hours.week1" id="hours.week1" ng-disabled="$first"></td>
-                <td><input type="text" class="form-control" ng-model="hours.week2" id="hours.week2" ng-disabled="$first"></td>
-                <td><input type="text" class="form-control" ng-model="hours.week3" id="hours.week3" ng-disabled="$first"></td>
-                <td><input type="text" class="form-control" ng-model="hours.week4" id="hours.week4" ng-disabled="$first"></td>
-                <td><input type="text" class="form-control" ng-model="hours.week5" id="hours.week5" ng-disabled="$first"></td>
+            <tr ng-repeat="(key, value) in forcastEmployeeHours">
+                <td><b>{{key}}</b></td>
+                <td ng-repeat="dateOfMonth in value"><input id="checkSlave" type="checkbox" ng-checked="dateOfMonth.selected" ng-disabled="dateOfMonth.holiday"></td>
             </tr>
             </tbody>
         </table>

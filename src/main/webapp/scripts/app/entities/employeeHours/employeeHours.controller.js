@@ -16,9 +16,9 @@ angular.module('forecastApp')
             EmployeeHoursForComingMonths.get(function (result) {
                 $scope.forcastEmployeeHours = result;
             });
-            WorkingDatesPerWeekForMonths.get(function (result) {
+/*            WorkingDatesPerWeekForMonths.get(function (result) {
                 $scope.workingDatesPerWeekForMonths = result;
-            });
+            });*/
         };
 
         $scope.search = function () {

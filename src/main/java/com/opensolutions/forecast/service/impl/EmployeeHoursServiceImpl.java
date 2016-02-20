@@ -1,25 +1,23 @@
 package com.opensolutions.forecast.service.impl;
 
-import com.opensolutions.forecast.domain.Employee;
+import com.opensolutions.forecast.domain.DaysOfMonth;
 import com.opensolutions.forecast.domain.EmployeeHours;
+import com.opensolutions.forecast.domain.Holidays;
 import com.opensolutions.forecast.repository.EmployeeHoursRepository;
-import com.opensolutions.forecast.repository.EmployeeRepository;
+import com.opensolutions.forecast.repository.HolidaysRepository;
 import com.opensolutions.forecast.repository.search.EmployeeHoursSearchRepository;
-import com.opensolutions.forecast.security.SecurityUtils;
 import com.opensolutions.forecast.service.EmployeeHoursService;
 import com.opensolutions.forecast.service.EmployeeService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -32,6 +30,8 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 @Transactional
 public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 
+    private static final EnumSet<DayOfWeek> HOLIDAY_OF_WEEKS = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+
     private final Logger log = LoggerFactory.getLogger(EmployeeHoursServiceImpl.class);
 
     @Inject
@@ -41,8 +41,8 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     private EmployeeHoursSearchRepository employeeHoursSearchRepository;
 
     @Inject
-    private EmployeeRepository employeeRepository;
-    
+    private HolidaysRepository holidaysRepository;
+
     @Inject
     private EmployeeService employeeService;
 
@@ -97,7 +97,6 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
      */
     @Transactional(readOnly = true)
     public List<EmployeeHours> search(String query) {
-
         log.debug("REST request to search EmployeeHourss for query {}", query);
         return StreamSupport
             .stream(employeeHoursSearchRepository.search(queryStringQuery(query)).spliterator(), false)
@@ -105,45 +104,32 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     }
 
     @Override
-    public Map<String, List<EmployeeHours>> getEmployeeHoursForComingMonths() {
-        final Map<String, List<EmployeeHours>> employeeHoursMap = new LinkedHashMap<>();
-        final Long empId = Long.valueOf(SecurityUtils.getCurrentUserLogin());
-        log.debug("REST request to get all Employee Hours for Coming Months for: {}", empId);
-		final Employee employee = employeeService.getEmployeeForAssociateId(empId);
-		log.debug("Retrieved employee: {}", employee.getName());
-        employeeHoursMap.put(LocalDate.now().plusMonths(1).getMonth().toString(), getEmployeeHoursList(employee, 1));
-        employeeHoursMap.put(LocalDate.now().plusMonths(2).getMonth().toString(), getEmployeeHoursList(employee, 2));
-        employeeHoursMap.put(LocalDate.now().plusMonths(3).getMonth().toString(), getEmployeeHoursList(employee, 3));
-        return employeeHoursMap;
+    public Map<String, List<DaysOfMonth>> getEmployeeHoursForComingMonths() {
+        final Map<String, List<DaysOfMonth>> daysOfMonthMap = new LinkedHashMap<>();
+        daysOfMonthMap.put(LocalDate.now().plusMonths(1).getMonth().toString(), getDaysOfMonths(LocalDate.now().plusMonths(1)));
+        daysOfMonthMap.put(LocalDate.now().plusMonths(2).getMonth().toString(), getDaysOfMonths(LocalDate.now().plusMonths(2)));
+        daysOfMonthMap.put(LocalDate.now().plusMonths(3).getMonth().toString(), getDaysOfMonths(LocalDate.now().plusMonths(3)));
+        return daysOfMonthMap;
     }
 
-    private List<EmployeeHours> getEmployeeHoursList(final Employee employee, final int monthAdd) {
-        final EmployeeHours working = getEmployeeHours(employee, LocalDate.now().plusMonths(monthAdd), "Working");
-        final EmployeeHours personal = getEmployeeHours(employee, LocalDate.now().plusMonths(monthAdd), "Personal");
-        final EmployeeHours training = getEmployeeHours(employee, LocalDate.now().plusMonths(monthAdd), "Training");
-        return Arrays.asList(working, personal, training);
-    }
-
-    private EmployeeHours getEmployeeHours(final Employee employee, final LocalDate forecastDate, final String type) {
-        final EmployeeHours hours = new EmployeeHours();
-        hours.setEmployee(employee);
-        hours.setWeek1(40);
-        hours.setWeek2(40);
-        hours.setWeek3(40);
-        hours.setWeek4(40);
-        hours.setWeek5(40);
-        if (!"Working".equals(type)) {
-            hours.setWeek1(0);
-            hours.setWeek2(0);
-            hours.setWeek3(0);
-            hours.setWeek4(0);
-            hours.setWeek5(0);
+    private List<DaysOfMonth> getDaysOfMonths(final LocalDate localDate) {
+        final List<DaysOfMonth> daysOfMonths = new ArrayList<>();
+        for (int i = 1; i <= localDate.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
+            final DaysOfMonth daysOfMonth = new DaysOfMonth();
+            daysOfMonth.setDay(i);
+            daysOfMonth.setHoliday(HOLIDAY_OF_WEEKS.contains(localDate.withDayOfMonth(i).getDayOfWeek()) || isHoliday("Netherlands", localDate.withDayOfMonth(i)));
+            daysOfMonths.add(daysOfMonth);
         }
-        hours.setType(type);
-        hours.setCreatedDate(LocalDate.now());
-        hours.setLastChangedDate(LocalDate.now());
-        hours.setForecastDate(forecastDate);
-        hours.setLastChangedBy("admin");
-        return hours;
+        return daysOfMonths;
+    }
+
+    private boolean isHoliday(final String location, final LocalDate localDate) {
+        final List<Holidays> holidaysList = holidaysRepository.findAll();
+        for (Holidays holiday : holidaysList) {
+            if (holiday.getLocation().equalsIgnoreCase(location) && holiday.getStartDate().equals(localDate)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

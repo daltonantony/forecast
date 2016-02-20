@@ -1,6 +1,6 @@
 package com.opensolutions.forecast.service;
 
-import com.opensolutions.forecast.domain.Employee;
+import com.opensolutions.forecast.domain.DaysOfMonth;
 import com.opensolutions.forecast.domain.EmployeeHours;
 
 import java.util.List;
@@ -43,5 +43,5 @@ public interface EmployeeHoursService {
     /**
      * @return Employee Hours for Coming Months
      */
-    public Map<String, List<EmployeeHours>> getEmployeeHoursForComingMonths();
+    public Map<String, List<DaysOfMonth>> getEmployeeHoursForComingMonths();
 }
