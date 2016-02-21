@@ -132,12 +132,4 @@ public class EmployeeHoursResource {
         return employeeHoursService.getEmployeeHoursForComingMonths();
     }
 
-    @RequestMapping(value = "/getWorkingDatesPerWeekForMonths",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public Map<String, List<String>>  getWorkingDatesPerWeekForMonths() {
-        log.debug("REST request to get Working Dates Per Week For Months");
-        return EmployeeHoursHelper.getWorkingDatesPerWeekForMonths();
-    }
 }

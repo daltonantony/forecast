@@ -52,14 +52,9 @@ angular.module('forecastApp')
                         resolve: {
                             entity: function () {
                                 return {
-                                    week1: null,
-                                    week2: null,
-                                    week3: null,
-                                    week4: null,
-                                    week5: null,
+                                    holidays: null,
                                     createdDate: null,
                                     forecastDate: null,
-                                    type: null,
                                     lastChangedDate: null,
                                     lastChangedBy: null,
                                     id: null

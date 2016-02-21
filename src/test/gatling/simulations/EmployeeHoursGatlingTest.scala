@@ -67,7 +67,7 @@ class EmployeeHoursGatlingTest extends Simulation {
             .exec(http("Create new employeeHours")
             .post("/api/employeeHourss")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "week1":"0", "week2":"0", "week3":"0", "week4":"0", "week5":"0", "createdDate":"2020-01-01T00:00:00.000Z", "forecastDate":"2020-01-01T00:00:00.000Z", "type":"SAMPLE_TEXT", "lastChangedDate":"2020-01-01T00:00:00.000Z", "lastChangedBy":"SAMPLE_TEXT"}""")).asJSON
+            .body(StringBody("""{"id":null, "holidays":"SAMPLE_TEXT", "createdDate":"2020-01-01T00:00:00.000Z", "forecastDate":"2020-01-01T00:00:00.000Z", "lastChangedDate":"2020-01-01T00:00:00.000Z", "lastChangedBy":"SAMPLE_TEXT"}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_employeeHours_url")))
             .pause(10)

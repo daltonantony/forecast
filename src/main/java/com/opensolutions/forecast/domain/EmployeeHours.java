@@ -24,29 +24,14 @@ public class EmployeeHours implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "week1")
-    private Integer week1;
-
-    @Column(name = "week2")
-    private Integer week2;
-
-    @Column(name = "week3")
-    private Integer week3;
-
-    @Column(name = "week4")
-    private Integer week4;
-
-    @Column(name = "week5")
-    private Integer week5;
+    @Column(name = "holidays")
+    private String holidays;
 
     @Column(name = "created_date")
     private LocalDate createdDate;
 
     @Column(name = "forecast_date")
     private LocalDate forecastDate;
-
-    @Column(name = "type")
-    private String type;
 
     @Column(name = "last_changed_date")
     private LocalDate lastChangedDate;
@@ -66,44 +51,12 @@ public class EmployeeHours implements Serializable {
         this.id = id;
     }
 
-    public Integer getWeek1() {
-        return week1;
+    public String getHolidays() {
+        return holidays;
     }
 
-    public void setWeek1(Integer week1) {
-        this.week1 = week1;
-    }
-
-    public Integer getWeek2() {
-        return week2;
-    }
-
-    public void setWeek2(Integer week2) {
-        this.week2 = week2;
-    }
-
-    public Integer getWeek3() {
-        return week3;
-    }
-
-    public void setWeek3(Integer week3) {
-        this.week3 = week3;
-    }
-
-    public Integer getWeek4() {
-        return week4;
-    }
-
-    public void setWeek4(Integer week4) {
-        this.week4 = week4;
-    }
-
-    public Integer getWeek5() {
-        return week5;
-    }
-
-    public void setWeek5(Integer week5) {
-        this.week5 = week5;
+    public void setHolidays(String holidays) {
+        this.holidays = holidays;
     }
 
     public LocalDate getCreatedDate() {
@@ -120,14 +73,6 @@ public class EmployeeHours implements Serializable {
 
     public void setForecastDate(LocalDate forecastDate) {
         this.forecastDate = forecastDate;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public LocalDate getLastChangedDate() {
@@ -175,14 +120,9 @@ public class EmployeeHours implements Serializable {
     public String toString() {
         return "EmployeeHours{" +
             "id=" + id +
-            ", week1='" + week1 + "'" +
-            ", week2='" + week2 + "'" +
-            ", week3='" + week3 + "'" +
-            ", week4='" + week4 + "'" +
-            ", week5='" + week5 + "'" +
+            ", holidays='" + holidays + "'" +
             ", createdDate='" + createdDate + "'" +
             ", forecastDate='" + forecastDate + "'" +
-            ", type='" + type + "'" +
             ", lastChangedDate='" + lastChangedDate + "'" +
             ", lastChangedBy='" + lastChangedBy + "'" +
             '}';

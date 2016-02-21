@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('forecastApp')
-    .controller('EmployeeHoursController', function ($scope, $state, EmployeeHours, EmployeeHoursSearch, EmployeeHoursForComingMonths, WorkingDatesPerWeekForMonths) {
+    .controller('EmployeeHoursController', function ($scope, $state, EmployeeHours, EmployeeHoursSearch, EmployeeHoursForComingMonths) {
 
         $scope.employeeHourss = [];
         $scope.loadAll = function() {
@@ -16,9 +16,6 @@ angular.module('forecastApp')
             EmployeeHoursForComingMonths.get(function (result) {
                 $scope.forcastEmployeeHours = result;
             });
-/*            WorkingDatesPerWeekForMonths.get(function (result) {
-                $scope.workingDatesPerWeekForMonths = result;
-            });*/
         };
 
         $scope.search = function () {
@@ -38,14 +35,9 @@ angular.module('forecastApp')
 
         $scope.clear = function () {
             $scope.employeeHours = {
-                week1: null,
-                week2: null,
-                week3: null,
-                week4: null,
-                week5: null,
+                holidays: null,
                 createdDate: null,
                 forecastDate: null,
-                type: null,
                 lastChangedDate: null,
                 lastChangedBy: null,
                 id: null

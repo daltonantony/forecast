@@ -28,7 +28,7 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
  */
 @Service
 @Transactional
-public class EmployeeHoursServiceImpl implements EmployeeHoursService {
+public class EmployeeHoursServiceImpl implements EmployeeHoursService{
 
     private static final EnumSet<DayOfWeek> HOLIDAY_OF_WEEKS = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
 
@@ -48,7 +48,6 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 
     /**
      * Save a employeeHours.
-     *
      * @return the persisted entity
      */
     public EmployeeHours save(EmployeeHours employeeHours) {
@@ -59,9 +58,8 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     }
 
     /**
-     * get all the employeeHourss.
-     *
-     * @return the list of entities
+     *  get all the employeeHourss.
+     *  @return the list of entities
      */
     @Transactional(readOnly = true)
     public List<EmployeeHours> findAll() {
@@ -71,9 +69,8 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     }
 
     /**
-     * get one employeeHours by id.
-     *
-     * @return the entity
+     *  get one employeeHours by id.
+     *  @return the entity
      */
     @Transactional(readOnly = true)
     public EmployeeHours findOne(Long id) {
@@ -83,7 +80,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     }
 
     /**
-     * delete the  employeeHours by id.
+     *  delete the  employeeHours by id.
      */
     public void delete(Long id) {
         log.debug("Request to delete EmployeeHours : {}", id);

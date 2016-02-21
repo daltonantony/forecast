@@ -11,64 +11,34 @@
     "fields": [
         {
             "fieldId": 1,
-            "fieldName": "week1",
-            "fieldType": "Integer",
+            "fieldName": "holidays",
+            "fieldType": "String",
             "fieldValidateRules": []
         },
         {
             "fieldId": 2,
-            "fieldName": "week2",
-            "fieldType": "Integer",
-            "fieldValidateRules": []
-        },
-        {
-            "fieldId": 3,
-            "fieldName": "week3",
-            "fieldType": "Integer",
-            "fieldValidateRules": []
-        },
-        {
-            "fieldId": 4,
-            "fieldName": "week4",
-            "fieldType": "Integer",
-            "fieldValidateRules": []
-        },
-        {
-            "fieldId": 5,
-            "fieldName": "week5",
-            "fieldType": "Integer",
-            "fieldValidateRules": []
-        },
-        {
-            "fieldId": 6,
             "fieldName": "createdDate",
             "fieldType": "LocalDate",
             "fieldValidateRules": []
         },
         {
-            "fieldId": 7,
+            "fieldId": 3,
             "fieldName": "forecastDate",
             "fieldType": "LocalDate",
             "fieldValidateRules": []
         },
         {
-            "fieldId": 8,
-            "fieldName": "type",
-            "fieldType": "String",
-            "fieldValidateRules": []
-        },
-        {
-            "fieldId": 9,
+            "fieldId": 4,
             "fieldName": "lastChangedDate",
             "fieldType": "LocalDate"
         },
         {
-            "fieldId": 10,
+            "fieldId": 5,
             "fieldName": "lastChangedBy",
             "fieldType": "String"
         }
     ],
-    "changelogDate": "20160214140937",
+    "changelogDate": "20160220220937",
     "dto": "no",
     "service": "serviceImpl",
     "pagination": "no"
