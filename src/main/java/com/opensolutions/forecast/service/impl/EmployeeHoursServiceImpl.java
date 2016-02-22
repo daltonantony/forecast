@@ -1,13 +1,16 @@
 package com.opensolutions.forecast.service.impl;
 
 import com.opensolutions.forecast.domain.DaysOfMonth;
+import com.opensolutions.forecast.domain.EmployeeAllocation;
 import com.opensolutions.forecast.domain.EmployeeHours;
 import com.opensolutions.forecast.domain.Holidays;
 import com.opensolutions.forecast.repository.EmployeeHoursRepository;
-import com.opensolutions.forecast.repository.HolidaysRepository;
 import com.opensolutions.forecast.repository.search.EmployeeHoursSearchRepository;
+import com.opensolutions.forecast.security.SecurityUtils;
+import com.opensolutions.forecast.service.EmployeeAllocationService;
 import com.opensolutions.forecast.service.EmployeeHoursService;
-import com.opensolutions.forecast.service.EmployeeService;
+import com.opensolutions.forecast.service.HolidaysService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,7 +33,7 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 @Transactional
 public class EmployeeHoursServiceImpl implements EmployeeHoursService{
 
-    private static final EnumSet<DayOfWeek> HOLIDAY_OF_WEEKS = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+    private static final EnumSet<DayOfWeek> WEEKEND = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
 
     private final Logger log = LoggerFactory.getLogger(EmployeeHoursServiceImpl.class);
 
@@ -41,10 +44,10 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService{
     private EmployeeHoursSearchRepository employeeHoursSearchRepository;
 
     @Inject
-    private HolidaysRepository holidaysRepository;
-
+    private EmployeeAllocationService employeeAllocationService;
+    
     @Inject
-    private EmployeeService employeeService;
+    private HolidaysService holidaysService;
 
     /**
      * Save a employeeHours.
@@ -102,28 +105,43 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService{
 
     @Override
     public Map<String, List<DaysOfMonth>> getEmployeeHoursForComingMonths() {
+    	final String employeeLocation = getEmployeeLocation();
+    	final List<Holidays> holidays = holidaysService.getHolidaysForLocation(employeeLocation);
         final Map<String, List<DaysOfMonth>> daysOfMonthMap = new LinkedHashMap<>();
-        daysOfMonthMap.put(LocalDate.now().plusMonths(1).getMonth().toString(), getDaysOfMonths(LocalDate.now().plusMonths(1)));
-        daysOfMonthMap.put(LocalDate.now().plusMonths(2).getMonth().toString(), getDaysOfMonths(LocalDate.now().plusMonths(2)));
-        daysOfMonthMap.put(LocalDate.now().plusMonths(3).getMonth().toString(), getDaysOfMonths(LocalDate.now().plusMonths(3)));
+        daysOfMonthMap.put(LocalDate.now().plusMonths(1).getMonth().toString(), getDaysOfMonths(LocalDate.now().plusMonths(1), holidays));
+        daysOfMonthMap.put(LocalDate.now().plusMonths(2).getMonth().toString(), getDaysOfMonths(LocalDate.now().plusMonths(2), holidays));
+        daysOfMonthMap.put(LocalDate.now().plusMonths(3).getMonth().toString(), getDaysOfMonths(LocalDate.now().plusMonths(3), holidays));
         return daysOfMonthMap;
     }
 
-    private List<DaysOfMonth> getDaysOfMonths(final LocalDate localDate) {
+    private List<DaysOfMonth> getDaysOfMonths(final LocalDate localDate, final List<Holidays> holidays) {
         final List<DaysOfMonth> daysOfMonths = new ArrayList<>();
         for (int i = 1; i <= localDate.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
             final DaysOfMonth daysOfMonth = new DaysOfMonth();
             daysOfMonth.setDay(i);
-            daysOfMonth.setHoliday(HOLIDAY_OF_WEEKS.contains(localDate.withDayOfMonth(i).getDayOfWeek()) || isHoliday("Netherlands", localDate.withDayOfMonth(i)));
+            daysOfMonth.setHoliday(WEEKEND.contains(localDate.withDayOfMonth(i).getDayOfWeek()) || isHoliday(holidays, localDate.withDayOfMonth(i)));
             daysOfMonths.add(daysOfMonth);
         }
         return daysOfMonths;
     }
 
-    private boolean isHoliday(final String location, final LocalDate localDate) {
-        final List<Holidays> holidaysList = holidaysRepository.findAll();
-        for (Holidays holiday : holidaysList) {
-            if (holiday.getLocation().equalsIgnoreCase(location) && holiday.getStartDate().equals(localDate)) {
+    private String getEmployeeLocation() {
+    	final Long empId = Long.valueOf(SecurityUtils.getCurrentUserLogin());
+    	final List<EmployeeAllocation> activeEmployeeAllocations = employeeAllocationService.findActiveEmployeeAllocationsForEmployee(empId);
+    	// Assuming that the location is the same even if employee has multiple active allocations:
+    	final EmployeeAllocation employeeAllocation = activeEmployeeAllocations.size() > 0 ? activeEmployeeAllocations.get(0) : null;
+    	if (employeeAllocation == null) {
+			// TODO: handle lack of active allocation for the logged in employee
+    		throw new RuntimeException("No active allocation for the employee: " + empId);
+		}
+    	log.debug("Retrieved allocation for employee: {}", employeeAllocation.getEmployee().getName());
+		return employeeAllocation.getLocation();
+	}
+
+	private boolean isHoliday(final List<Holidays> holidays, final LocalDate localDate) {
+        for (final Holidays holiday : holidays) {
+            final boolean isDateInHolidayRange = !(localDate.isBefore(holiday.getStartDate()) || localDate.isAfter(holiday.getEndDate()));
+			if (isDateInHolidayRange) {
                 return true;
             }
         }

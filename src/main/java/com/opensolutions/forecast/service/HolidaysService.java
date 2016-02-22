@@ -37,4 +37,11 @@ public interface HolidaysService {
      * to the query.
      */
     public List<Holidays> search(String query);
+    
+    /**
+     * Gets all the holidays for the location.
+     * @param location location
+     * @return holidays for the location
+     */
+    public List<Holidays> getHolidaysForLocation(String location);
 }

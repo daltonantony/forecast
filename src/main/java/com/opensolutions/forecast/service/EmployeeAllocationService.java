@@ -28,7 +28,26 @@ public interface EmployeeAllocationService {
      */
     public EmployeeAllocation findOne(Long id);
 
+    /**
+     * Find all employee allocations for the employee.
+     * @param empId employee id
+     * @return Employee Allocations for employee id
+     */
     public Set<EmployeeAllocation> findAnEmployeeAllocations(Long empId);
+    
+    /**
+     * Find all employee allocations for the employee.
+     * @param empId employee id
+     * @return All Employee Allocations for employee id
+     */
+    public List<EmployeeAllocation> findAllEmployeeAllocationsForEmployee(Long empId);
+
+    /**
+     * Find active employee allocations for the employee.
+     * @param empId employee id
+     * @return Active Employee Allocations for employee id
+     */
+    public List<EmployeeAllocation> findActiveEmployeeAllocationsForEmployee(Long empId);
 
     /**
      *  delete the "id" employeeAllocation.

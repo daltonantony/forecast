@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -27,7 +28,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
  */
 @Service
 @Transactional
-public class EmployeeAllocationServiceImpl implements EmployeeAllocationService{
+public class EmployeeAllocationServiceImpl implements EmployeeAllocationService {
 
     private final Logger log = LoggerFactory.getLogger(EmployeeAllocationServiceImpl.class);
 
@@ -108,4 +109,35 @@ public class EmployeeAllocationServiceImpl implements EmployeeAllocationService{
             .stream(employeeAllocationSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
+
+	@Override
+	public List<EmployeeAllocation> findAllEmployeeAllocationsForEmployee(final Long empId) {
+		final List<EmployeeAllocation> allEmployeeAllocationsForEmployee = new ArrayList<>();
+		final List<EmployeeAllocation> allEmployeeAllocations = findAll();
+		for (final EmployeeAllocation employeeAllocation : allEmployeeAllocations) {
+			if (employeeAllocation.getEmployee().getAssociateId().equals(empId)) {
+				allEmployeeAllocationsForEmployee.add(employeeAllocation);
+			}
+		}
+		return allEmployeeAllocationsForEmployee;
+	}
+
+	@Override
+	public List<EmployeeAllocation> findActiveEmployeeAllocationsForEmployee(final Long empId) {
+		final List<EmployeeAllocation> activeEmployeeAllocationsForEmployee = new ArrayList<>();
+		final List<EmployeeAllocation> allEmployeeAllocations = findAllEmployeeAllocationsForEmployee(empId);
+		for (final EmployeeAllocation employeeAllocation : allEmployeeAllocations) {
+			if (isEmployeeAllocationActive(employeeAllocation)) {
+				activeEmployeeAllocationsForEmployee.add(employeeAllocation);
+			}
+		}
+		return activeEmployeeAllocationsForEmployee;
+	}
+
+	private boolean isEmployeeAllocationActive(final EmployeeAllocation employeeAllocation) {
+		final boolean isStartDateBeforeNow = employeeAllocation.getStartDate().isBefore(LocalDate.now());
+		final LocalDate endDate = employeeAllocation.getEndDate();
+		final boolean isEndDateEitherNullOrAfterNow = endDate == null || endDate.isAfter(LocalDate.now());
+		return isStartDateBeforeNow && isEndDateEitherNullOrAfterNow;
+	}
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -92,4 +93,16 @@ public class HolidaysServiceImpl implements HolidaysService{
             .stream(holidaysSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
+
+	@Override
+	public List<Holidays> getHolidaysForLocation(String location) {
+		final List<Holidays> holidaysForLocation = new ArrayList<>();
+		final List<Holidays> allHolidays = findAll();
+		for (final Holidays holidays : allHolidays) {
+			if (holidays.getLocation().equals(location)) {
+				holidaysForLocation.add(holidays);
+			}
+		}
+		return holidaysForLocation;
+	}
 }
