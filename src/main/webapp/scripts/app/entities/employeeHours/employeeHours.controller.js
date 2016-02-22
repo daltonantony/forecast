@@ -18,6 +18,10 @@ angular.module('forecastApp')
             });
         };
 
+        $scope.save = function () {
+            EmployeeHoursForComingMonths.save($scope.forcastEmployeeHours);
+        };
+
         $scope.search = function () {
             EmployeeHoursSearch.query({query: $scope.searchQuery}, function(result) {
                 $scope.employeeHourss = result;

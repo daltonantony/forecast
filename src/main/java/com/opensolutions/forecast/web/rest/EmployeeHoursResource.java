@@ -2,9 +2,9 @@ package com.opensolutions.forecast.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.opensolutions.forecast.domain.DaysOfMonth;
+import com.opensolutions.forecast.domain.Employee;
 import com.opensolutions.forecast.domain.EmployeeHours;
 import com.opensolutions.forecast.service.EmployeeHoursService;
-import com.opensolutions.forecast.service.util.EmployeeHoursHelper;
 import com.opensolutions.forecast.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,6 +130,16 @@ public class EmployeeHoursResource {
     public Map<String, List<DaysOfMonth>> getComingMonthsHours() {
         log.debug("REST request to get the Employee Hours for Coming Months");
         return employeeHoursService.getEmployeeHoursForComingMonths();
+    }
+    
+    @RequestMapping(value = "/employeeHoursForComingMonths",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Void> saveComingMonthsHours(@RequestBody Map<String, List<DaysOfMonth>> employeeHoursForComingMonths) {
+        log.debug("REST request to save the Employee Hours for Coming Months");
+        final Employee employee = employeeHoursService.saveEmployeeHoursForComingMonths(employeeHoursForComingMonths);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityCreationAlert("Employee Hours", employee.getAssociateId().toString())).build();
     }
 
 }

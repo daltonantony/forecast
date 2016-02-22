@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('forecastApp')
-    .factory('EmployeeHours', function ($resource, DateUtils) {
+var app = angular.module('forecastApp');
+
+    app.factory('EmployeeHours', function ($resource, DateUtils) {
         return $resource('api/employeeHourss/:id', {}, {
             'query': { method: 'GET', isArray: true},
             'get': {
@@ -37,7 +38,13 @@ angular.module('forecastApp')
 
 app.factory('EmployeeHoursForComingMonths', function ($resource) {
     return $resource('api/employeeHoursForComingMonths', {}, {
-        'get': { method: 'GET', isArray: false}
+        'get': { method: 'GET', isArray: false},
+        'save': {
+            method: 'POST',
+            transformRequest: function (data) {
+                return angular.toJson(data);
+            }
+        }
     });
 });
 

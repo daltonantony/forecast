@@ -1,6 +1,7 @@
 package com.opensolutions.forecast.service.impl;
 
 import com.opensolutions.forecast.domain.DaysOfMonth;
+import com.opensolutions.forecast.domain.Employee;
 import com.opensolutions.forecast.domain.EmployeeAllocation;
 import com.opensolutions.forecast.domain.EmployeeHours;
 import com.opensolutions.forecast.domain.Holidays;
@@ -9,6 +10,7 @@ import com.opensolutions.forecast.repository.search.EmployeeHoursSearchRepositor
 import com.opensolutions.forecast.security.SecurityUtils;
 import com.opensolutions.forecast.service.EmployeeAllocationService;
 import com.opensolutions.forecast.service.EmployeeHoursService;
+import com.opensolutions.forecast.service.EmployeeService;
 import com.opensolutions.forecast.service.HolidaysService;
 
 import org.slf4j.Logger;
@@ -21,6 +23,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -31,7 +34,7 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
  */
 @Service
 @Transactional
-public class EmployeeHoursServiceImpl implements EmployeeHoursService{
+public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 
     private static final EnumSet<DayOfWeek> WEEKEND = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
 
@@ -42,6 +45,9 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService{
 
     @Inject
     private EmployeeHoursSearchRepository employeeHoursSearchRepository;
+
+    @Inject
+    private EmployeeService employeeService;
 
     @Inject
     private EmployeeAllocationService employeeAllocationService;
@@ -147,4 +153,22 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService{
         }
         return false;
     }
+
+	@Override
+	public Employee saveEmployeeHoursForComingMonths(Map<String, List<DaysOfMonth>> employeeHoursForComingMonths) {
+		log.debug("Request to save the Employee Hours for Coming Months");
+		final Long empId = Long.valueOf(SecurityUtils.getCurrentUserLogin());
+		final Employee employee = employeeService.getEmployeeForAssociateId(empId);
+		
+		// TODO: convert to EmployeeHours ad save to DB
+		for (Entry<String, List<DaysOfMonth>> entry : employeeHoursForComingMonths.entrySet()) {
+			log.debug("Month: {}", entry.getKey());
+			for (DaysOfMonth dayOfMonth : entry.getValue()) {
+				log.debug("Day: {} - {} - {}", dayOfMonth.getDay(), dayOfMonth.isSelected(), dayOfMonth.isHoliday());
+			}
+			log.debug("---------------------------");
+		}
+		log.debug("Employee Hours saved for [{}]", employee.getAssociateId());
+		return employee;
+	}
 }
