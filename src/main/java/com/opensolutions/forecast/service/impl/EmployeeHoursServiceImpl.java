@@ -120,7 +120,6 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService{
             final DaysOfMonth daysOfMonth = new DaysOfMonth();
             daysOfMonth.setDay(i);
             daysOfMonth.setHoliday(WEEKEND.contains(localDate.withDayOfMonth(i).getDayOfWeek()) || isHoliday(holidays, localDate.withDayOfMonth(i)));
-            daysOfMonth.setSelected(!daysOfMonth.isHoliday());
             daysOfMonths.add(daysOfMonth);
         }
         return daysOfMonths;
