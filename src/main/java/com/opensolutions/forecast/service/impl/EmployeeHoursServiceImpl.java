@@ -126,7 +126,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     @Override
     public Map<String, List<DaysOfMonth>> getEmployeeHoursForComingMonths() {
     	final Long empId = Long.valueOf(SecurityUtils.getCurrentUserLogin());
-    	log.debug("Employee Id: {}", empId.toString());
+    	log.debug("Employee Hours for [{}]", empId.toString());
     	final List<EmployeeHours> employeeHoursCreatedInCurrentMonth = getEmployeeHoursCreatedInCurrentMonth(empId);
 
     	final String employeeLocation = getEmployeeLocation(empId);
@@ -213,44 +213,59 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 
 	@Override
 	public Employee saveEmployeeHoursForComingMonths(final Map<String, List<DaysOfMonth>> employeeHoursForComingMonths) {
-		// TODO: check for existing entries and update that instead of creating new entries
 		log.debug("Request to save the Employee Hours for Coming Months");
 		final Long empId = Long.valueOf(SecurityUtils.getCurrentUserLogin());
 		final Employee employee = employeeService.getEmployeeForAssociateId(empId);
+		final List<EmployeeHours> employeeHoursCreatedInCurrentMonth = getEmployeeHoursCreatedInCurrentMonth(empId);
 
 		int index = 1;
 		for (final Entry<String, List<DaysOfMonth>> entry : employeeHoursForComingMonths.entrySet()) {
 			final String month = entry.getKey();
 			log.debug("Month: {}", month);
-
-			final EmployeeHours employeeHours = new EmployeeHours();
-			employeeHours.setEmployee(employee);
-			employeeHours.setCreatedDate(LocalDate.now());
-
-			// TODO: link with month value instead of index
-			employeeHours.setForecastDate(LocalDate.now().plusMonths(index).with(TemporalAdjusters.firstDayOfMonth()));
-
-			final StringBuffer employeeHolidays = new StringBuffer();
-			for (final DaysOfMonth dayOfMonth : entry.getValue()) {
-				log.debug("Day: {} - {} - {}", dayOfMonth.getDay(), dayOfMonth.isSelected(), dayOfMonth.isHoliday());
-				if (!dayOfMonth.isHoliday() && dayOfMonth.isSelected()) {
-					employeeHolidays.append(dayOfMonth.getDay());
-					employeeHolidays.append(",");
+			if (CollectionUtils.isNotEmpty(employeeHoursCreatedInCurrentMonth)) {
+				log.debug("Employee Hours created this month are already present");
+				for (final EmployeeHours employeeHours : employeeHoursCreatedInCurrentMonth) {
+					if (employeeHours.getForecastDate().getMonth().toString().equals(month)) {
+						setEmployeeHoursCommonFields(entry, employeeHours, empId);
+						save(employeeHours);
+					}
 				}
+			} else {
+				log.debug("Employee Hours created this month are not already present");
+				final EmployeeHours employeeHours = new EmployeeHours();
+				employeeHours.setEmployee(employee);
+				// TODO: link with month value instead of index
+				employeeHours.setForecastDate(LocalDate.now().plusMonths(index).with(TemporalAdjusters.firstDayOfMonth()));
+				setEmployeeHoursCommonFields(entry, employeeHours, empId);
+				save(employeeHours);
+				index++;
 			}
-			log.debug("---------------------------");
-
-			// Remove the last comma, if applicable:
-			employeeHolidays.setLength(Math.max(employeeHolidays.length() - 1, 0));
-			employeeHours.setHolidays(employeeHolidays.toString());
-
-			employeeHours.setLastChangedBy(empId.toString());
-			employeeHours.setLastChangedDate(LocalDate.now());
-
-			save(employeeHours);
-			index++;
 		}
 		log.debug("Employee Hours saved for [{}]", employee.getAssociateId());
 		return employee;
+	}
+
+	private void setEmployeeHoursCommonFields(final Entry<String, List<DaysOfMonth>> entry, final EmployeeHours employeeHours, final Long empId) {
+		employeeHours.setCreatedDate(LocalDate.now());
+		setEmployeeHolidays(entry, employeeHours);
+		employeeHours.setLastChangedDate(LocalDate.now());
+		employeeHours.setLastChangedBy(empId.toString());
+	}
+
+	private void setEmployeeHolidays(final Entry<String, List<DaysOfMonth>> entry, final EmployeeHours employeeHours) {
+		// Joining employee holidays, separated by a comma
+		final StringBuffer employeeHolidays = new StringBuffer();
+		for (final DaysOfMonth dayOfMonth : entry.getValue()) {
+			log.debug("Day: {} - Sel: {} - Hol: {}", dayOfMonth.getDay(), dayOfMonth.isSelected(), dayOfMonth.isHoliday());
+			if (!dayOfMonth.isHoliday() && dayOfMonth.isSelected()) {
+				employeeHolidays.append(dayOfMonth.getDay());
+				employeeHolidays.append(",");
+			}
+		}
+		log.debug("---------------------------");
+
+		// Remove the last comma, if applicable:
+		employeeHolidays.setLength(Math.max(employeeHolidays.length() - 1, 0));
+		employeeHours.setHolidays(employeeHolidays.toString());
 	}
 }
