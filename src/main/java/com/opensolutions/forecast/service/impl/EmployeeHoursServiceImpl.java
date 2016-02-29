@@ -126,7 +126,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     }
 
     @Override
-    public Map<String, List<DaysOfMonth>> getEmployeeHoursForComingMonths() {
+    public Map<LocalDate, List<DaysOfMonth>> getEmployeeHoursForComingMonths() {
     	final Long empId = Long.valueOf(SecurityUtils.getCurrentUserLogin());
     	log.debug("Employee Hours for [{}]", empId.toString());
 
@@ -160,8 +160,8 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 		return allEmployeeHoursForSelectedEmployee;
 	}
 
-	private Map<String, List<DaysOfMonth>> getDaysOfMonthMap(final List<EmployeeHours> employeeHoursCreatedInCurrentMonth, final List<Holidays> holidays) {
-		final Map<String, List<DaysOfMonth>> daysOfMonthMap = new LinkedHashMap<>();
+	private Map<LocalDate, List<DaysOfMonth>> getDaysOfMonthMap(final List<EmployeeHours> employeeHoursCreatedInCurrentMonth, final List<Holidays> holidays) {
+		final Map<LocalDate, List<DaysOfMonth>> daysOfMonthMap = new LinkedHashMap<>();
 
         if (CollectionUtils.isNotEmpty(employeeHoursCreatedInCurrentMonth)) {
         	log.debug("Employee Hours created this month are already present");
@@ -169,13 +169,13 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
         		final String employeeHolidays = employeeHours.getHolidays();
         		final List<String> empHolidays = Arrays.asList(ArrayUtils.nullToEmpty(StringUtils.split(employeeHolidays, ',')));
         		final LocalDate forecastDate = employeeHours.getForecastDate();
-				daysOfMonthMap.put(forecastDate.getMonth().toString(), getDaysOfMonths(forecastDate, holidays, true, empHolidays));
+				daysOfMonthMap.put(forecastDate, getDaysOfMonths(forecastDate, holidays, true, empHolidays));
         	}
 		} else {
 			log.debug("Employee Hours created this month are not already present");
-			daysOfMonthMap.put(LocalDate.now().plusMonths(1).getMonth().toString(), getDaysOfMonthsForEmpHoursNotCreatedInThisMonth(holidays, 1));
-			daysOfMonthMap.put(LocalDate.now().plusMonths(2).getMonth().toString(), getDaysOfMonthsForEmpHoursNotCreatedInThisMonth(holidays, 2));
-			daysOfMonthMap.put(LocalDate.now().plusMonths(3).getMonth().toString(), getDaysOfMonthsForEmpHoursNotCreatedInThisMonth(holidays, 3));
+			daysOfMonthMap.put(LocalDate.now().plusMonths(1).withDayOfMonth(1), getDaysOfMonthsForEmpHoursNotCreatedInThisMonth(holidays, 1));
+			daysOfMonthMap.put(LocalDate.now().plusMonths(2).withDayOfMonth(1), getDaysOfMonthsForEmpHoursNotCreatedInThisMonth(holidays, 2));
+			daysOfMonthMap.put(LocalDate.now().plusMonths(3).withDayOfMonth(1), getDaysOfMonthsForEmpHoursNotCreatedInThisMonth(holidays, 3));
 		}
 
 		return daysOfMonthMap;
@@ -224,21 +224,19 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     }
 
 	@Override
-	public Employee saveEmployeeHoursForComingMonths(final Map<String, List<DaysOfMonth>> employeeHoursForComingMonths) {
+	public Employee saveEmployeeHoursForComingMonths(final Map<LocalDate, List<DaysOfMonth>> employeeHoursForComingMonths) {
 		log.debug("Request to save the Employee Hours for Coming Months");
 		final Long empId = Long.valueOf(SecurityUtils.getCurrentUserLogin());
 		final Employee employee = employeeService.getEmployeeForAssociateId(empId);
 		final List<EmployeeHours> employeeHoursCreatedInCurrentMonth = getEmployeeHoursCreatedInCurrentMonth(empId);
 
-		int index = 1;
-		for (final Entry<String, List<DaysOfMonth>> entry : employeeHoursForComingMonths.entrySet()) {
-			final String month = entry.getKey();
-			log.debug("Month: {}", month);
+		for (final Entry<LocalDate, List<DaysOfMonth>> entry : employeeHoursForComingMonths.entrySet()) {
+			final LocalDate forecastDate = entry.getKey();
+			log.debug("Forecast Month: {}", forecastDate.getMonth().toString());
 			if (CollectionUtils.isNotEmpty(employeeHoursCreatedInCurrentMonth)) {
-				updateEmployeeHoursAlreadyPresentForThisMonth(empId, employeeHoursCreatedInCurrentMonth, entry, month);
+				updateEmployeeHoursAlreadyPresentForThisMonth(empId, employeeHoursCreatedInCurrentMonth, entry, forecastDate);
 			} else {
-				createEmployeeHoursNewlyCreatedForThisMonth(employee, index, entry);
-				index++;
+				createEmployeeHoursNewlyCreatedForThisMonth(employee, entry, forecastDate);
 			}
 		}
 		log.debug("Employee Hours saved for [{}]", employee.getAssociateId());
@@ -246,29 +244,28 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 	}
 
 	private void updateEmployeeHoursAlreadyPresentForThisMonth(final Long empId,
-			final List<EmployeeHours> employeeHoursCreatedInCurrentMonth, final Entry<String, List<DaysOfMonth>> entry,
-			final String month) {
+			final List<EmployeeHours> employeeHoursCreatedInCurrentMonth, final Entry<LocalDate, List<DaysOfMonth>> entry,
+			final LocalDate forecastDate) {
 		log.debug("Employee Hours created this month are already present");
 		for (final EmployeeHours employeeHours : employeeHoursCreatedInCurrentMonth) {
-			if (employeeHours.getForecastDate().getMonth().toString().equals(month)) {
+			if (employeeHours.getForecastDate().equals(forecastDate)) {
 				setEmployeeHoursCommonFields(entry, employeeHours, empId);
 				save(employeeHours);
 			}
 		}
 	}
 
-	private void createEmployeeHoursNewlyCreatedForThisMonth(final Employee employee, final int index,
-			final Entry<String, List<DaysOfMonth>> entry) {
+	private void createEmployeeHoursNewlyCreatedForThisMonth(final Employee employee,
+			final Entry<LocalDate, List<DaysOfMonth>> entry, final LocalDate forecastDate) {
 		log.debug("Employee Hours created this month are not already present");
 		final EmployeeHours employeeHours = new EmployeeHours();
 		employeeHours.setEmployee(employee);
-		// TODO: link with month value instead of index
-		employeeHours.setForecastDate(LocalDate.now().plusMonths(index).with(TemporalAdjusters.firstDayOfMonth()));
+		employeeHours.setForecastDate(forecastDate);
 		setEmployeeHoursCommonFields(entry, employeeHours, employee.getAssociateId());
 		save(employeeHours);
 	}
 
-	private void setEmployeeHoursCommonFields(final Entry<String, List<DaysOfMonth>> entry,
+	private void setEmployeeHoursCommonFields(final Entry<LocalDate, List<DaysOfMonth>> entry,
 												final EmployeeHours employeeHours, final Long empId) {
 		employeeHours.setCreatedDate(LocalDate.now().withDayOfMonth(1));
 		setEmployeeHolidays(entry, employeeHours);
@@ -276,7 +273,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 		employeeHours.setLastChangedBy(empId.toString());
 	}
 
-	private void setEmployeeHolidays(final Entry<String, List<DaysOfMonth>> entry, final EmployeeHours employeeHours) {
+	private void setEmployeeHolidays(final Entry<LocalDate, List<DaysOfMonth>> entry, final EmployeeHours employeeHours) {
 		// Joining employee holidays, separated by a comma
 		final StringBuffer employeeHolidays = new StringBuffer();
 		for (final DaysOfMonth dayOfMonth : entry.getValue()) {

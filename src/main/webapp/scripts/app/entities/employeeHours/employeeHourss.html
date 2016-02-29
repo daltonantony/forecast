@@ -29,8 +29,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="(key, value) in forcastEmployeeHours">
-                <td><b>{{key}}</b></td>
+            <tr ng-repeat="(key, value) in newForecastEmployeeHoursMap">
+                <td><b>{{key | date : 'MMMM'}}</b></td>
                 <td ng-repeat="dateOfMonth in value"><input id="checkSlave" type="checkbox" name="selected" ng-model="dateOfMonth.selected" ng-checked="dateOfMonth.selected" ng-disabled="dateOfMonth.holiday"></td>
             </tr>
             </tbody>

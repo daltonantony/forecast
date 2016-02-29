@@ -15,7 +15,7 @@ angular.module('forecastApp')
             $scope.newForecast = true;
             $scope.oldForecast = false;
             EmployeeHoursForComingMonths.get(function (result) {
-                $scope.forcastEmployeeHours = result;
+                $scope.newForecastEmployeeHoursMap = result;
             });
         };
 
@@ -28,7 +28,7 @@ angular.module('forecastApp')
         };
 
         $scope.save = function () {
-            EmployeeHoursForComingMonths.save($scope.forcastEmployeeHours);
+            EmployeeHoursForComingMonths.save($scope.newForecastEmployeeHoursMap);
         };
 
         $scope.search = function () {

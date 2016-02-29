@@ -134,7 +134,7 @@ public class EmployeeHoursResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public Map<String, List<DaysOfMonth>> getComingMonthsHours() {
+    public Map<LocalDate, List<DaysOfMonth>> getComingMonthsHours() {
         log.debug("REST request to get the Employee Hours for Coming Months");
         return employeeHoursService.getEmployeeHoursForComingMonths();
     }
@@ -143,7 +143,7 @@ public class EmployeeHoursResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> saveComingMonthsHours(@RequestBody final Map<String, List<DaysOfMonth>> employeeHoursForComingMonths) {
+    public ResponseEntity<Void> saveComingMonthsHours(@RequestBody final Map<LocalDate, List<DaysOfMonth>> employeeHoursForComingMonths) {
         log.debug("REST request to save the Employee Hours for Coming Months");
         final Employee employee = employeeHoursService.saveEmployeeHoursForComingMonths(employeeHoursForComingMonths);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityCreationAlert("Employee Hours", employee.getAssociateId().toString())).build();

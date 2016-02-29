@@ -69,11 +69,11 @@ public class EmployeeHoursServiceImplTest {
         when(employeeAllocationService.findActiveEmployeeAllocationsForEmployee(empId)).thenReturn(mockEmployeeAllocations(empId));
         when(holidaysService.getHolidaysForLocation(NETHERLANDS)).thenReturn(mockHolidaysList());
 
-    	final Map<String, List<DaysOfMonth>> employeeHoursForComingMonths = serviceImpl.getEmployeeHoursForComingMonths();
+    	final Map<LocalDate, List<DaysOfMonth>> employeeHoursForComingMonths = serviceImpl.getEmployeeHoursForComingMonths();
     	assertEquals(3, employeeHoursForComingMonths.size());
-    	assertEquals(LocalDate.now().plusMonths(1).getMonth().toString(), employeeHoursForComingMonths.keySet().toArray()[0]);
-    	assertEquals(LocalDate.now().plusMonths(2).getMonth().toString(), employeeHoursForComingMonths.keySet().toArray()[1]);
-    	assertEquals(LocalDate.now().plusMonths(3).getMonth().toString(), employeeHoursForComingMonths.keySet().toArray()[2]);
+    	assertEquals(LocalDate.now().plusMonths(1).withDayOfMonth(1), employeeHoursForComingMonths.keySet().toArray()[0]);
+    	assertEquals(LocalDate.now().plusMonths(2).withDayOfMonth(1), employeeHoursForComingMonths.keySet().toArray()[1]);
+    	assertEquals(LocalDate.now().plusMonths(3).withDayOfMonth(1), employeeHoursForComingMonths.keySet().toArray()[2]);
     }
 
     private List<EmployeeHours> mockEmployeeHoursList(final long empId, final int monthsToAdd) {
@@ -81,20 +81,20 @@ public class EmployeeHoursServiceImplTest {
 
     	final EmployeeHours employeeHours0 = new EmployeeHours();
     	employeeHours0.setEmployee(mockEmployee(empId));
-    	employeeHours0.setCreatedDate(LocalDate.now().plusMonths(monthsToAdd));
-    	employeeHours0.setForecastDate(LocalDate.now().plusMonths(monthsToAdd + 1));
+    	employeeHours0.setCreatedDate(LocalDate.now().plusMonths(monthsToAdd).withDayOfMonth(1));
+    	employeeHours0.setForecastDate(LocalDate.now().plusMonths(monthsToAdd + 1).withDayOfMonth(1));
     	employeeHoursList.add(employeeHours0);
 
     	final EmployeeHours employeeHours1 = new EmployeeHours();
     	employeeHours1.setEmployee(mockEmployee(empId));
-    	employeeHours1.setCreatedDate(LocalDate.now().plusMonths(monthsToAdd));
-    	employeeHours1.setForecastDate(LocalDate.now().plusMonths(monthsToAdd + 2));
+    	employeeHours1.setCreatedDate(LocalDate.now().plusMonths(monthsToAdd).withDayOfMonth(1));
+    	employeeHours1.setForecastDate(LocalDate.now().plusMonths(monthsToAdd + 2).withDayOfMonth(1));
     	employeeHoursList.add(employeeHours1);
 
     	final EmployeeHours employeeHours2 = new EmployeeHours();
     	employeeHours2.setEmployee(mockEmployee(empId));
-    	employeeHours2.setCreatedDate(LocalDate.now().plusMonths(monthsToAdd));
-    	employeeHours2.setForecastDate(LocalDate.now().plusMonths(monthsToAdd + 3));
+    	employeeHours2.setCreatedDate(LocalDate.now().plusMonths(monthsToAdd).withDayOfMonth(1));
+    	employeeHours2.setForecastDate(LocalDate.now().plusMonths(monthsToAdd + 3).withDayOfMonth(1));
     	employeeHoursList.add(employeeHours2);
 
     	return employeeHoursList;

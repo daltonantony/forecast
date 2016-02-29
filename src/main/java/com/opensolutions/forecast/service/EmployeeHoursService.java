@@ -45,14 +45,14 @@ public interface EmployeeHoursService {
     /**
      * @return Employee Hours for Coming Months
      */
-    public Map<String, List<DaysOfMonth>> getEmployeeHoursForComingMonths();
+    public Map<LocalDate, List<DaysOfMonth>> getEmployeeHoursForComingMonths();
 
     /**
      * Saves employee hours for coming months.
      * @param employeeHoursForComingMonths
      * @return Employee
      */
-    public Employee saveEmployeeHoursForComingMonths(Map<String, List<DaysOfMonth>> employeeHoursForComingMonths);
+    public Employee saveEmployeeHoursForComingMonths(Map<LocalDate, List<DaysOfMonth>> employeeHoursForComingMonths);
 
     /**
      * @return Employee Hours for Previous Months
