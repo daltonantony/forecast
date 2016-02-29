@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('forecastApp')
-    .controller('EmployeeHoursController', function ($scope, $state, EmployeeHours, EmployeeHoursSearch, EmployeeHoursForComingMonths) {
+    .controller('EmployeeHoursController', function ($scope, $state, EmployeeHours, EmployeeHoursSearch, EmployeeHoursForComingMonths, EmployeeHoursForPreviousMonths) {
 
         $scope.employeeHourss = [];
         $scope.loadAll = function() {
@@ -13,8 +13,17 @@ angular.module('forecastApp')
 
         $scope.newForecastForComingMonths = function () {
             $scope.newForecast = true;
+            $scope.oldForecast = false;
             EmployeeHoursForComingMonths.get(function (result) {
                 $scope.forcastEmployeeHours = result;
+            });
+        };
+
+        $scope.oldForecastForPreviousMonths = function () {
+            $scope.oldForecast = true;
+            $scope.newForecast = false;
+            EmployeeHoursForPreviousMonths.get(function (result) {
+                $scope.oldForecastEmployeeHoursMap = result;
             });
         };
 

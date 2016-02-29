@@ -1,11 +1,12 @@
 package com.opensolutions.forecast.service;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
 import com.opensolutions.forecast.domain.DaysOfMonth;
 import com.opensolutions.forecast.domain.Employee;
 import com.opensolutions.forecast.domain.EmployeeHours;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Service Interface for managing EmployeeHours.
@@ -45,12 +46,17 @@ public interface EmployeeHoursService {
      * @return Employee Hours for Coming Months
      */
     public Map<String, List<DaysOfMonth>> getEmployeeHoursForComingMonths();
-    
+
     /**
      * Saves employee hours for coming months.
      * @param employeeHoursForComingMonths
      * @return Employee
      */
     public Employee saveEmployeeHoursForComingMonths(Map<String, List<DaysOfMonth>> employeeHoursForComingMonths);
+
+    /**
+     * @return Employee Hours for Previous Months
+     */
+    public Map<LocalDate, List<EmployeeHours>> getEmployeeHoursForPreviousMonths();
 
 }

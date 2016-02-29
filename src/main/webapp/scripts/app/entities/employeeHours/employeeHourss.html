@@ -1,26 +1,25 @@
-<form name="employeeHoursForm" role="form" novalidate ng-submit="save()">
 <div>
     <h2>Employee Hours</h2>
     <jh-alert></jh-alert>
+    <br/>
     <div class="container">
         <div class="row">
             <div class="col-md-4">
                 <button class="btn btn-primary" ng-click="newForecastForComingMonths()">
-                    <span class="glyphicon glyphicon-flash"></span> <span>Select the non-billable days</span>
+                    <span class="glyphicon glyphicon-flash"></span><span>Forecast the non-billable days for coming months</span>
                 </button>
             </div>
-            <!-- <div class="col-md-8">
-                <form name="searchForm" class="form-inline">
-                    <div class="form-group">
-                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
-                    </div>
-                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a EmployeeHours</span>
-                    </button>
-                </form>
-            </div> -->
+            <div class="col-md-4">
+                <button class="btn btn-primary" ng-click="oldForecastForPreviousMonths()">
+                    <span class="glyphicon glyphicon-flash"></span><span>View forecasted non-billable days for previous months</span>
+                </button>
+            </div>
         </div>
     </div>
+    <br/>
 
+<form name="employeeHoursForm" role="form" novalidate ng-submit="save()">
+	<!-- NEW FORECAST -->
     <div class="table-responsive" ng-show="newForecast">
         <table class="table table-striped">
             <thead>
@@ -29,6 +28,7 @@
                 <th ng-repeat="n in [].constructor(31) track by $index"><span>{{$index + 1}}</span> </th>
             </tr>
             </thead>
+            <tbody>
             <tr ng-repeat="(key, value) in forcastEmployeeHours">
                 <td><b>{{key}}</b></td>
                 <td ng-repeat="dateOfMonth in value"><input id="checkSlave" type="checkbox" name="selected" ng-model="dateOfMonth.selected" ng-checked="dateOfMonth.selected" ng-disabled="dateOfMonth.holiday"></td>
@@ -36,13 +36,32 @@
             </tbody>
         </table>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" ng-click="clear()">
-                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
-            </button>
             <button type="submit" class="btn btn-primary">
                 <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
             </button>
         </div>
     </div>
-</div>
 </form>
+
+	<!-- OLD FORECAST -->
+	<div class="table-responsive" ng-show="oldForecast">
+		<div ng-repeat="(key, value) in oldForecastEmployeeHoursMap">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							<span>Forecast created in {{key | date : 'yyyy MMMM'}}</span>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="employeeHours in value">
+						<td>
+							Non-billable days for {{employeeHours.forecastDate | date : 'yyyy MMMM'}} : {{(employeeHours.holidays) || "None"}}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

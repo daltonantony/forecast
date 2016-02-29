@@ -48,3 +48,9 @@ app.factory('EmployeeHoursForComingMonths', function ($resource) {
     });
 });
 
+app.factory('EmployeeHoursForPreviousMonths', function ($resource) {
+    return $resource('api/employeeHoursForPreviousMonths', {}, {
+        'get': { method: 'GET', isArray: false}
+    });
+});
+

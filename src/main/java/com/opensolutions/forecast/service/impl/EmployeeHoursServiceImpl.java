@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -136,20 +138,26 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     }
 
 	private List<EmployeeHours> getEmployeeHoursCreatedInCurrentMonth(final Long empId) {
+		final List<EmployeeHours> allEmployeeHoursForSelectedEmployee = getAllEmployeeHoursForEmployee(empId);
+
+    	final List<EmployeeHours> employeeHoursCreatedInCurrentMonth = new ArrayList<>();
+    	for (final EmployeeHours employeeHours : allEmployeeHoursForSelectedEmployee) {
+			if (employeeHours.getCreatedDate().withDayOfMonth(1).equals(LocalDate.now().withDayOfMonth(1))) {
+				employeeHoursCreatedInCurrentMonth.add(employeeHours);
+			}
+		}
+		return employeeHoursCreatedInCurrentMonth;
+	}
+
+	private List<EmployeeHours> getAllEmployeeHoursForEmployee(final Long empId) {
 		final List<EmployeeHours> allEmployeeHoursForSelectedEmployee = new ArrayList<>();
+		// TODO: try to use named query using empId instead of calling findAll()
     	for (final EmployeeHours employeeHours : findAll()) {
     		if (employeeHours.getEmployee().getAssociateId().equals(empId)) {
 				allEmployeeHoursForSelectedEmployee.add(employeeHours);
 			}
     	}
-
-    	final List<EmployeeHours> employeeHoursCreatedInCurrentMonth = new ArrayList<>();
-    	for (final EmployeeHours employeeHours : allEmployeeHoursForSelectedEmployee) {
-			if (employeeHours.getCreatedDate().getMonth() == LocalDate.now().getMonth()) {
-				employeeHoursCreatedInCurrentMonth.add(employeeHours);
-			}
-		}
-		return employeeHoursCreatedInCurrentMonth;
+		return allEmployeeHoursForSelectedEmployee;
 	}
 
 	private Map<String, List<DaysOfMonth>> getDaysOfMonthMap(final List<EmployeeHours> employeeHoursCreatedInCurrentMonth, final List<Holidays> holidays) {
@@ -262,7 +270,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 
 	private void setEmployeeHoursCommonFields(final Entry<String, List<DaysOfMonth>> entry,
 												final EmployeeHours employeeHours, final Long empId) {
-		employeeHours.setCreatedDate(LocalDate.now());
+		employeeHours.setCreatedDate(LocalDate.now().withDayOfMonth(1));
 		setEmployeeHolidays(entry, employeeHours);
 		employeeHours.setLastChangedDate(LocalDate.now());
 		employeeHours.setLastChangedBy(empId.toString());
@@ -283,5 +291,49 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 		// Remove the last comma, if applicable:
 		employeeHolidays.setLength(Math.max(employeeHolidays.length() - 1, 0));
 		employeeHours.setHolidays(employeeHolidays.toString());
+	}
+
+	@Override
+	public Map<LocalDate, List<EmployeeHours>> getEmployeeHoursForPreviousMonths() {
+    	final Long empId = Long.valueOf(SecurityUtils.getCurrentUserLogin());
+    	log.debug("Employee Hours for [{}]", empId.toString());
+
+    	final List<EmployeeHours> allEmployeeHoursForSelectedEmployee = getAllEmployeeHoursForEmployee(empId);
+    	sortEmployeeHoursOnDescendingOrderOfCreatedDate(allEmployeeHoursForSelectedEmployee);
+
+    	final Map<LocalDate, List<EmployeeHours>> employeeHoursMapForPreviousMonths = new LinkedHashMap<>();
+    	for (final EmployeeHours employeeHours : allEmployeeHoursForSelectedEmployee) {
+    		addPreviousMonthsEmployeeHoursToMap(employeeHoursMapForPreviousMonths, employeeHours);
+		}
+
+		return employeeHoursMapForPreviousMonths;
+	}
+
+	private void sortEmployeeHoursOnDescendingOrderOfCreatedDate(
+			final List<EmployeeHours> allEmployeeHoursForSelectedEmployee) {
+		Collections.sort(allEmployeeHoursForSelectedEmployee, new Comparator<EmployeeHours>() {
+
+			@Override
+			public int compare(final EmployeeHours o1, final EmployeeHours o2) {
+				if(o1.getCreatedDate().equals(o2.getCreatedDate())) {
+					return 0;
+				}
+				return o1.getCreatedDate().isAfter(o2.getCreatedDate()) ? -1 : 1;
+			}
+		});
+	}
+
+	private void addPreviousMonthsEmployeeHoursToMap(final Map<LocalDate, List<EmployeeHours>> employeeHoursMapForPreviousMonths,
+			final EmployeeHours employeeHours) {
+		final LocalDate createdDate = employeeHours.getCreatedDate();
+		if (createdDate.withDayOfMonth(1).isBefore(LocalDate.now().withDayOfMonth(1))) {
+			if (employeeHoursMapForPreviousMonths.containsKey(createdDate)) {
+				employeeHoursMapForPreviousMonths.get(createdDate).add(employeeHours);
+			} else {
+				final List<EmployeeHours> employeeHoursList = new ArrayList<>();
+				employeeHoursList.add(employeeHours);
+				employeeHoursMapForPreviousMonths.put(createdDate, employeeHoursList);
+			}
+		}
 	}
 }
