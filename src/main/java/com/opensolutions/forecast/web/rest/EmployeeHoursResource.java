@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
-import com.opensolutions.forecast.domain.DaysOfMonth;
 import com.opensolutions.forecast.domain.Employee;
 import com.opensolutions.forecast.domain.EmployeeHours;
 import com.opensolutions.forecast.service.EmployeeHoursService;
+import com.opensolutions.forecast.web.rest.dto.EmployeeHoursDTO;
 import com.opensolutions.forecast.web.rest.util.HeaderUtil;
 
 /**
@@ -134,18 +134,21 @@ public class EmployeeHoursResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public Map<LocalDate, List<DaysOfMonth>> getComingMonthsHours() {
+    public EmployeeHoursDTO getComingMonthsHours() {
         log.debug("REST request to get the Employee Hours for Coming Months");
-        return employeeHoursService.getEmployeeHoursForComingMonths();
+        final EmployeeHoursDTO dto = new EmployeeHoursDTO();
+        dto.setEmployeeHoursForComingMonths(employeeHoursService.getEmployeeHoursForComingMonths());
+        dto.setForecastFreezePeriod(employeeHoursService.isForecastFreezePeriod());
+		return dto;
     }
 
     @RequestMapping(value = "/employeeHoursForComingMonths",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> saveComingMonthsHours(@RequestBody final Map<LocalDate, List<DaysOfMonth>> employeeHoursForComingMonths) {
+    public ResponseEntity<Void> saveComingMonthsHours(@RequestBody final EmployeeHoursDTO dto) {
         log.debug("REST request to save the Employee Hours for Coming Months");
-        final Employee employee = employeeHoursService.saveEmployeeHoursForComingMonths(employeeHoursForComingMonths);
+        final Employee employee = employeeHoursService.saveEmployeeHoursForComingMonths(dto.getEmployeeHoursForComingMonths());
         return ResponseEntity.ok().headers(HeaderUtil.createEntityCreationAlert("Employee Hours", employee.getAssociateId().toString())).build();
     }
 

@@ -4,6 +4,7 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.opensolutions.forecast.domain.CodeValues;
 import com.opensolutions.forecast.domain.DaysOfMonth;
 import com.opensolutions.forecast.domain.Employee;
 import com.opensolutions.forecast.domain.EmployeeAllocation;
@@ -35,6 +37,7 @@ import com.opensolutions.forecast.domain.Holidays;
 import com.opensolutions.forecast.repository.EmployeeHoursRepository;
 import com.opensolutions.forecast.repository.search.EmployeeHoursSearchRepository;
 import com.opensolutions.forecast.security.SecurityUtils;
+import com.opensolutions.forecast.service.CodeValuesService;
 import com.opensolutions.forecast.service.EmployeeAllocationService;
 import com.opensolutions.forecast.service.EmployeeHoursService;
 import com.opensolutions.forecast.service.EmployeeService;
@@ -65,6 +68,9 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 
     @Inject
     private HolidaysService holidaysService;
+
+    @Inject
+    private CodeValuesService codeValuesService;
 
     /**
      * Save a employeeHours.
@@ -126,6 +132,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     }
 
     @Override
+	@Transactional(readOnly = true)
     public Map<LocalDate, List<DaysOfMonth>> getEmployeeHoursForComingMonths() {
     	final Long empId = Long.valueOf(SecurityUtils.getCurrentUserLogin());
     	log.debug("Employee Hours for [{}]", empId.toString());
@@ -224,6 +231,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     }
 
 	@Override
+	@Transactional(readOnly = false)
 	public Employee saveEmployeeHoursForComingMonths(final Map<LocalDate, List<DaysOfMonth>> employeeHoursForComingMonths) {
 		log.debug("Request to save the Employee Hours for Coming Months");
 		final Long empId = Long.valueOf(SecurityUtils.getCurrentUserLogin());
@@ -291,6 +299,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Map<LocalDate, List<EmployeeHours>> getEmployeeHoursForPreviousMonths() {
     	final Long empId = Long.valueOf(SecurityUtils.getCurrentUserLogin());
     	log.debug("Employee Hours for [{}]", empId.toString());
@@ -333,4 +342,16 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 			}
 		}
 	}
+
+    @Override
+	@Transactional(readOnly = true)
+	public boolean isForecastFreezePeriod() {
+    	final List<CodeValues> codeValues = codeValuesService.searchActiveCodeValues("ForecastFreezeDate");
+    	final String codeValue = codeValues.get(0).getCodeValue();
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		final LocalDate forecastFreezeDate = LocalDate.parse(codeValue, formatter);
+		final LocalDate today = LocalDate.now();
+		return !today.isBefore(forecastFreezeDate) &&
+				!today.isAfter(forecastFreezeDate.with(TemporalAdjusters.lastDayOfMonth()));
+    }
 }

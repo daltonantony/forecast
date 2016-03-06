@@ -17,46 +17,50 @@ public interface EmployeeHoursService {
      * Save a employeeHours.
      * @return the persisted entity
      */
-    public EmployeeHours save(EmployeeHours employeeHours);
+    EmployeeHours save(EmployeeHours employeeHours);
 
     /**
      *  get all the employeeHourss.
      *  @return the list of entities
      */
-    public List<EmployeeHours> findAll();
+    List<EmployeeHours> findAll();
 
     /**
      *  get the "id" employeeHours.
      *  @return the entity
      */
-    public EmployeeHours findOne(Long id);
+    EmployeeHours findOne(Long id);
 
     /**
      *  delete the "id" employeeHours.
      */
-    public void delete(Long id);
+    void delete(Long id);
 
     /**
      * search for the employeeHours corresponding
      * to the query.
      */
-    public List<EmployeeHours> search(String query);
+    List<EmployeeHours> search(String query);
 
     /**
      * @return Employee Hours for Coming Months
      */
-    public Map<LocalDate, List<DaysOfMonth>> getEmployeeHoursForComingMonths();
+    Map<LocalDate, List<DaysOfMonth>> getEmployeeHoursForComingMonths();
 
     /**
      * Saves employee hours for coming months.
      * @param employeeHoursForComingMonths
      * @return Employee
      */
-    public Employee saveEmployeeHoursForComingMonths(Map<LocalDate, List<DaysOfMonth>> employeeHoursForComingMonths);
+    Employee saveEmployeeHoursForComingMonths(Map<LocalDate, List<DaysOfMonth>> employeeHoursForComingMonths);
 
     /**
      * @return Employee Hours for Previous Months
      */
-    public Map<LocalDate, List<EmployeeHours>> getEmployeeHoursForPreviousMonths();
+    Map<LocalDate, List<EmployeeHours>> getEmployeeHoursForPreviousMonths();
 
+    /**
+     * @return whether the current day is part of the "forecast freeze period"
+     */
+    boolean isForecastFreezePeriod();
 }
