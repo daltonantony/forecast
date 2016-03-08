@@ -19,22 +19,6 @@ angular.module('forecastApp')
                 resolve: {
                 }
             })
-            .state('employeeHoursAdmin', {
-                parent: 'entity',
-                url: '/employeeHoursAdmin',
-                data: {
-                    authorities: ['ROLE_ADMIN'],
-                    pageTitle: 'Employee Hours Administration'
-                },
-                views: {
-                    'content@': {
-                        templateUrl: 'scripts/app/entities/employeeHours/employeeHoursAdmin.html',
-                        controller: 'EmployeeHoursController'
-                    }
-                },
-                resolve: {
-                }
-            })
             .state('employeeHours.detail', {
                 parent: 'entity',
                 url: '/employeeHours/{id}',

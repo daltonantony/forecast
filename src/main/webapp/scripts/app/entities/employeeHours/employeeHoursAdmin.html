@@ -2,6 +2,58 @@
     <h2>Employee Hours Administration</h2>
     <jh-alert></jh-alert>
     <br/>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <button class="btn btn-primary" ng-click="showViewEmployeeHours()">
+                    <span class="glyphicon glyphicon-flash"></span><span>View Employee Hours</span>
+                </button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" ng-click="showDownloadEmployeeHours()">
+                    <span class="glyphicon glyphicon-flash"></span><span>Download Employee Hours</span>
+                </button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" ng-click="showSetForecastFreezeDate()">
+                    <span class="glyphicon glyphicon-flash"></span><span>Set Forecast Freeze Date</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+
+<form name="viewEmployeeHoursForm" role="form" novalidate ng-submit="viewEmployeeHours()">
+	<!-- VIEW EMPLOYEE HOURS -->
+	<div class="table-responsive" ng-show="showViewEmployeeHoursDiv">
+		<h4>View Employee Hours</h4>
+		View the Employee Hours based on Employee/Month
+		<br/>
+	    TO BE ADDED
+    </div>
+</form>
+
+<form name="downloadEmployeeHoursForm" role="form" novalidate ng-submit="downloadEmployeeHours()">
+	<!-- DOWNLOAD EMPLOYEE HOURS -->
+	<div class="table-responsive" ng-show="showDownloadEmployeeHoursDiv">
+		<h4>Download Employee Hours</h4>
+		Download the Employee Hours based on Employee/Month
+		<br/>
+	    TO BE ADDED
+    </div>
+</form>
+
+<form name="setForecastFreezeDate" role="form" novalidate ng-submit="setForecastFreezeDate()">
+	<!-- SET FORECAST FREEZE DATE -->
+	<div class="table-responsive" ng-show="showSetForecastFreezeDateDiv">
+		<h4>Set Forecast Freeze Date</h4>
+		Set the "forecast freeze date" for the current month
+		<br/>
+	    TO BE ADDED
+    </div>
+</form>
+
+    <br/><hr style="border: 3px outset ;" />
     Intended to be accessed by only the admins. For the following purposes:
     <br/>
     (1) View Employee Hours based on Employee/Month
