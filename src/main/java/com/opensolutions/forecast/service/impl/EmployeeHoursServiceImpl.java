@@ -50,9 +50,10 @@ import com.opensolutions.forecast.service.HolidaysService;
 @Transactional
 public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 
-    private static final EnumSet<DayOfWeek> WEEKEND = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
-
-    private final Logger log = LoggerFactory.getLogger(EmployeeHoursServiceImpl.class);
+	private final Logger log = LoggerFactory.getLogger(EmployeeHoursServiceImpl.class);
+	private static final String FORECAST_FREEZE_DATE = "ForecastFreezeDate";
+    private static final String YYYY_MM_DD = "yyyy-MM-dd";
+	private static final EnumSet<DayOfWeek> WEEKEND = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
 
     @Inject
     private EmployeeHoursRepository employeeHoursRepository;
@@ -346,12 +347,43 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     @Override
 	@Transactional(readOnly = true)
 	public boolean isForecastFreezePeriod() {
-    	final List<CodeValues> codeValues = codeValuesService.searchActiveCodeValues("ForecastFreezeDate");
-    	final String codeValue = codeValues.get(0).getCodeValue();
-		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		final LocalDate forecastFreezeDate = LocalDate.parse(codeValue, formatter);
+    	final LocalDate forecastFreezeDate = getForecastFreezeDateFromDB();
 		final LocalDate today = LocalDate.now();
 		return !today.isBefore(forecastFreezeDate) &&
 				!today.isAfter(forecastFreezeDate.with(TemporalAdjusters.lastDayOfMonth()));
     }
+
+	@Override
+	@Transactional(readOnly = true)
+	public LocalDate getForecastFreezeDate() {
+		LocalDate forecastFreezeDate = getForecastFreezeDateFromDB();
+		final LocalDate today = LocalDate.now();
+		if (forecastFreezeDate.getYear() != today.getYear() || forecastFreezeDate.getMonth() != today.getMonth()) {
+			forecastFreezeDate = today.with(TemporalAdjusters.lastDayOfMonth()).minusDays(5);
+		}
+		return forecastFreezeDate;
+	}
+
+	private LocalDate getForecastFreezeDateFromDB() {
+		final List<CodeValues> codeValues = codeValuesService.searchActiveCodeValues(FORECAST_FREEZE_DATE);
+    	final String codeValue = codeValues.get(0).getCodeValue();
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(YYYY_MM_DD);
+		final LocalDate forecastFreezeDate = LocalDate.parse(codeValue, formatter);
+		return forecastFreezeDate;
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public void setForecastFreezeDate(final LocalDate forecastFreezeDate) {
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(YYYY_MM_DD);
+		final String forecastFreezeDateString = formatter.format(forecastFreezeDate);
+
+		final List<CodeValues> codeValues = codeValuesService.searchActiveCodeValues(FORECAST_FREEZE_DATE);
+    	final CodeValues codeValue = codeValues.get(0);
+		codeValue.setCodeValue(forecastFreezeDateString);
+		codeValue.setLastChangedDate(LocalDate.now());
+		codeValue.setLastChangedBy(SecurityUtils.getCurrentUserLogin());
+		codeValuesService.save(codeValue);
+	}
+
 }

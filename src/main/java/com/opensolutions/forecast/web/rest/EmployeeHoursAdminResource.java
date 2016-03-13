@@ -1,8 +1,5 @@
 package com.opensolutions.forecast.web.rest;
 
-import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
-
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -38,9 +35,8 @@ public class EmployeeHoursAdminResource {
     @Timed
     public EmployeeHoursAdminDTO showSetForecastFreezeDate() {
         log.debug("REST request to show the view to set the forecast freeze date");
-        final LocalDate forecastFreezeDate = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).minusDays(5);
         final EmployeeHoursAdminDTO dto = new EmployeeHoursAdminDTO();
-        dto.setForecastFreezeDate(forecastFreezeDate);
+        dto.setForecastFreezeDate(employeeHoursService.getForecastFreezeDate());
 		return dto;
     }
 
@@ -50,7 +46,7 @@ public class EmployeeHoursAdminResource {
     @Timed
     public ResponseEntity<Void> setForecastFreezeDate(@RequestBody final EmployeeHoursAdminDTO dto) {
         log.debug("REST request to set the forecast freeze date");
-        log.debug("Forecast Freeze Date to be set as {}", dto.getForecastFreezeDate());
+        employeeHoursService.setForecastFreezeDate(dto.getForecastFreezeDate());
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("Forecast Freeze Date Set", "")).build();
     }
 

@@ -48,7 +48,7 @@
 	<div class="table-responsive" ng-show="showSetForecastFreezeDateDiv">
 		<h4>Set Forecast Freeze Date</h4>
 		Set the "forecast freeze date" for the current month
-		<br/>
+		<br/><br/>
 	    <div class="form-group">
             <label class="control-label" for="field_forecastFreezeDate">Forecast Freeze Date</label>
             <input id="field_forecastFreezeDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="dto.forecastFreezeDate" is-open="datePickerForForecastFreezeDate.status.opened"
@@ -65,12 +65,4 @@
     </div>
 </form>
 
-    <br/><hr style="border: 3px outset ;" />
-    Intended to be accessed by only the admins. For the following purposes:
-    <br/>
-    (1) View Employee Hours based on Employee/Month
-    <br/>
-    (2) Download Employee Hours based on Employee/Month
-    <br/>
-    (3) Set the "forecast freeze date" for the current month
 </div>

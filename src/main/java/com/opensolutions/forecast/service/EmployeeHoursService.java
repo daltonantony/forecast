@@ -63,4 +63,15 @@ public interface EmployeeHoursService {
      * @return whether the current day is part of the "forecast freeze period"
      */
     boolean isForecastFreezePeriod();
+
+    /**
+     * @return the Forecast Freeze Date
+     */
+    LocalDate getForecastFreezeDate();
+
+    /**
+     * @param forecastFreezeDate the Forecast Freeze Date to set
+     */
+    void setForecastFreezeDate(LocalDate forecastFreezeDate);
+
 }
