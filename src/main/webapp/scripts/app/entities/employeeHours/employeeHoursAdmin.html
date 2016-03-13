@@ -43,13 +43,25 @@
     </div>
 </form>
 
-<form name="setForecastFreezeDate" role="form" novalidate ng-submit="setForecastFreezeDate()">
+<form name="setForecastFreezeDateForm" role="form" novalidate ng-submit="setForecastFreezeDate()">
 	<!-- SET FORECAST FREEZE DATE -->
 	<div class="table-responsive" ng-show="showSetForecastFreezeDateDiv">
 		<h4>Set Forecast Freeze Date</h4>
 		Set the "forecast freeze date" for the current month
 		<br/>
-	    TO BE ADDED
+	    <div class="form-group">
+            <label class="control-label" for="field_forecastFreezeDate">Forecast Freeze Date</label>
+            <input id="field_forecastFreezeDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="dto.forecastFreezeDate" is-open="datePickerForForecastFreezeDate.status.opened"
+            />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePickerForForecastFreezeDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+            </button>
+        </div>
     </div>
 </form>
 

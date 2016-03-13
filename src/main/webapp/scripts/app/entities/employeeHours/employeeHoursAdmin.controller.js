@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('forecastApp')
-    .controller('EmployeeHoursAdminController', function ($scope, $state, EmployeeHours) {
+    .controller('EmployeeHoursAdminController', function ($scope, $state, EmployeeHours, EmployeeHoursAdminSetForecastFreezeDate) {
 
         $scope.employeeHourss = [];
         $scope.loadAll = function() {
@@ -27,6 +27,28 @@ angular.module('forecastApp')
             $scope.showViewEmployeeHoursDiv = false;
             $scope.showDownloadEmployeeHoursDiv = false;
             $scope.showSetForecastFreezeDateDiv = true;
+            
+            EmployeeHoursAdminSetForecastFreezeDate.get(function (result) {
+                $scope.dto = result;
+            });
+        };
+        
+        $scope.setForecastFreezeDate = function () {
+            $scope.showViewEmployeeHoursDiv = false;
+            $scope.showDownloadEmployeeHoursDiv = false;
+            $scope.showSetForecastFreezeDateDiv = true;
+            
+            EmployeeHoursAdminSetForecastFreezeDate.save($scope.dto);
+        };
+        
+        $scope.datePickerForForecastFreezeDate = {};
+
+        $scope.datePickerForForecastFreezeDate.status = {
+            opened: false
+        };
+
+        $scope.datePickerForForecastFreezeDateOpen = function($event) {
+            $scope.datePickerForForecastFreezeDate.status.opened = true;
         };
 
     });
