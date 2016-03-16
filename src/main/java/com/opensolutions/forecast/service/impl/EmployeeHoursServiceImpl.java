@@ -6,14 +6,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -92,9 +85,8 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     @Override
 	@Transactional(readOnly = true)
     public List<EmployeeHours> findAll() {
-        log.debug("Request to get all EmployeeHourss");
-        final List<EmployeeHours> result = employeeHoursRepository.findAll();
-        return result;
+        log.debug("Request to get all EmployeeHours");
+        return employeeHoursRepository.findAll();
     }
 
     /**
@@ -105,8 +97,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 	@Transactional(readOnly = true)
     public EmployeeHours findOne(final Long id) {
         log.debug("Request to get EmployeeHours : {}", id);
-        final EmployeeHours employeeHours = employeeHoursRepository.findOne(id);
-        return employeeHours;
+        return employeeHoursRepository.findOne(id);
     }
 
     /**
@@ -284,7 +275,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 
 	private void setEmployeeHolidays(final Entry<LocalDate, List<DaysOfMonth>> entry, final EmployeeHours employeeHours) {
 		// Joining employee holidays, separated by a comma
-		final StringBuffer employeeHolidays = new StringBuffer();
+		final StringBuilder employeeHolidays = new StringBuilder();
 		for (final DaysOfMonth dayOfMonth : entry.getValue()) {
 			log.debug("Day: {} - Sel: {} - Hol: {}", dayOfMonth.getDay(), dayOfMonth.isSelected(), dayOfMonth.isHoliday());
 			if (!dayOfMonth.isHoliday() && dayOfMonth.isSelected()) {
@@ -368,8 +359,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 		final List<CodeValues> codeValues = codeValuesService.searchActiveCodeValues(FORECAST_FREEZE_DATE);
     	final String codeValue = codeValues.get(0).getCodeValue();
 		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(YYYY_MM_DD);
-		final LocalDate forecastFreezeDate = LocalDate.parse(codeValue, formatter);
-		return forecastFreezeDate;
+		return LocalDate.parse(codeValue, formatter);
 	}
 
 	@Override
@@ -385,5 +375,15 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 		codeValue.setLastChangedBy(SecurityUtils.getCurrentUserLogin());
 		codeValuesService.save(codeValue);
 	}
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<Employee,List<EmployeeHours>> getForecastForAllEmployees(List<Employee> employees){
+        Map<Employee,List<EmployeeHours>> employeeHoursForEachEmployee = new HashMap<>();
+        for (Employee employee : employees) {
+            employeeHoursForEachEmployee.put(employee,getAllEmployeeHoursForEmployee(employee.getId()));
+        }
+        return employeeHoursForEachEmployee;
+    }
 
 }

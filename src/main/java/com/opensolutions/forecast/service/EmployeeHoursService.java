@@ -49,7 +49,7 @@ public interface EmployeeHoursService {
 
     /**
      * Saves employee hours for coming months.
-     * @param employeeHoursForComingMonths
+     * @param employeeHoursForComingMonths the employee hours for coming months
      * @return Employee
      */
     Employee saveEmployeeHoursForComingMonths(Map<LocalDate, List<DaysOfMonth>> employeeHoursForComingMonths);
@@ -74,4 +74,10 @@ public interface EmployeeHoursService {
      */
     void setForecastFreezeDate(LocalDate forecastFreezeDate);
 
+    /**
+     * Get forecast for all employees.
+     * @param employees the employee details of all employees
+     * @return the Employee and employee hours
+     */
+    Map<Employee,List<EmployeeHours>> getForecastForAllEmployees(List<Employee> employees);
 }
