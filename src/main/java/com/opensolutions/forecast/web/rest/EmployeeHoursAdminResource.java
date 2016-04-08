@@ -71,16 +71,13 @@ public class EmployeeHoursAdminResource {
             workbook.write(out);
             out.flush();
         } catch (final IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         final HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("content-disposition", "attachment; filename=EmpHrs.xls");
+        responseHeaders.add("content-disposition", "attachment; filename=ForecastHours.xls");
         responseHeaders.add("Content-Type", "application/vnd.ms-excel");
-        
-        final ResponseEntity a = new ResponseEntity(out, responseHeaders, HttpStatus.OK);
 
-        return a;
+        return new ResponseEntity(out, responseHeaders, HttpStatus.CREATED);
     }
 
 }

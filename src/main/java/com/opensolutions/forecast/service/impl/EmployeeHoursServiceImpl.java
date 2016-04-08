@@ -78,7 +78,7 @@ public class EmployeeHoursServiceImpl extends EmployeeHoursHelper implements Emp
 
     /**
      * Save a employeeHours.
-     * 
+     *
      * @return the persisted entity
      */
     @Override
@@ -91,7 +91,7 @@ public class EmployeeHoursServiceImpl extends EmployeeHoursHelper implements Emp
 
     /**
      * get all the employeeHourss.
-     * 
+     *
      * @return the list of entities
      */
     @Override
@@ -103,7 +103,7 @@ public class EmployeeHoursServiceImpl extends EmployeeHoursHelper implements Emp
 
     /**
      * get one employeeHours by id.
-     * 
+     *
      * @return the entity
      */
     @Override
@@ -419,7 +419,7 @@ public class EmployeeHoursServiceImpl extends EmployeeHoursHelper implements Emp
     public HSSFWorkbook getForecastOfAllEmployee(final List<Employee> employees) {
         final Map<Employee, Map<LocalDate, List<DaysOfMonth>>> employeeHours = new HashMap<>();
         for (final Employee employee : employees) {
-            employeeHours.put(employee, getForecastedHours(employee.getId()));
+            employeeHours.put(employee, getForecastedHours(employee.getAssociateId()));
         }
         return writeHoursInWorkbook(employeeHours);
     }
