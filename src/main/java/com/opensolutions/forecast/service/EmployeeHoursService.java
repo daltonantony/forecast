@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
 import com.opensolutions.forecast.domain.DaysOfMonth;
 import com.opensolutions.forecast.domain.Employee;
 import com.opensolutions.forecast.domain.EmployeeHours;
@@ -15,30 +17,32 @@ public interface EmployeeHoursService {
 
     /**
      * Save a employeeHours.
+     * 
      * @return the persisted entity
      */
     EmployeeHours save(EmployeeHours employeeHours);
 
     /**
-     *  get all the employeeHourss.
-     *  @return the list of entities
+     * get all the employeeHourss.
+     * 
+     * @return the list of entities
      */
     List<EmployeeHours> findAll();
 
     /**
-     *  get the "id" employeeHours.
-     *  @return the entity
+     * get the "id" employeeHours.
+     * 
+     * @return the entity
      */
     EmployeeHours findOne(Long id);
 
     /**
-     *  delete the "id" employeeHours.
+     * delete the "id" employeeHours.
      */
     void delete(Long id);
 
     /**
-     * search for the employeeHours corresponding
-     * to the query.
+     * search for the employeeHours corresponding to the query.
      */
     List<EmployeeHours> search(String query);
 
@@ -49,6 +53,7 @@ public interface EmployeeHoursService {
 
     /**
      * Saves employee hours for coming months.
+     * 
      * @param employeeHoursForComingMonths the employee hours for coming months
      * @return Employee
      */
@@ -75,9 +80,10 @@ public interface EmployeeHoursService {
     void setForecastFreezeDate(LocalDate forecastFreezeDate);
 
     /**
-     * Get forecast for all employees.
+     * Get forecast of all employees in Excel.
+     * 
      * @param employees the employee details of all employees
      * @return the Employee and employee hours
      */
-    Map<Employee,List<EmployeeHours>> getForecastForAllEmployees(List<Employee> employees);
+    HSSFWorkbook getForecastOfAllEmployee(List<Employee> employees);
 }

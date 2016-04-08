@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('forecastApp')
-    .controller('EmployeeHoursAdminController', function ($scope, $state, EmployeeHours, EmployeeHoursAdminSetForecastFreezeDate) {
+    .controller('EmployeeHoursAdminController', function ($scope, $state, EmployeeHours, EmployeeHoursAdminSetForecastFreezeDate, EmployeeHoursAdminDownloadForecast) {
 
         $scope.employeeHourss = [];
         $scope.loadAll = function() {
@@ -21,6 +21,8 @@ angular.module('forecastApp')
             $scope.showViewEmployeeHoursDiv = false;
             $scope.showDownloadEmployeeHoursDiv = true;
             $scope.showSetForecastFreezeDateDiv = false;
+            
+            EmployeeHoursAdminDownloadForecast.get();
         };
 
         $scope.showSetForecastFreezeDate = function () {
