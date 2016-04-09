@@ -21,7 +21,9 @@ app.factory('EmployeeHoursAdminSetForecastFreezeDate', function ($resource, Date
 
 app.factory('EmployeeHoursAdminDownloadForecast', function ($resource) {
     return $resource('api/downloadForecast', {}, {
-    	'get': { method: 'GET', isArray: false}
+        'get': {
+           method: 'GET', isArray : false
+       }
     });
 });
 

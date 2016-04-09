@@ -1,5 +1,6 @@
 package com.opensolutions.forecast.web.rest;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -61,23 +63,27 @@ public class EmployeeHoursAdminResource {
 
     @RequestMapping(value = DOWNLOAD_FORECAST, method = RequestMethod.GET, produces = "application/vnd.ms-excel")
     @Timed
-    public ResponseEntity downloadForecastHours(final HttpServletResponse response) {
+    public ResponseEntity<Void> downloadForecastHours() {
         log.debug("REST request to download the forecast hours");
         final List<Employee> employees = employeeService.findAll();
         final HSSFWorkbook workbook = employeeHoursService.getForecastOfAllEmployee(employees);
-        OutputStream out = null;
+        // OutputStream out = null;
         try {
-            out = response.getOutputStream();
-            workbook.write(out);
-            out.flush();
+            // out =  response.getOutputStream();
+            // workbook.write(out);
+            // out.flush();
+            FileOutputStream file = new FileOutputStream("C:/Users/Public/Downloads/Forecast.xls");
+            workbook.write(file);
         } catch (final IOException e) {
             e.printStackTrace();
         }
-        final HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("content-disposition", "attachment; filename=ForecastHours.xls");
-        responseHeaders.add("Content-Type", "application/vnd.ms-excel");
+        /*final HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Cache-Control","must-revalidate");
+        responseHeaders.add("Pragma", "public");
+        responseHeaders.add("Content-Transfer-Encoding","binary");
+        responseHeaders.add("content-disposition", "attachment; filename=ForecastHours.xls");*/
+        // responseHeaders.add("Content-Type", "application/vnd.ms-excel");
 
-        return new ResponseEntity(out, responseHeaders, HttpStatus.CREATED);
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("Download complete !!!", "")).build();
     }
-
 }

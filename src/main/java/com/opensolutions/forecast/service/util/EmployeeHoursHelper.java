@@ -32,16 +32,15 @@ import com.opensolutions.forecast.domain.Employee;
  */
 public class EmployeeHoursHelper {
 
-    private static final EnumSet<DayOfWeek> WEEKEND = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+    /*private static final EnumSet<DayOfWeek> WEEKEND = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
 
-    /*public static void main(final String[] args) {
+    public static void main(final String[] args) {
         final Map<Employee, Map<LocalDate, List<DaysOfMonth>>> employeeHours = new HashMap<>();
-        final List<DaysOfMonth> dom = new ArrayList<>();
-        addHours(dom, LocalDate.now());
-        addHours(dom, LocalDate.now().plusMonths(1));
-        addHours(dom, LocalDate.now().plusMonths(2));
         final Map<LocalDate, List<DaysOfMonth>> empHours = new HashMap<>();
-        empHours.put(LocalDate.now(), dom);
+        addHours(LocalDate.now().plusMonths(2));
+        empHours.put(LocalDate.now(), addHours(LocalDate.now()));
+        empHours.put(LocalDate.now().plusMonths(1), addHours(LocalDate.now().plusMonths(1)));
+        empHours.put(LocalDate.now().plusMonths(2), addHours(LocalDate.now().plusMonths(2)));
         final Employee emp = new Employee();
         emp.setAssociateId(224801L);
         emp.setName("Jegannathan, Ramesh Kala");
@@ -49,7 +48,8 @@ public class EmployeeHoursHelper {
         new EmployeeHoursHelper().writeHoursInWorkbook(employeeHours);
     }
 
-    private static void addHours(final List<DaysOfMonth> dom, final LocalDate date) {
+    private static List<DaysOfMonth> addHours(final LocalDate date) {
+        final List<DaysOfMonth> dom = new ArrayList<>();
         for (int i = 1; i <= date.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
             final DaysOfMonth daysOfMonth = new DaysOfMonth();
             daysOfMonth.setDay(i);
@@ -59,16 +59,12 @@ public class EmployeeHoursHelper {
             }
             dom.add(daysOfMonth);
         }
+        return dom;
     }*/
 
     private void createDatesOfMonth(final Row row, final LocalDate date, int columnCount,
                                     final HSSFCellStyle headerStyle)
     {
-        for (int i = 1; i <= date.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
-            final Cell headerCell = row.createCell(columnCount++);
-            headerCell.setCellValue(date.getMonth().toString().substring(0, 3) + i);
-            headerCell.setCellStyle(headerStyle);
-        }
         for (int i = 1; i <= date.plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
             final Cell headerCell = row.createCell(columnCount++);
             headerCell.setCellValue(date.plusMonths(1).getMonth().toString().substring(0, 3) + i);
@@ -77,6 +73,11 @@ public class EmployeeHoursHelper {
         for (int i = 1; i <= date.plusMonths(2).with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
             final Cell headerCell = row.createCell(columnCount++);
             headerCell.setCellValue(date.plusMonths(2).getMonth().toString().substring(0, 3) + i);
+            headerCell.setCellStyle(headerStyle);
+        }
+        for (int i = 1; i <= date.plusMonths(3).with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
+            final Cell headerCell = row.createCell(columnCount++);
+            headerCell.setCellValue(date.plusMonths(3).getMonth().toString().substring(0, 3) + i);
             headerCell.setCellStyle(headerStyle);
         }
     }
@@ -128,23 +129,26 @@ public class EmployeeHoursHelper {
             employeeCell.setCellStyle(employeeStyle);
             employeeCell.setCellValue(entry.getKey().getAssociateId());
             for (final Map.Entry<LocalDate, List<DaysOfMonth>> empHours : entry.getValue().entrySet()) {
-                final List<DaysOfMonth> daysOfMonth = empHours.getValue();
-                for (final DaysOfMonth dayOfMonth : daysOfMonth) {
-                    final Cell cell = row.createCell(columnCount++);
-                    if (dayOfMonth.isSelected()) {
-                        cell.setCellValue(0);
-                        cell.setCellStyle(forecastStyle);
-                    } else if (dayOfMonth.isHoliday()) {
-                        cell.setCellStyle(holidayStyle);
-                    } else {
-                        cell.setCellValue(8);
+                LocalDate date = empHours.getKey();
+                if(date.getMonthValue() > LocalDate.now().getMonthValue()){
+                    final List<DaysOfMonth> daysOfMonth = empHours.getValue();
+                    for (final DaysOfMonth dayOfMonth : daysOfMonth) {
+                        final Cell cell = row.createCell(columnCount++);
+                        if (dayOfMonth.isSelected()) {
+                            cell.setCellValue(0);
+                            cell.setCellStyle(forecastStyle);
+                        } else if (dayOfMonth.isHoliday()) {
+                            cell.setCellStyle(holidayStyle);
+                        } else {
+                            cell.setCellValue(8);
+                        }
                     }
                 }
             }
         }
         autoSizeColumns(workbook);
         /*try {
-            final FileOutputStream outputStream = new FileOutputStream("C:/forecast/Sample.xls");
+            final FileOutputStream outputStream = new FileOutputStream("W:/test.xls");
             workbook.write(outputStream);
         } catch (final Exception e) {
             System.out.println(e);

@@ -21,28 +21,35 @@ angular.module('forecastApp')
             $scope.showViewEmployeeHoursDiv = false;
             $scope.showDownloadEmployeeHoursDiv = true;
             $scope.showSetForecastFreezeDateDiv = false;
-            
+
             EmployeeHoursAdminDownloadForecast.get();
+            /*EmployeeHoursAdminDownloadForecast.get(function (result) {
+
+                var blob = new Blob([result], {type: "application/vnd.ms-excel"});
+                var objectUrl = URL.createObjectURL(blob);
+                window.open(objectUrl);
+
+            });*/
         };
 
         $scope.showSetForecastFreezeDate = function () {
             $scope.showViewEmployeeHoursDiv = false;
             $scope.showDownloadEmployeeHoursDiv = false;
             $scope.showSetForecastFreezeDateDiv = true;
-            
+
             EmployeeHoursAdminSetForecastFreezeDate.get(function (result) {
                 $scope.dto = result;
             });
         };
-        
+
         $scope.setForecastFreezeDate = function () {
             $scope.showViewEmployeeHoursDiv = false;
             $scope.showDownloadEmployeeHoursDiv = false;
             $scope.showSetForecastFreezeDateDiv = true;
-            
+
             EmployeeHoursAdminSetForecastFreezeDate.save($scope.dto);
         };
-        
+
         $scope.datePickerForForecastFreezeDate = {};
 
         $scope.datePickerForForecastFreezeDate.status = {
