@@ -80,10 +80,19 @@ public interface EmployeeHoursService {
     void setForecastFreezeDate(LocalDate forecastFreezeDate);
 
     /**
-     * Get forecast of all employees in Excel.
+     * Write forecast of all employees in Excel.
      * 
      * @param employees the employee details of all employees
      * @return the Employee and employee hours
      */
-    HSSFWorkbook getForecastOfAllEmployee(List<Employee> employees);
+    HSSFWorkbook writeForecastOfAllEmployee(List<Employee> employees);
+
+    /**
+     * Gets the forecast of all employee.
+     *
+     * @param employees the employees
+     * @return the forecast of all employees
+     */
+    Map<Employee, Map<LocalDate, List<DaysOfMonth>>> getForecastOfAllEmployee(List<Employee> employees);
+
 }

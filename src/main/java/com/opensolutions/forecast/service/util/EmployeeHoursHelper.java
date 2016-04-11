@@ -1,6 +1,5 @@
 package com.opensolutions.forecast.service.util;
 
-import java.io.FileOutputStream;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
@@ -9,8 +8,6 @@ import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,56 +29,12 @@ import com.opensolutions.forecast.domain.Employee;
  */
 public class EmployeeHoursHelper {
 
-    /*private static final EnumSet<DayOfWeek> WEEKEND = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
-
-    public static void main(final String[] args) {
-        final Map<Employee, Map<LocalDate, List<DaysOfMonth>>> employeeHours = new HashMap<>();
-        final Map<LocalDate, List<DaysOfMonth>> empHours = new HashMap<>();
-        addHours(LocalDate.now().plusMonths(2));
-        empHours.put(LocalDate.now(), addHours(LocalDate.now()));
-        empHours.put(LocalDate.now().plusMonths(1), addHours(LocalDate.now().plusMonths(1)));
-        empHours.put(LocalDate.now().plusMonths(2), addHours(LocalDate.now().plusMonths(2)));
-        final Employee emp = new Employee();
-        emp.setAssociateId(224801L);
-        emp.setName("Jegannathan, Ramesh Kala");
-        employeeHours.put(emp, empHours);
-        new EmployeeHoursHelper().writeHoursInWorkbook(employeeHours);
-    }
-
-    private static List<DaysOfMonth> addHours(final LocalDate date) {
-        final List<DaysOfMonth> dom = new ArrayList<>();
-        for (int i = 1; i <= date.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
-            final DaysOfMonth daysOfMonth = new DaysOfMonth();
-            daysOfMonth.setDay(i);
-            daysOfMonth.setHoliday(WEEKEND.contains(date.withDayOfMonth(i).getDayOfWeek()));
-            if (i % 8 == 0) {
-                daysOfMonth.setSelected(Boolean.TRUE);
-            }
-            dom.add(daysOfMonth);
-        }
-        return dom;
-    }*/
-
-    private void createDatesOfMonth(final Row row, final LocalDate date, int columnCount,
-                                    final HSSFCellStyle headerStyle)
-    {
-        for (int i = 1; i <= date.plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
-            final Cell headerCell = row.createCell(columnCount++);
-            headerCell.setCellValue(date.plusMonths(1).getMonth().toString().substring(0, 3) + i);
-            headerCell.setCellStyle(headerStyle);
-        }
-        for (int i = 1; i <= date.plusMonths(2).with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
-            final Cell headerCell = row.createCell(columnCount++);
-            headerCell.setCellValue(date.plusMonths(2).getMonth().toString().substring(0, 3) + i);
-            headerCell.setCellStyle(headerStyle);
-        }
-        for (int i = 1; i <= date.plusMonths(3).with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
-            final Cell headerCell = row.createCell(columnCount++);
-            headerCell.setCellValue(date.plusMonths(3).getMonth().toString().substring(0, 3) + i);
-            headerCell.setCellStyle(headerStyle);
-        }
-    }
-
+    /**
+     * Write hours in workbook.
+     *
+     * @param employeeHours the employee hours
+     * @return the HSSF workbook
+     */
     public HSSFWorkbook writeHoursInWorkbook(final Map<Employee, Map<LocalDate, List<DaysOfMonth>>> employeeHours) {
         final HSSFWorkbook workbook = new HSSFWorkbook();
         final HSSFSheet sheet = workbook.createSheet("Forecast");
@@ -129,8 +82,8 @@ public class EmployeeHoursHelper {
             employeeCell.setCellStyle(employeeStyle);
             employeeCell.setCellValue(entry.getKey().getAssociateId());
             for (final Map.Entry<LocalDate, List<DaysOfMonth>> empHours : entry.getValue().entrySet()) {
-                LocalDate date = empHours.getKey();
-                if(date.getMonthValue() > LocalDate.now().getMonthValue()){
+                final LocalDate date = empHours.getKey();
+                if (date.getMonthValue() > LocalDate.now().getMonthValue()) {
                     final List<DaysOfMonth> daysOfMonth = empHours.getValue();
                     for (final DaysOfMonth dayOfMonth : daysOfMonth) {
                         final Cell cell = row.createCell(columnCount++);
@@ -147,13 +100,31 @@ public class EmployeeHoursHelper {
             }
         }
         autoSizeColumns(workbook);
-        /*try {
-            final FileOutputStream outputStream = new FileOutputStream("W:/test.xls");
-            workbook.write(outputStream);
-        } catch (final Exception e) {
-            System.out.println(e);
-        }*/
+        /*
+         * try { final FileOutputStream outputStream = new FileOutputStream("W:/test.xls");
+         * workbook.write(outputStream); } catch (final Exception e) { System.out.println(e); }
+         */
         return workbook;
+    }
+
+    private void createDatesOfMonth(final Row row, final LocalDate date, int columnCount,
+                                    final HSSFCellStyle headerStyle)
+    {
+        for (int i = 1; i <= date.plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
+            final Cell headerCell = row.createCell(columnCount++);
+            headerCell.setCellValue(date.plusMonths(1).getMonth().toString().substring(0, 3) + i);
+            headerCell.setCellStyle(headerStyle);
+        }
+        for (int i = 1; i <= date.plusMonths(2).with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
+            final Cell headerCell = row.createCell(columnCount++);
+            headerCell.setCellValue(date.plusMonths(2).getMonth().toString().substring(0, 3) + i);
+            headerCell.setCellStyle(headerStyle);
+        }
+        for (int i = 1; i <= date.plusMonths(3).with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth(); i++) {
+            final Cell headerCell = row.createCell(columnCount++);
+            headerCell.setCellValue(date.plusMonths(3).getMonth().toString().substring(0, 3) + i);
+            headerCell.setCellStyle(headerStyle);
+        }
     }
 
     private void autoSizeColumns(final HSSFWorkbook workbook) {

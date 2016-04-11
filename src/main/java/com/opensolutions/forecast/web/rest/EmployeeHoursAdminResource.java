@@ -2,18 +2,13 @@ package com.opensolutions.forecast.web.rest;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +32,8 @@ public class EmployeeHoursAdminResource {
 
     private final Logger log = LoggerFactory.getLogger(EmployeeHoursAdminResource.class);
     private static final String SET_FORECAST_FREEZE_DATE = "/setForecastFreezeDate";
-    private static final String DOWNLOAD_FORECAST = "/downloadForecast";
+    private static final String DOWNLOAD_FORECAST_FOR_ALL = "/downloadForecastForAll";
+    private static final String SHOW_FORECAST_FOR_ALL = "/showForecastForAll";
 
     @Inject
     private EmployeeService employeeService;
@@ -61,29 +57,41 @@ public class EmployeeHoursAdminResource {
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("Forecast Freeze Date Set", "")).build();
     }
 
-    @RequestMapping(value = DOWNLOAD_FORECAST, method = RequestMethod.GET, produces = "application/vnd.ms-excel")
+    @RequestMapping(value = DOWNLOAD_FORECAST_FOR_ALL, method = RequestMethod.GET, produces = "application/vnd.ms-excel")
     @Timed
-    public ResponseEntity<Void> downloadForecastHours() {
+    public ResponseEntity<Void> downloadForecastHoursForAllEmployees() {
         log.debug("REST request to download the forecast hours");
         final List<Employee> employees = employeeService.findAll();
-        final HSSFWorkbook workbook = employeeHoursService.getForecastOfAllEmployee(employees);
+        final HSSFWorkbook workbook = employeeHoursService.writeForecastOfAllEmployee(employees);
         // OutputStream out = null;
         try {
-            // out =  response.getOutputStream();
+            // out = response.getOutputStream();
             // workbook.write(out);
             // out.flush();
-            FileOutputStream file = new FileOutputStream("C:/Users/Public/Downloads/Forecast.xls");
+            final FileOutputStream file = new FileOutputStream("C:/Users/Public/Downloads/Forecast.xls");
             workbook.write(file);
         } catch (final IOException e) {
             e.printStackTrace();
         }
-        /*final HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Cache-Control","must-revalidate");
-        responseHeaders.add("Pragma", "public");
-        responseHeaders.add("Content-Transfer-Encoding","binary");
-        responseHeaders.add("content-disposition", "attachment; filename=ForecastHours.xls");*/
+        /*
+         * final HttpHeaders responseHeaders = new HttpHeaders();
+         * responseHeaders.add("Cache-Control","must-revalidate"); responseHeaders.add("Pragma", "public");
+         * responseHeaders.add("Content-Transfer-Encoding","binary"); responseHeaders.add("content-disposition",
+         * "attachment; filename=ForecastHours.xls");
+         */
         // responseHeaders.add("Content-Type", "application/vnd.ms-excel");
 
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("Download complete !!!", "")).build();
     }
+
+    @RequestMapping(value = SHOW_FORECAST_FOR_ALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public EmployeeHoursAdminDTO getForecastHoursForAllEmployees() {
+        log.debug("REST request to get the Employee Hours for Coming Months for all employees");
+        final List<Employee> employees = employeeService.findAll();
+        final EmployeeHoursAdminDTO dto = new EmployeeHoursAdminDTO();
+        dto.setAllEmployeeWithForecast(employeeHoursService.getForecastOfAllEmployee(employees));
+        return dto;
+    }
+
 }

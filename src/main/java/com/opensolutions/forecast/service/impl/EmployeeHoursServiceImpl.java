@@ -416,12 +416,18 @@ public class EmployeeHoursServiceImpl extends EmployeeHoursHelper implements Emp
 
     @Override
     @Transactional(readOnly = true)
-    public HSSFWorkbook getForecastOfAllEmployee(final List<Employee> employees) {
+    public HSSFWorkbook writeForecastOfAllEmployee(final List<Employee> employees) {
+        return writeHoursInWorkbook(getForecastOfAllEmployee(employees));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<Employee, Map<LocalDate, List<DaysOfMonth>>> getForecastOfAllEmployee(final List<Employee> employees) {
         final Map<Employee, Map<LocalDate, List<DaysOfMonth>>> employeeHours = new HashMap<>();
         for (final Employee employee : employees) {
             employeeHours.put(employee, getForecastedHours(employee.getAssociateId()));
         }
-        return writeHoursInWorkbook(employeeHours);
+        return employeeHours;
     }
 
 }
