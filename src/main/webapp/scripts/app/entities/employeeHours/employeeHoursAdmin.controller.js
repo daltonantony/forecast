@@ -26,7 +26,7 @@ angular.module('forecastApp')
             $scope.showDownloadEmployeeHoursDiv = true;
             $scope.showSetForecastFreezeDateDiv = false;
 
-            EmployeeHoursAdminDownloadForecast.get();
+            //EmployeeHoursAdminDownloadForecast.get();
             /*EmployeeHoursAdminDownloadForecast.get(function (result) {
 
                 var blob = new Blob([result], {type: "application/vnd.ms-excel"});
@@ -34,6 +34,7 @@ angular.module('forecastApp')
                 window.open(objectUrl);
 
             });*/
+            window.open('api/downloadForecastForAll', '_parent');
         };
 
         $scope.showSetForecastFreezeDate = function () {

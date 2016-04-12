@@ -1,6 +1,6 @@
 package com.opensolutions.forecast.web.rest;
 
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,10 +31,11 @@ import com.opensolutions.forecast.web.rest.util.HeaderUtil;
 @RequestMapping("/api")
 public class EmployeeHoursAdminResource {
 
-    private final Logger log = LoggerFactory.getLogger(EmployeeHoursAdminResource.class);
+	private final Logger log = LoggerFactory.getLogger(EmployeeHoursAdminResource.class);
     private static final String SET_FORECAST_FREEZE_DATE = "/setForecastFreezeDate";
     private static final String DOWNLOAD_FORECAST_FOR_ALL = "/downloadForecastForAll";
     private static final String SHOW_FORECAST_FOR_ALL = "/showForecastForAll";
+    private static final String APPLICATION_VND_MS_EXCEL = "application/vnd.ms-excel";
 
     @Inject
     private EmployeeService employeeService;
@@ -57,32 +59,28 @@ public class EmployeeHoursAdminResource {
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("Forecast Freeze Date Set", "")).build();
     }
 
-    @RequestMapping(value = DOWNLOAD_FORECAST_FOR_ALL, method = RequestMethod.GET, produces = "application/vnd.ms-excel")
-    @Timed
-    public ResponseEntity<Void> downloadForecastHoursForAllEmployees() {
-        log.debug("REST request to download the forecast hours");
-        final List<Employee> employees = employeeService.findAll();
-        final HSSFWorkbook workbook = employeeHoursService.writeForecastOfAllEmployee(employees);
-        // OutputStream out = null;
-        try {
-            // out = response.getOutputStream();
-            // workbook.write(out);
-            // out.flush();
-            final FileOutputStream file = new FileOutputStream("C:/Users/Public/Downloads/Forecast.xls");
-            workbook.write(file);
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
-        /*
-         * final HttpHeaders responseHeaders = new HttpHeaders();
-         * responseHeaders.add("Cache-Control","must-revalidate"); responseHeaders.add("Pragma", "public");
-         * responseHeaders.add("Content-Transfer-Encoding","binary"); responseHeaders.add("content-disposition",
-         * "attachment; filename=ForecastHours.xls");
-         */
-        // responseHeaders.add("Content-Type", "application/vnd.ms-excel");
+    @RequestMapping(value = DOWNLOAD_FORECAST_FOR_ALL, method = RequestMethod.GET, produces = APPLICATION_VND_MS_EXCEL)
+	@Timed
+	public ResponseEntity<byte[]> downloadForecastHoursForAllEmployees() {
+		log.debug("REST request to download the forecast hours");
+		final List<Employee> employees = employeeService.findAll();
+		final HSSFWorkbook workbook = employeeHoursService.writeForecastOfAllEmployee(employees);
 
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert("Download complete !!!", "")).build();
-    }
+		final HttpHeaders headers = HeaderUtil.createAlert("Download complete!", "");
+		headers.add("Content-Disposition", "attachment; filename=ForecastHours.xls");
+		headers.add("Content-Type", APPLICATION_VND_MS_EXCEL);
+
+		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			workbook.write(baos);
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+		final byte[] bytes = baos.toByteArray();
+
+		// TODO: exception handling
+		return ResponseEntity.ok().headers(headers).contentLength(bytes.length).body(bytes);
+	}
 
     @RequestMapping(value = SHOW_FORECAST_FOR_ALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
