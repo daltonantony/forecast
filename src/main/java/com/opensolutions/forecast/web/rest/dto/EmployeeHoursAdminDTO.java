@@ -11,6 +11,7 @@ public class EmployeeHoursAdminDTO {
 
     private LocalDate forecastFreezeDate;
     private Map<Employee, Map<LocalDate, List<DaysOfMonth>>> allEmployeeWithForecast;
+    private Map<LocalDate, List<DaysOfMonth>> employeeHours;
 
     public LocalDate getForecastFreezeDate() {
         return forecastFreezeDate;
@@ -31,6 +32,14 @@ public class EmployeeHoursAdminDTO {
 
     public void setAllEmployeeWithForecast(final Map<Employee, Map<LocalDate, List<DaysOfMonth>>> allEmployeeWithForecast) {
         this.allEmployeeWithForecast = allEmployeeWithForecast;
+    }
+
+    public Map<LocalDate, List<DaysOfMonth>> getEmployeeHours() {
+        return employeeHours;
+    }
+
+    public void setEmployeeHours(final Map<LocalDate, List<DaysOfMonth>> employeeHours) {
+        this.employeeHours = employeeHours;
     }
 
 }

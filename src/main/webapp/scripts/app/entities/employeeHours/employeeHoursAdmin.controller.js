@@ -15,16 +15,25 @@ angular.module('forecastApp')
             $scope.showViewEmployeeHoursDiv = true;
             $scope.showDownloadEmployeeHoursDiv = false;
             $scope.showSetForecastFreezeDateDiv = false;
-            
+            $scope.showEmployeeForecast = false;
+
             EmployeeHoursAdminShowForecast.get(function (result) {
-                $scope.forecastForAllEmployees = result;
+                $scope.dto = result;
             });
+        };
+
+        $scope.showEachEmployeeHours = function () {
+            $scope.showViewEmployeeHoursDiv = true;
+            $scope.showDownloadEmployeeHoursDiv = false;
+            $scope.showSetForecastFreezeDateDiv = false;
+            $scope.showEmployeeForecast = true;
         };
 
         $scope.showDownloadEmployeeHours = function () {
             $scope.showViewEmployeeHoursDiv = false;
             $scope.showDownloadEmployeeHoursDiv = true;
             $scope.showSetForecastFreezeDateDiv = false;
+			$scope.showEmployeeForecast = false;
 
             //EmployeeHoursAdminDownloadForecast.get();
             /*EmployeeHoursAdminDownloadForecast.get(function (result) {
@@ -41,6 +50,7 @@ angular.module('forecastApp')
             $scope.showViewEmployeeHoursDiv = false;
             $scope.showDownloadEmployeeHoursDiv = false;
             $scope.showSetForecastFreezeDateDiv = true;
+			$scope.showEmployeeForecast = false;
 
             EmployeeHoursAdminSetForecastFreezeDate.get(function (result) {
                 $scope.dto = result;
@@ -51,6 +61,7 @@ angular.module('forecastApp')
             $scope.showViewEmployeeHoursDiv = false;
             $scope.showDownloadEmployeeHoursDiv = false;
             $scope.showSetForecastFreezeDateDiv = true;
+			$scope.showEmployeeForecast = false;
 
             EmployeeHoursAdminSetForecastFreezeDate.save($scope.dto);
         };

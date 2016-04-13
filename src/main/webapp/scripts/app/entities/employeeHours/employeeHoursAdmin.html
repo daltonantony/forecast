@@ -27,8 +27,33 @@
 	<!-- VIEW EMPLOYEE HOURS -->
 	<div class="table-responsive" ng-show="showViewEmployeeHoursDiv">
     	<h4>View Employee Hours</h4>
-		View the Employee Hours based on Employee
 		<br/>
+        <label for="emp"> Employee  : </label>
+        <select id="emp" ng-model="dto.employeeHours" ng-click="showEachEmployeeHours()">
+            <option ng-repeat="(key, value) in dto.allEmployeeWithForecast" ng-value="{{value}}">
+                {{key}}
+            </option>
+        </select>
+        <br/><br/>
+    </div>
+    <div class="table-responsive" ng-show="showEmployeeForecast">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th><span>MONTH</span> </th>
+                <th ng-repeat="n in [].constructor(31) track by $index"><span>{{$index + 1}}</span> </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="(key, value) in dto.employeeHours">
+                <td><b>{{key | date : 'MMMM'}}</b></td>
+                <td ng-repeat="dateOfMonth in value">
+                    <input id="checkSlave" type="checkbox" name="selected" ng-model="dateOfMonth.selected" ng-checked="dateOfMonth.selected"
+                           ng-disabled="true">
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </form>
 
@@ -36,9 +61,9 @@
 	<!-- DOWNLOAD EMPLOYEE HOURS -->
 	<div class="table-responsive" ng-show="showDownloadEmployeeHoursDiv">
 		<h4>Download Employee Hours</h4>
-		Downloading forecast Hours of all the Employees for the coming months,
-        Location : C:/Users/Public/Downloads/Forecast.xls
-		<br/><br/>
+        <br/>
+		Downloads the forecast Hours of all the Employees for the coming months !!!
+		<br/>
     </div>
 </form>
 
