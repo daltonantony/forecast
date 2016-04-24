@@ -385,12 +385,14 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public LocalDate getForecastFreezeDate() {
         LocalDate forecastFreezeDate = getForecastFreezeDateFromDB();
         final LocalDate today = LocalDate.now();
         if (forecastFreezeDate.getYear() != today.getYear() || forecastFreezeDate.getMonth() != today.getMonth()) {
+        	// if a freeze date is not already present for the current month, set a default date in database
             forecastFreezeDate = today.with(TemporalAdjusters.lastDayOfMonth()).minusDays(5);
+            setForecastFreezeDate(forecastFreezeDate);
         }
         return forecastFreezeDate;
     }

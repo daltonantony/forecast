@@ -21,6 +21,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.opensolutions.forecast.domain.Employee;
 import com.opensolutions.forecast.service.EmployeeHoursService;
 import com.opensolutions.forecast.service.EmployeeService;
+import com.opensolutions.forecast.web.rest.dto.AdminDTO;
 import com.opensolutions.forecast.web.rest.dto.EmployeeHoursAdminDTO;
 import com.opensolutions.forecast.web.rest.util.HeaderUtil;
 
@@ -44,16 +45,16 @@ public class EmployeeHoursAdminResource {
 
     @RequestMapping(value = SET_FORECAST_FREEZE_DATE, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public EmployeeHoursAdminDTO showSetForecastFreezeDate() {
+    public AdminDTO showSetForecastFreezeDate() {
         log.debug("REST request to show the view to set the forecast freeze date");
-        final EmployeeHoursAdminDTO dto = new EmployeeHoursAdminDTO();
+        final AdminDTO dto = new AdminDTO();
         dto.setForecastFreezeDate(employeeHoursService.getForecastFreezeDate());
         return dto;
     }
 
     @RequestMapping(value = SET_FORECAST_FREEZE_DATE, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> setForecastFreezeDate(@RequestBody final EmployeeHoursAdminDTO dto) {
+    public ResponseEntity<Void> setForecastFreezeDate(@RequestBody final AdminDTO dto) {
         log.debug("REST request to set the forecast freeze date");
         employeeHoursService.setForecastFreezeDate(dto.getForecastFreezeDate());
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("Forecast Freeze Date Set", "")).build();
