@@ -10,6 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -21,6 +22,8 @@ import org.apache.poi.ss.usermodel.Row;
 
 import com.opensolutions.forecast.domain.DaysOfMonth;
 import com.opensolutions.forecast.domain.Employee;
+import com.opensolutions.forecast.domain.EmployeeAllocation;
+import com.opensolutions.forecast.service.EmployeeAllocationService;
 
 /**
  * Forecast Download Helper
@@ -71,9 +74,11 @@ public class ForecastDownloadHelper {
      * Write hours in workbook.
      *
      * @param employeeHours the employee hours
+     * @param employeeAllocationService 
      * @return the HSSF workbook
      */
-    public HSSFWorkbook writeHoursInWorkbook(final Map<Employee, Map<LocalDate, List<DaysOfMonth>>> employeeHours) {
+    public HSSFWorkbook writeHoursInWorkbook(final Map<Employee, Map<LocalDate, List<DaysOfMonth>>> employeeHours,
+    		EmployeeAllocationService employeeAllocationService) {
         final HSSFWorkbook workbook = new HSSFWorkbook();
         final HSSFCellStyle headerStyle = workbook.createCellStyle();
         final HSSFFont headerFont = workbook.createFont();
@@ -100,8 +105,8 @@ public class ForecastDownloadHelper {
         holidayStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
         holidayStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
-        createSheetWithForecastA(employeeHours, workbook, headerStyle, employeeStyle, forecastStyle, holidayStyle);
-        createSheetWithForecastB(employeeHours, workbook, headerStyle, employeeStyle, forecastStyle, holidayStyle);
+        createSheetWithForecastA(employeeHours, workbook, headerStyle, employeeStyle, forecastStyle, holidayStyle, employeeAllocationService);
+        createSheetWithForecastB(employeeHours, workbook, headerStyle, employeeStyle, forecastStyle, holidayStyle, employeeAllocationService);
         autoSizeColumns(workbook);
 
         /*try { final FileOutputStream outputStream = new FileOutputStream("W:/test.xls");
@@ -110,7 +115,9 @@ public class ForecastDownloadHelper {
         return workbook;
     }
 
-    private void createSheetWithForecastA(Map<Employee, Map<LocalDate, List<DaysOfMonth>>> employeeHours, HSSFWorkbook workbook, HSSFCellStyle headerStyle, HSSFCellStyle employeeStyle, HSSFCellStyle forecastStyle, HSSFCellStyle holidayStyle) {
+    private void createSheetWithForecastA(Map<Employee, Map<LocalDate, List<DaysOfMonth>>> employeeHours, HSSFWorkbook workbook,
+    		HSSFCellStyle headerStyle, HSSFCellStyle employeeStyle, HSSFCellStyle forecastStyle, HSSFCellStyle holidayStyle,
+    		EmployeeAllocationService employeeAllocationService) {
         final HSSFSheet sheet= workbook.createSheet("Forecast A");
         int rowCount = 0;
         int columnCount = 0;
@@ -147,9 +154,10 @@ public class ForecastDownloadHelper {
                         if (dayOfMonth.isSelected()) {
                             row = sheet.createRow(rowCount++);
                             Cell cell = row.createCell(columnCount++);
-                            cell.setCellValue(entry.getKey().getId());
+                            final Employee employee = entry.getKey();
+							cell.setCellValue(employee.getId());
                             cell = row.createCell(columnCount++);
-                            cell.setCellValue(entry.getKey().getAssociateId());
+                            cell.setCellValue(employee.getAssociateId());
                             cell.setCellStyle(employeeStyle);
                             cell = row.createCell(columnCount++);
                             cell.setCellValue(date.withDayOfMonth(dayOfMonth.getDay()).toString());
@@ -157,12 +165,12 @@ public class ForecastDownloadHelper {
                             cell = row.createCell(columnCount++);
                             cell.setCellValue(1);
                             cell = row.createCell(columnCount++);
-                            cell.setCellValue(entry.getKey().getName());
+                            cell.setCellValue(employee.getName());
                             cell.setCellStyle(employeeStyle);
                             cell = row.createCell(columnCount++);
-                            cell.setCellValue(entry.getKey().getDomain());
+                            cell.setCellValue(getEmployeeProject(employeeAllocationService, employee.getAssociateId()));
                             cell = row.createCell(columnCount++);
-                            cell.setCellValue("");
+                            cell.setCellValue(employee.getDomain());
                         }
                     }
                 //}
@@ -170,7 +178,9 @@ public class ForecastDownloadHelper {
         }
     }
 
-    private void createSheetWithForecastB(Map<Employee, Map<LocalDate, List<DaysOfMonth>>> employeeHours, HSSFWorkbook workbook, HSSFCellStyle headerStyle, HSSFCellStyle employeeStyle, HSSFCellStyle forecastStyle, HSSFCellStyle holidayStyle) {
+    private void createSheetWithForecastB(Map<Employee, Map<LocalDate, List<DaysOfMonth>>> employeeHours, HSSFWorkbook workbook,
+    		HSSFCellStyle headerStyle, HSSFCellStyle employeeStyle, HSSFCellStyle forecastStyle, HSSFCellStyle holidayStyle,
+    		EmployeeAllocationService employeeAllocationService) {
         final HSSFSheet sheet = workbook.createSheet("Forecast B");
 
         int rowCount = 0;
@@ -182,17 +192,30 @@ public class ForecastDownloadHelper {
         headerCell = row.createCell(columnCount++);
         headerCell.setCellValue("AssociateId");
         headerCell.setCellStyle(headerStyle);
+        headerCell = row.createCell(columnCount++);
+        headerCell.setCellValue("DomainName");
+        headerCell.setCellStyle(headerStyle);
+        headerCell = row.createCell(columnCount++);
+        headerCell.setCellValue("ProjectName");
+        headerCell.setCellStyle(headerStyle);
         createDatesOfMonth(row, LocalDate.now(), columnCount, headerStyle);
 
         for (final Map.Entry<Employee, Map<LocalDate, List<DaysOfMonth>>> entry : employeeHours.entrySet()) {
             row = sheet.createRow(rowCount++);
             columnCount = 0;
             Cell employeeCell = row.createCell(columnCount++);
-            employeeCell.setCellValue(entry.getKey().getName());
+            final Employee employee = entry.getKey();
+			employeeCell.setCellValue(employee.getName());
             employeeCell.setCellStyle(employeeStyle);
             employeeCell = row.createCell(columnCount++);
             employeeCell.setCellStyle(employeeStyle);
-            employeeCell.setCellValue(entry.getKey().getAssociateId());
+            employeeCell.setCellValue(employee.getAssociateId());
+            employeeCell = row.createCell(columnCount++);
+            employeeCell.setCellStyle(employeeStyle);
+            employeeCell.setCellValue(employee.getDomain());
+            employeeCell = row.createCell(columnCount++);
+            employeeCell.setCellStyle(employeeStyle);
+            employeeCell.setCellValue(getEmployeeProject(employeeAllocationService, employee.getAssociateId()));
             for (final Map.Entry<LocalDate, List<DaysOfMonth>> empHours : entry.getValue().entrySet()) {
                 final LocalDate date = empHours.getKey();
                 if (date.getMonthValue() > LocalDate.now().getMonthValue()) {
@@ -319,6 +342,15 @@ public class ForecastDownloadHelper {
             endDate = endDate.with(TemporalAdjusters.lastInMonth(DayOfWeek.FRIDAY));
         }
         return endDate;
+    }
+
+    private String getEmployeeProject(final EmployeeAllocationService employeeAllocationService, final Long empId) {
+    	String project = "";
+    	final List<EmployeeAllocation> activeEmployeeAllocations = employeeAllocationService.findActiveEmployeeAllocationsForEmployee(empId);
+    	if (CollectionUtils.isNotEmpty(activeEmployeeAllocations)) {
+			project = activeEmployeeAllocations.get(0).getProject();
+		}
+    	return project;
     }
 
 }

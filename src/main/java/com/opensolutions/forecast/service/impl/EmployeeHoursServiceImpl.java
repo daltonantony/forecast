@@ -419,7 +419,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     @Override
     @Transactional(readOnly = true)
     public HSSFWorkbook writeForecastOfAllEmployee(final List<Employee> employees) {
-        return downloadHelper.writeHoursInWorkbook(getForecastOfAllEmployee(employees));
+        return downloadHelper.writeHoursInWorkbook(getForecastOfAllEmployee(employees), employeeAllocationService);
     }
 
     @Override
