@@ -11,6 +11,6 @@ public class EmployeeHoursHelperTest {
 
     @Test
     public void getWorkingDatesPerWeekForMonths() throws Exception {
-        EmployeeHoursHelper.getWorkingDatesPerWeekForMonths();
+        ForecastDownloadHelper.getWorkingDatesPerWeekForMonths();
     }
 }

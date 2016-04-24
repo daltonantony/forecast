@@ -23,9 +23,9 @@ import com.opensolutions.forecast.domain.DaysOfMonth;
 import com.opensolutions.forecast.domain.Employee;
 
 /**
- * Employee Hours Helper
+ * Forecast Download Helper
  */
-public class EmployeeHoursHelper {
+public class ForecastDownloadHelper {
 
     /*private static final EnumSet<DayOfWeek> WEEKEND = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
 

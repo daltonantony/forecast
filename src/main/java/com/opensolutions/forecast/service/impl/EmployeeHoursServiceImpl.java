@@ -44,14 +44,14 @@ import com.opensolutions.forecast.service.EmployeeAllocationService;
 import com.opensolutions.forecast.service.EmployeeHoursService;
 import com.opensolutions.forecast.service.EmployeeService;
 import com.opensolutions.forecast.service.HolidaysService;
-import com.opensolutions.forecast.service.util.EmployeeHoursHelper;
+import com.opensolutions.forecast.service.util.ForecastDownloadHelper;
 
 /**
  * Service Implementation for managing EmployeeHours.
  */
 @Service
 @Transactional
-public class EmployeeHoursServiceImpl extends EmployeeHoursHelper implements EmployeeHoursService {
+public class EmployeeHoursServiceImpl implements EmployeeHoursService {
 
     private final Logger log = LoggerFactory.getLogger(EmployeeHoursServiceImpl.class);
     private static final String FORECAST_FREEZE_DATE = "ForecastFreezeDate";
@@ -75,6 +75,8 @@ public class EmployeeHoursServiceImpl extends EmployeeHoursHelper implements Emp
 
     @Inject
     private CodeValuesService codeValuesService;
+
+    private ForecastDownloadHelper downloadHelper = new ForecastDownloadHelper();
 
     /**
      * Save a employeeHours.
@@ -417,7 +419,7 @@ public class EmployeeHoursServiceImpl extends EmployeeHoursHelper implements Emp
     @Override
     @Transactional(readOnly = true)
     public HSSFWorkbook writeForecastOfAllEmployee(final List<Employee> employees) {
-        return writeHoursInWorkbook(getForecastOfAllEmployee(employees));
+        return downloadHelper.writeHoursInWorkbook(getForecastOfAllEmployee(employees));
     }
 
     @Override
