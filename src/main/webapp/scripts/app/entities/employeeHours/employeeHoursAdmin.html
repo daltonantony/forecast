@@ -30,8 +30,8 @@
 		<br/>
         <label for="emp"> Employee  : </label>
         <select id="emp" ng-model="dto.employeeHours" ng-click="showEachEmployeeHours()">
-            <option ng-repeat="(key, value) in dto.allEmployeeWithForecast" ng-value="{{value}}">
-                {{key}}
+            <option ng-repeat="employeeForecast in dto.employeesForecast" value="{{employeeForecast.employeeHours}}">
+                {{employeeForecast.associateId}}
             </option>
         </select>
         <br/><br/>
@@ -48,8 +48,7 @@
             <tr ng-repeat="(key, value) in dto.employeeHours">
                 <td><b>{{key | date : 'MMMM'}}</b></td>
                 <td ng-repeat="dateOfMonth in value">
-                    <input id="checkSlave" type="checkbox" name="selected" ng-model="dateOfMonth.selected" ng-checked="dateOfMonth.selected"
-                           ng-disabled="true">
+                    <input id="checkSlave" type="checkbox" name="selected" ng-model="dateOfMonth.selected" ng-checked="dateOfMonth.selected" ng-disabled="true">
                 </td>
             </tr>
             </tbody>

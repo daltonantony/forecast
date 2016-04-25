@@ -5,25 +5,48 @@ import java.util.List;
 import java.util.Map;
 
 import com.opensolutions.forecast.domain.DaysOfMonth;
-import com.opensolutions.forecast.domain.Employee;
+import com.opensolutions.forecast.domain.EmployeeForecast;
 
+/**
+ * The Class EmployeeHoursAdminDTO.
+ */
 public class EmployeeHoursAdminDTO {
 
-    private Map<Employee, Map<LocalDate, List<DaysOfMonth>>> allEmployeeWithForecast;
+    private List<EmployeeForecast> employeesForecast;
     private Map<LocalDate, List<DaysOfMonth>> employeeHours;
 
-    public Map<Employee, Map<LocalDate, List<DaysOfMonth>>> getAllEmployeeWithForecast() {
-        return allEmployeeWithForecast;
+    /**
+     * Gets the employees forecast.
+     *
+     * @return the employees forecast
+     */
+    public List<EmployeeForecast> getEmployeesForecast() {
+        return employeesForecast;
     }
 
-    public void setAllEmployeeWithForecast(final Map<Employee, Map<LocalDate, List<DaysOfMonth>>> allEmployeeWithForecast) {
-        this.allEmployeeWithForecast = allEmployeeWithForecast;
+    /**
+     * Sets the employees forecast.
+     *
+     * @param employeesForecast the new employees forecast
+     */
+    public void setEmployeesForecast(final List<EmployeeForecast> employeesForecast) {
+        this.employeesForecast = employeesForecast;
     }
 
+    /**
+     * Gets the employee hours.
+     *
+     * @return the employee hours
+     */
     public Map<LocalDate, List<DaysOfMonth>> getEmployeeHours() {
         return employeeHours;
     }
 
+    /**
+     * Sets the employee hours.
+     *
+     * @param employeeHours the employee hours
+     */
     public void setEmployeeHours(final Map<LocalDate, List<DaysOfMonth>> employeeHours) {
         this.employeeHours = employeeHours;
     }

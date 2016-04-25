@@ -32,7 +32,7 @@ import com.opensolutions.forecast.web.rest.util.HeaderUtil;
 @RequestMapping("/api")
 public class EmployeeHoursAdminResource {
 
-	private final Logger log = LoggerFactory.getLogger(EmployeeHoursAdminResource.class);
+    private final Logger log = LoggerFactory.getLogger(EmployeeHoursAdminResource.class);
     private static final String SET_FORECAST_FREEZE_DATE = "/setForecastFreezeDate";
     private static final String DOWNLOAD_FORECAST_FOR_ALL = "/downloadForecastForAll";
     private static final String SHOW_FORECAST_FOR_ALL = "/showForecastForAll";
@@ -61,27 +61,27 @@ public class EmployeeHoursAdminResource {
     }
 
     @RequestMapping(value = DOWNLOAD_FORECAST_FOR_ALL, method = RequestMethod.GET, produces = APPLICATION_VND_MS_EXCEL)
-	@Timed
-	public ResponseEntity<byte[]> downloadForecastHoursForAllEmployees() {
-		log.debug("REST request to download the forecast hours");
-		final List<Employee> employees = employeeService.findAll();
-		final HSSFWorkbook workbook = employeeHoursService.writeForecastOfAllEmployee(employees);
+    @Timed
+    public ResponseEntity<byte[]> downloadForecastHoursForAllEmployees() {
+        log.debug("REST request to download the forecast hours");
+        final List<Employee> employees = employeeService.findAll();
+        final HSSFWorkbook workbook = employeeHoursService.writeForecastOfAllEmployee(employees);
 
-		final HttpHeaders headers = HeaderUtil.createAlert("Download complete!", "");
-		headers.add("Content-Disposition", "attachment; filename=ForecastHours.xls");
-		headers.add("Content-Type", APPLICATION_VND_MS_EXCEL);
+        final HttpHeaders headers = HeaderUtil.createAlert("Download complete!", "");
+        headers.add("Content-Disposition", "attachment; filename=ForecastHours.xls");
+        headers.add("Content-Type", APPLICATION_VND_MS_EXCEL);
 
-		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try {
-			workbook.write(baos);
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-		final byte[] bytes = baos.toByteArray();
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            workbook.write(baos);
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        final byte[] bytes = baos.toByteArray();
 
-		// TODO: exception handling
-		return ResponseEntity.ok().headers(headers).contentLength(bytes.length).body(bytes);
-	}
+        // TODO: exception handling
+        return ResponseEntity.ok().headers(headers).contentLength(bytes.length).body(bytes);
+    }
 
     @RequestMapping(value = SHOW_FORECAST_FOR_ALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -89,7 +89,7 @@ public class EmployeeHoursAdminResource {
         log.debug("REST request to get the Employee Hours for Coming Months for all employees");
         final List<Employee> employees = employeeService.findAll();
         final EmployeeHoursAdminDTO dto = new EmployeeHoursAdminDTO();
-        dto.setAllEmployeeWithForecast(employeeHoursService.getForecastOfAllEmployee(employees));
+        dto.setEmployeesForecast(employeeHoursService.getEmployeesForecast(employees));
         return dto;
     }
 

@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +33,7 @@ import com.opensolutions.forecast.domain.CodeValues;
 import com.opensolutions.forecast.domain.DaysOfMonth;
 import com.opensolutions.forecast.domain.Employee;
 import com.opensolutions.forecast.domain.EmployeeAllocation;
+import com.opensolutions.forecast.domain.EmployeeForecast;
 import com.opensolutions.forecast.domain.EmployeeHours;
 import com.opensolutions.forecast.domain.Holidays;
 import com.opensolutions.forecast.repository.EmployeeHoursRepository;
@@ -76,7 +76,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     @Inject
     private CodeValuesService codeValuesService;
 
-    private ForecastDownloadHelper downloadHelper = new ForecastDownloadHelper();
+    private final ForecastDownloadHelper downloadHelper = new ForecastDownloadHelper();
 
     /**
      * Save a employeeHours.
@@ -390,7 +390,7 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
         LocalDate forecastFreezeDate = getForecastFreezeDateFromDB();
         final LocalDate today = LocalDate.now();
         if (forecastFreezeDate.getYear() != today.getYear() || forecastFreezeDate.getMonth() != today.getMonth()) {
-        	// if a freeze date is not already present for the current month, set a default date in database
+            // if a freeze date is not already present for the current month, set a default date in database
             forecastFreezeDate = today.with(TemporalAdjusters.lastDayOfMonth()).minusDays(5);
             setForecastFreezeDate(forecastFreezeDate);
         }
@@ -421,17 +421,33 @@ public class EmployeeHoursServiceImpl implements EmployeeHoursService {
     @Override
     @Transactional(readOnly = true)
     public HSSFWorkbook writeForecastOfAllEmployee(final List<Employee> employees) {
-        return downloadHelper.writeHoursInWorkbook(getForecastOfAllEmployee(employees), employeeAllocationService);
+        return downloadHelper.writeHoursInWorkbook(getEmployeesForecast(employees));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Map<Employee, Map<LocalDate, List<DaysOfMonth>>> getForecastOfAllEmployee(final List<Employee> employees) {
-        final Map<Employee, Map<LocalDate, List<DaysOfMonth>>> employeeHours = new HashMap<>();
+    public List<EmployeeForecast> getEmployeesForecast(final List<Employee> employees) {
+        final List<EmployeeForecast> employeesForecast = new ArrayList<>();
         for (final Employee employee : employees) {
-            employeeHours.put(employee, getForecastedHours(employee.getAssociateId()));
+            final EmployeeForecast employeeForecast = new EmployeeForecast();
+            employeeForecast.setId(employee.getId());
+            employeeForecast.setAssociateId(employee.getAssociateId());
+            employeeForecast.setName(employee.getName());
+            employeeForecast.setDomain(employee.getDomain());
+            employeeForecast.setProject(getEmployeeProject(employee.getAssociateId()));
+            employeeForecast.setEmployeeHours(getForecastedHours(employee.getAssociateId()));
+            employeesForecast.add(employeeForecast);
         }
-        return employeeHours;
+        return employeesForecast;
+    }
+
+    private String getEmployeeProject(final Long empId) {
+        final List<EmployeeAllocation> activeEmployeeAllocations =
+                employeeAllocationService.findActiveEmployeeAllocationsForEmployee(empId);
+        if (CollectionUtils.isNotEmpty(activeEmployeeAllocations)) {
+            return activeEmployeeAllocations.get(0).getProject();
+        }
+        return null;
     }
 
 }

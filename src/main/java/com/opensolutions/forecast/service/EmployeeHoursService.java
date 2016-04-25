@@ -8,6 +8,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import com.opensolutions.forecast.domain.DaysOfMonth;
 import com.opensolutions.forecast.domain.Employee;
+import com.opensolutions.forecast.domain.EmployeeForecast;
 import com.opensolutions.forecast.domain.EmployeeHours;
 
 /**
@@ -88,11 +89,11 @@ public interface EmployeeHoursService {
     HSSFWorkbook writeForecastOfAllEmployee(List<Employee> employees);
 
     /**
-     * Gets the forecast of all employee.
+     * Gets the employees forecast.
      *
      * @param employees the employees
-     * @return the forecast of all employees
+     * @return the employees forecast
      */
-    Map<Employee, Map<LocalDate, List<DaysOfMonth>>> getForecastOfAllEmployee(List<Employee> employees);
+    List<EmployeeForecast> getEmployeesForecast(List<Employee> employees);
 
 }
