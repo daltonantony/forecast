@@ -28,13 +28,12 @@
 	<div class="table-responsive" ng-show="showViewEmployeeHoursDiv">
     	<h4>View Employee Hours</h4>
 		<br/>
-        <label for="emp"> Employee Id : </label>
+        <label for="emp"> Employee : </label>
         <select id="emp" ng-model="dto.employeeIdSelected" ng-change="setSelectedEmployee()">
             <option ng-repeat="employeeForecast in dto.employeesForecast" value="{{employeeForecast.associateId}}">
-                {{employeeForecast.associateId}}
+                {{employeeForecast.associateId}} - {{employeeForecast.name}}
             </option>
         </select>
-        &nbsp;&nbsp;&nbsp;<label> Employee Name :</label> {{dto.employeeNameSelected}} <br/> <br/>
     </div>
     <div class="table-responsive" ng-show="showEmployeeForecast">
         <table class="table table-striped">
@@ -61,8 +60,6 @@
 	<div class="table-responsive" ng-show="showDownloadEmployeeHoursDiv">
 		<h4>Download Employee Hours</h4>
         <br/>
-		Downloads the forecast Hours of all the Employees for the coming months !!!
-		<br/>
     </div>
 </form>
 
