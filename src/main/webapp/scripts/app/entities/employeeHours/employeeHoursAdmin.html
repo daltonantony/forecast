@@ -28,13 +28,13 @@
 	<div class="table-responsive" ng-show="showViewEmployeeHoursDiv">
     	<h4>View Employee Hours</h4>
 		<br/>
-        <label for="emp"> Employee  : </label>
-        <select id="emp" ng-model="dto.employeeHours" ng-click="showEachEmployeeHours()">
-            <option ng-repeat="employeeForecast in dto.employeesForecast" value="{{employeeForecast.employeeHours}}">
+        <label for="emp"> Employee Id : </label>
+        <select id="emp" ng-model="dto.employeeIdSelected" ng-change="setSelectedEmployee()">
+            <option ng-repeat="employeeForecast in dto.employeesForecast" value="{{employeeForecast.associateId}}">
                 {{employeeForecast.associateId}}
             </option>
         </select>
-        <br/><br/>
+        &nbsp;&nbsp;&nbsp;<label> Employee Name :</label> {{dto.employeeNameSelected}} <br/> <br/>
     </div>
     <div class="table-responsive" ng-show="showEmployeeForecast">
         <table class="table table-striped">

@@ -14,6 +14,8 @@ public class EmployeeHoursAdminDTO {
 
     private List<EmployeeForecast> employeesForecast;
     private Map<LocalDate, List<DaysOfMonth>> employeeHours;
+    private String employeeIdSelected;
+    private String employeeNameSelected;
 
     /**
      * Gets the employees forecast.
@@ -49,6 +51,42 @@ public class EmployeeHoursAdminDTO {
      */
     public void setEmployeeHours(final Map<LocalDate, List<DaysOfMonth>> employeeHours) {
         this.employeeHours = employeeHours;
+    }
+
+    /**
+     * Gets the employee id selected.
+     *
+     * @return the employee id selected
+     */
+    public String getEmployeeIdSelected() {
+        return employeeIdSelected;
+    }
+
+    /**
+     * Sets the employee id selected.
+     *
+     * @param employeeIdSelected the new employee id selected
+     */
+    public void setEmployeeIdSelected(final String employeeIdSelected) {
+        this.employeeIdSelected = employeeIdSelected;
+    }
+
+    /**
+     * Gets the employee name selected.
+     *
+     * @return the employee name selected
+     */
+    public String getEmployeeNameSelected() {
+        return employeeNameSelected;
+    }
+
+    /**
+     * Sets the employee name selected.
+     *
+     * @param employeeNameSelected the new employee name selected
+     */
+    public void setEmployeeNameSelected(final String employeeNameSelected) {
+        this.employeeNameSelected = employeeNameSelected;
     }
 
 }

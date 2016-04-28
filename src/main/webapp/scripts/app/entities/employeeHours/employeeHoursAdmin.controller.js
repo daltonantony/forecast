@@ -45,6 +45,17 @@ angular.module('forecastApp')
             });*/
             window.open('api/downloadForecastForAll', '_parent');
         };
+        
+        $scope.setSelectedEmployee = function () {
+        	var selectedId = $scope.dto.employeeIdSelected;
+        	angular.forEach($scope.dto.employeesForecast, function(employeeForecast){
+                if(employeeForecast.associateId === parseInt($scope.dto.employeeIdSelected, 10)){
+                	$scope.dto.employeeHours = employeeForecast.employeeHours;
+                	$scope.dto.employeeNameSelected = employeeForecast.name;
+                	$scope.showEachEmployeeHours();
+                }
+            })
+        };
 
         $scope.showSetForecastFreezeDate = function () {
             $scope.showViewEmployeeHoursDiv = false;
