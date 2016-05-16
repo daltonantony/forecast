@@ -45,7 +45,7 @@ public class UserServiceIntTest {
 
     @Test
     public void testRemoveOldPersistentTokens() {
-        User admin = userRepository.findOneByLogin("admin").get();
+        User admin = userRepository.findOneByLogin("126195").get();
         int existingCount = persistentTokenRepository.findByUser(admin).size();
         generateUserToken(admin, "1111-1111", LocalDate.now());
         LocalDate now = LocalDate.now();
@@ -60,10 +60,10 @@ public class UserServiceIntTest {
         Optional<User> maybeUser = userService.requestPasswordReset("john.doe@localhost");
         assertThat(maybeUser.isPresent()).isFalse();
 
-        maybeUser = userService.requestPasswordReset("admin@localhost");
+        maybeUser = userService.requestPasswordReset("agorp@localhost");
         assertThat(maybeUser.isPresent()).isTrue();
 
-        assertThat(maybeUser.get().getEmail()).isEqualTo("admin@localhost");
+        assertThat(maybeUser.get().getEmail()).isEqualTo("agorp@localhost");
         assertThat(maybeUser.get().getResetDate()).isNotNull();
         assertThat(maybeUser.get().getResetKey()).isNotNull();
     }
